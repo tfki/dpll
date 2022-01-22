@@ -60,30 +60,40 @@ cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
   cnf_clause_iterator clauseIterator;
   cnf_clause_iterator_create(&clauseIterator, pCnf);
 
-  // allocate worst case buffer
   clauseBuffer clauseBuffer;
   if (clauseBuffer_create(&clauseBuffer))
     return 1;
 
   while (!cnf_clause_iterator_next(&clauseIterator)) {
+
+    int8_t clauseTrue = 0u;
+
     for (size_t literalIndex = 0u; literalIndex < clauseIterator.count; ++literalIndex) {
 
       int32_t literal = clauseIterator.pData[literalIndex];
       uint32_t variable = literal < 0 ? -literal : literal;
 
       int8_t variableAssignment;
-      assignment_get(pAssignment, variable, &variableAssignment);
-
-      if (!(variableAssignment ^ (literal > 0))) {
-        clauseBuffer_reset(&clauseBuffer);
+      if (!assignment_get(pAssignment, variable, &variableAssignment)) {
+        // assignment does not specify literal value
+        clauseBuffer_push(&clauseBuffer, literal);
         continue;
       }
 
-      clauseBuffer_push(&clauseBuffer, literal);
+      if (!(variableAssignment ^ (literal > 0))) {
+        // assignment makes the whole clause true
+        clauseBuffer_reset(&clauseBuffer);
+        clauseTrue = 1u;
+        break;
+      }
+
+      // assignment makes the literal false
     }
 
-    cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
-    clauseBuffer_reset(&clauseBuffer);
+    if (!clauseTrue) {
+      cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
+      clauseBuffer_reset(&clauseBuffer);
+    }
   }
 
   clauseBuffer_destroy(&clauseBuffer);
