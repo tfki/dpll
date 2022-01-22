@@ -36,8 +36,8 @@ dpll_solve_partial(const cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRe
     uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
 
     // assignment with nextLiteral evaluating to false
-    assignment pFalseAssigment;
-    assignment_copy(&pFalseAssigment, pAssignment);
+    assignment pFalseAssignment;
+    assignment_copy(&pFalseAssignment, pAssignment);
 
     // for the assignment where nextLiteral evaluates to false we just reuse pAssignment
 
@@ -45,13 +45,13 @@ dpll_solve_partial(const cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRe
     assignment_set(pAssignment, nextVariable, (nextLiteral > 0) ? 1 : 0);
 
     // set value of nextVariable in pFalseAssigment, so that it evaluates to false
-    assignment_set(&pFalseAssigment, nextVariable, (nextLiteral < 0) ? 1 : 0);
+    assignment_set(&pFalseAssignment, nextVariable, (nextLiteral < 0) ? 1 : 0);
 
     if (!dpll_solve_partial(&simplified, pAssignment, pickAndRemove, pAssignmentResult)){
         return 0;
     }
 
-    if (!dpll_solve_partial(pCnf, &pFalseAssigment, pickAndRemove, pAssignmentResult)){
+    if (!dpll_solve_partial(pCnf, &pFalseAssignment, pickAndRemove, pAssignmentResult)){
         return 0;
     }
 
