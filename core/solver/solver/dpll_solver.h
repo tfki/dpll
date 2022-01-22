@@ -7,8 +7,8 @@
 
 #include <cnf/cnf.h>
 
-int dpll_solve(cnf* pCnf, int32_t (*pickAndRemove)(cnf *), assignment* pAssignmentResult);
+int dpll_solve(const cnf* pCnf, int32_t (*pickAndRemove)(const cnf *), assignment* pAssignmentResult);
 
-int dpll_solve_partial(cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRemove)(cnf *), assignment *pAssignmentResult);
+int dpll_solve_partial(const cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRemove)(const cnf *), assignment *pAssignmentResult);
 
 #endif
