@@ -93,6 +93,7 @@ test_cnf_simplify_with_mixed_clauses() {
   cnf formula;
   cnf_create(&formula);
   cnf_pushClause(&formula, clause1, clause1Length);
+  cnf_pushClause(&formula, clause2, clause2Length);
 
   cnf resultFormula;
   cnf_create(&resultFormula);
