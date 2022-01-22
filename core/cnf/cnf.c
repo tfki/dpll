@@ -64,3 +64,15 @@ cnf_destroy(cnf* pCnf)
   pCnf->capacity = 0u;
   pCnf->count = 0u;
 }
+
+void
+cnf_reset(cnf* pCnf)
+{
+  pCnf->count = 0u;
+}
+
+int
+cnf_simplify(const cnf* pCnf, cnf* pNextCnf)
+{
+
+}

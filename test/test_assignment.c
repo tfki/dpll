@@ -1,5 +1,4 @@
 #include <solver/assignment.h>
-#include <stdio.h>
 #include <assert.h>
 
 static void
