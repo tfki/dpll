@@ -1,41 +1,56 @@
 #include "solver/solver.h"
 
-typedef struct clause_buffer
+typedef struct clauseBuffer
 {
   int32_t* pData;
+  size_t capacity;
   size_t count;
-} clause_buffer;
+} clauseBuffer;
 
 static inline int
-clause_buffer_create(clause_buffer* pClauseBuffer, size_t worstCaseCapacity)
+clauseBuffer_create(clauseBuffer* pClauseBuffer)
 {
-  pClauseBuffer->pData = malloc(worstCaseCapacity * sizeof (int32_t));
+  pClauseBuffer->count = 0u;
+  pClauseBuffer->capacity = 1024u;
+  pClauseBuffer->pData = malloc(pClauseBuffer->capacity * sizeof(int32_t));
 
   if (!pClauseBuffer->pData)
     return 1;
 
-  pClauseBuffer->count = 0u;
+  return 0;
+}
+
+static inline int
+clauseBuffer_push(clauseBuffer* pClauseBuffer, int32_t literal)
+{
+  if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
+
+    int32_t* pNewData = realloc(pClauseBuffer->pData, pClauseBuffer->capacity * 2u * sizeof(int32_t));
+    if (!pNewData)
+      return 1;
+
+    pClauseBuffer->pData = pNewData;
+    pClauseBuffer->capacity *= 2u;
+  }
+
+  pClauseBuffer->pData[pClauseBuffer->count] = literal;
+  ++pClauseBuffer->count;
+
   return 0;
 }
 
 static inline void
-clause_buffer_push(clause_buffer* pClauseBuffer, int32_t literal)
+clauseBuffer_destroy(clauseBuffer* pClauseBuffer)
 {
-  pClauseBuffer->pData[pClauseBuffer->count] = literal;
-  ++pClauseBuffer->count;
-}
-
-static inline void
-clause_buffer_reset(clause_buffer* pClauseBuffer)
-{
+  free(pClauseBuffer->pData);
+  pClauseBuffer->pData = NULL;
+  pClauseBuffer->capacity = 0u;
   pClauseBuffer->count = 0u;
 }
 
 static inline void
-clause_buffer_destroy(clause_buffer* pClauseBuffer)
+clauseBuffer_reset(clauseBuffer* pClauseBuffer)
 {
-  free(pClauseBuffer->pData);
-  pClauseBuffer->pData = NULL;
   pClauseBuffer->count = 0u;
 }
 
@@ -46,8 +61,8 @@ cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
   cnf_clause_iterator_create(&clauseIterator, pCnf);
 
   // allocate worst case buffer
-  clause_buffer clauseBuffer;
-  if(clause_buffer_create(&clauseBuffer, pAssignment->count))
+  clauseBuffer clauseBuffer;
+  if (clauseBuffer_create(&clauseBuffer))
     return 1;
 
   while (!cnf_clause_iterator_next(&clauseIterator)) {
@@ -59,22 +74,18 @@ cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
       int8_t variableAssignment;
       assignment_get(pAssignment, variable, &variableAssignment);
 
-      if (!(variableAssignment ^ (literal > 0)))
-      {
-        clause_buffer_reset(&clauseBuffer);
-        break;
+      if (!(variableAssignment ^ (literal > 0))) {
+        clauseBuffer_reset(&clauseBuffer);
+        continue;
       }
 
-      clause_buffer_push(&clauseBuffer, literal);
+      clauseBuffer_push(&clauseBuffer, literal);
     }
 
-    if (clauseBuffer.count)
-    {
-      cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
-      clause_buffer_reset(&clauseBuffer);
-    }
+    cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
+    clauseBuffer_reset(&clauseBuffer);
   }
 
-  clause_buffer_destroy(&clauseBuffer);
+  clauseBuffer_destroy(&clauseBuffer);
   return 0;
 }
