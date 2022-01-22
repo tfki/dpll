@@ -1,4 +1,3 @@
-
 #include "solver/assignment.h"
 #include <stdlib.h>
 

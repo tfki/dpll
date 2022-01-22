@@ -1,6 +1,4 @@
-
 #include "solver/dpll_solver.h"
-
 
 int dpll_solve(const cnf *pCnf, int32_t (*pickAndRemove)(const cnf *), assignment *pAssignmentResult) {
     assignment emptyAssignment;
