@@ -74,19 +74,18 @@ assignment_set(assignment* pAssignment, uint32_t key, int8_t value)
   return 0;
 }
 
-void
+int
 assignment_get(const assignment* pAssignment, uint32_t key, int8_t* value)
 {
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
     if (pAssignment->pKeys[i] == key) {
       *value = pAssignment->pValues[i];
-      return;
+      return 0;
     }
   }
 
-  // if it doesnt exist, default to false
-  *value = 0;
+  return 1;
 }
 
 void

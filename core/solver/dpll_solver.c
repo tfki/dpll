@@ -14,7 +14,7 @@ dpll_solve_partial(cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRemove)(
     cnf simplified;
     cnf_create(&simplified);
 
-    // simplify (pCnf, pAssignment, &simplified);
+    cnf_simplify(pCnf, pAssignment, &simplified);
 
     // if cnf is empty -> sat
     if (pCnf->count == 0u) {
@@ -24,9 +24,9 @@ dpll_solve_partial(cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRemove)(
 
     // if cnf contains empty clause -> unsat
     cnf_clause_iterator iter;
-    cnf_clause_iterator_create(&iter, pCnf);
+    cnf_clause_iterator_create(&iter, &simplified);
 
-    while (cnf_clause_iterator_next(&iter)) {
+    while (!cnf_clause_iterator_next(&iter)) {
         if (iter.count == 0){
             return 1;
         }

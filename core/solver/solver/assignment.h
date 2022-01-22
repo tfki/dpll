@@ -22,7 +22,7 @@ assignment_copy(assignment* pDest, const assignment* pSrc);
 int
 assignment_set(assignment* pAssignment, uint32_t key, int8_t value);
 
-void
+int
 assignment_get(const assignment* pAssignment, uint32_t key, int8_t* value);
 
 void
