@@ -1,10 +1,10 @@
 #ifndef DPLLSOLVER_SOLVER_H
 #define DPLLSOLVER_SOLVER_H
 
-#include <cnf/cnf.h>
 #include "assignment.h"
+#include "dpll_solver.h"
 
-typedef struct solver solver;
+#include <cnf/cnf.h>
 
 int
 cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf);
