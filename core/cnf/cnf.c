@@ -71,8 +71,27 @@ cnf_reset(cnf* pCnf)
   pCnf->count = 0u;
 }
 
-int
-cnf_simplify(const cnf* pCnf, cnf* pNextCnf)
+void
+cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* pCnf)
 {
+  pCnfClauseIterator->pData = pCnf->pData;
+  pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
+  pCnfClauseIterator->count = 0u;
+}
 
+int
+cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator)
+{
+  const int32_t * pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count;
+  if (pNextData >= pCnfClauseIterator->pDataEnd)
+    return 1;
+
+  for (size_t i = 0u;;++i) {
+
+    if (pNextData[i] == 0u) {
+      pCnfClauseIterator->pData = pNextData;
+      pCnfClauseIterator->count = i;
+      return 0;
+    }
+  }
 }

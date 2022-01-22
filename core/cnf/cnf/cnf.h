@@ -26,39 +26,17 @@ cnf_destroy(cnf* pCnf);
 void
 cnf_reset(cnf* pCnf);
 
-int
-cnf_simplify(const cnf* pCnf, cnf* pNextCnf);
-
 typedef struct cnf_clause_iterator
 {
-  int32_t* pData;    /// position of the current clause
-  int32_t* pDataEnd; /// end of cnf
+  const int32_t* pData;    /// position of the current clause
+  const int32_t* pDataEnd; /// end of cnf
   size_t count;      /// count of literals in current clause
 } cnf_clause_iterator;
 
 void
-cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, cnf* pCnf)
-{
-  pCnfClauseIterator->pData = pCnf->pData;
-  pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
-  pCnfClauseIterator->count = 0u;
-}
+cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* pCnf);
 
 int
-cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator)
-{
-  int32_t * pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count;
-  if (pNextData >= pCnfClauseIterator->pDataEnd)
-    return 1;
-
-  for (size_t i = 0u;;++i) {
-
-    if (pNextData[i] == 0u) {
-      pCnfClauseIterator->pData = pNextData;
-      pCnfClauseIterator->count = i;
-      return 0;
-    }
-  }
-}
+cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator);
 
 #endif
