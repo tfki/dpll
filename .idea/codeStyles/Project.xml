@@ -1,0 +1,12 @@
+<component name="ProjectCodeStyleConfiguration">
+  <code_scheme name="Project" version="173">
+    <Objective-C-extensions>
+      <extensions>
+        <pair source="c" header="h" fileNamingConvention="SNAKE_CASE" />
+      </extensions>
+    </Objective-C-extensions>
+    <clangFormatSettings>
+      <option name="ENABLED" value="true" />
+    </clangFormatSettings>
+  </code_scheme>
+</component>
