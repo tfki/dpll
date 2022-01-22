@@ -36,6 +36,12 @@ cnf_copy(cnf* pDest, const cnf* pSrc)
 int
 cnf_pushClause(cnf* pCnf, const int32_t* pValues, size_t count)
 {
+  // if cnf empty, add leading 0
+  if (pCnf->count == 0u){
+    pCnf->pData[0u] = 0;
+    ++pCnf->count;
+  }
+
   while (pCnf->count + count + 1u > pCnf->capacity) {
 
     int32_t* pNewData = realloc(pCnf->pData, pCnf->capacity * 2u * sizeof(int32_t));
@@ -82,7 +88,8 @@ cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* p
 int
 cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator)
 {
-  const int32_t * pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count;
+  // + 1u to skip the 0 at pCnfClauseIterator->pData
+  const int32_t * pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
   if (pNextData >= pCnfClauseIterator->pDataEnd)
     return 1;
 

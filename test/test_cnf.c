@@ -18,8 +18,8 @@ test_cnf_create()
 static int
 test_cnf_pushClause()
 {
-  const int32_t rawCnf[] = { 10, -13, 11, -14, 0, -10, -11, 0, 16, -13, -11, 0 };
-  const size_t rawCnfCount = 12u;
+  const int32_t rawCnf[] = { 0,10, -13, 11, -14, 0, -10, -11, 0, 16, -13, -11, 0 };
+  const size_t rawCnfCount = 13u;
 
   const int32_t clause0[] = { 10, -13, 11, -14 };
   const int32_t clause1[] = { -10, -11 };
@@ -32,13 +32,13 @@ test_cnf_pushClause()
   assert(!cnf_create(&testCnf));
 
   assert(!cnf_pushClause(&testCnf, clause0, clause0_count));
-  assert(testCnf.count == 5);
+  assert(testCnf.count == 6);
 
   assert(!cnf_pushClause(&testCnf, clause1, clause1_count));
-  assert(testCnf.count == 8);
+  assert(testCnf.count == 9);
 
   assert(!cnf_pushClause(&testCnf, clause2, clause2_count));
-  assert(testCnf.count == 12);
+  assert(testCnf.count == 13);
 
   for (size_t i = 0u; i < rawCnfCount; ++i)
     assert(testCnf.pData[i] == rawCnf[i]);
@@ -56,16 +56,20 @@ test_cnf_capacityOverflow()
   cnf testCnf;
   assert(!cnf_create(&testCnf));
 
+  // push first clause separately, as it will also insert leading zero
+  // so count will be +=3
+  assert(!cnf_pushClause(&testCnf, clause, clauseCount));
+
   const size_t testCnfCapacity = testCnf.capacity;
-  for (size_t i = testCnf.count; i < testCnfCapacity; i += 2)
+  for (size_t i = testCnf.count; i + 2 < testCnfCapacity; i += 2)
     assert(!cnf_pushClause(&testCnf, clause, clauseCount));
 
   assert(testCnf.capacity == 1024u);
-  assert(testCnf.count == 1024u);
+  assert(testCnf.count == 1023u);
 
   assert(!cnf_pushClause(&testCnf, clause, clauseCount));
   assert(testCnf.capacity == 2048u);
-  assert(testCnf.count == 1026u);
+  assert(testCnf.count == 1025u);
 
   cnf_destroy(&testCnf);
   return 0;

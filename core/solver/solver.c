@@ -74,7 +74,7 @@ cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
       uint32_t variable = literal < 0 ? -literal : literal;
 
       int8_t variableAssignment;
-      if (!assignment_get(pAssignment, variable, &variableAssignment)) {
+      if (assignment_get(pAssignment, variable, &variableAssignment)) {
         // assignment does not specify literal value
         clauseBuffer_push(&clauseBuffer, literal);
         continue;
