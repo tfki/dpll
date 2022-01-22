@@ -30,7 +30,7 @@ typedef struct cnf_clause_iterator
 {
   const int32_t* pData;    /// position of the current clause
   const int32_t* pDataEnd; /// end of cnf
-  size_t count;      /// count of literals in current clause
+  size_t count;            /// count of literals in current clause
 } cnf_clause_iterator;
 
 void
