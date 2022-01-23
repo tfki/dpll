@@ -1,6 +1,6 @@
 #include "solver/assignment.h"
-#include <stdlib.h>
 #include <assert.h>
+#include <stdlib.h>
 
 int
 Assignment_create(Assignment* pAssignment)
@@ -84,7 +84,8 @@ Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
 }
 
 void
-Assignment_swap(Assignment* a, Assignment* b){
+Assignment_swap(Assignment* a, Assignment* b)
+{
   uint32_t* pKeysTmp = a->pKeys;
   int8_t* pValuesTmp = a->pValues;
   size_t countTmp = a->count;

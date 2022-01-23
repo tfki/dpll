@@ -1,17 +1,17 @@
+#include "test_common.h"
 
-#include <assert.h>
 #include <cnf/cnf.h>
 
 void
 test_cnf_clauseIterator_with_empty_cnf()
 {
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  assert(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
@@ -20,101 +20,102 @@ void
 test_cnf_clauseIterator_with_one_clause()
 {
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
-  int32_t clause1[] = {1, 2, -3};
+  int32_t clause1[] = { 1, 2, -3 };
   size_t clause1size = 3;
 
-  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 3);
-  assert(iter.pData[0] == 1);
-  assert(iter.pData[1] == 2);
-  assert(iter.pData[2] == -3);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 3);
+  TEST_ASSERT(iter.pData[0] == 1);
+  TEST_ASSERT(iter.pData[1] == 2);
+  TEST_ASSERT(iter.pData[2] == -3);
 
-  assert(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
 
 void
-test_cnf_clauseIterator_with_multiple_clauses(){
+test_cnf_clauseIterator_with_multiple_clauses()
+{
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
-  int32_t clause1[] = {1, 2, 3};
+  int32_t clause1[] = { 1, 2, 3 };
   size_t clause1size = 3;
 
-  int32_t clause2[] = {5, 2, -6, 1};
+  int32_t clause2[] = { 5, 2, -6, 1 };
   size_t clause2size = 4;
 
-  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
-  assert(!Cnf_pushClause(&cnf, clause2, clause2size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 3);
-  assert(iter.pData[0] == 1);
-  assert(iter.pData[1] == 2);
-  assert(iter.pData[2] == 3);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 3);
+  TEST_ASSERT(iter.pData[0] == 1);
+  TEST_ASSERT(iter.pData[1] == 2);
+  TEST_ASSERT(iter.pData[2] == 3);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 4);
-  assert(iter.pData[0] == 5);
-  assert(iter.pData[1] == 2);
-  assert(iter.pData[2] == -6);
-  assert(iter.pData[3] == 1);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 4);
+  TEST_ASSERT(iter.pData[0] == 5);
+  TEST_ASSERT(iter.pData[1] == 2);
+  TEST_ASSERT(iter.pData[2] == -6);
+  TEST_ASSERT(iter.pData[3] == 1);
 
-  assert(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
 
 void
-test_cnf_clauseIterator_with_mixed(){
+test_cnf_clauseIterator_with_mixed()
+{
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
-  int32_t clause1[] = {1, 2, 3};
+  int32_t clause1[] = { 1, 2, 3 };
   size_t clause1size = 3;
 
   int32_t clause2[] = {};
   size_t clause2size = 0;
 
-  int32_t clause3[] = {5, 2, -6, 1};
+  int32_t clause3[] = { 5, 2, -6, 1 };
   size_t clause3size = 4;
 
-
-  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
-  assert(!Cnf_pushClause(&cnf, clause2, clause2size));
-  assert(!Cnf_pushClause(&cnf, clause3, clause3size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause3, clause3size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 3);
-  assert(iter.pData[0] == 1);
-  assert(iter.pData[1] == 2);
-  assert(iter.pData[2] == 3);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 3);
+  TEST_ASSERT(iter.pData[0] == 1);
+  TEST_ASSERT(iter.pData[1] == 2);
+  TEST_ASSERT(iter.pData[2] == 3);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 0);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 0);
 
-  assert(!Cnf_ClauseIterator_next(&iter));
-  assert(iter.count == 4);
-  assert(iter.pData[0] == 5);
-  assert(iter.pData[1] == 2);
-  assert(iter.pData[2] == -6);
-  assert(iter.pData[3] == 1);
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(iter.count == 4);
+  TEST_ASSERT(iter.pData[0] == 5);
+  TEST_ASSERT(iter.pData[1] == 2);
+  TEST_ASSERT(iter.pData[2] == -6);
+  TEST_ASSERT(iter.pData[3] == 1);
 
-  assert(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
