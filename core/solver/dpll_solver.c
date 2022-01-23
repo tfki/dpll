@@ -1,9 +1,9 @@
 #include "solver/dpll_solver.h"
 
 int32_t
-dpllTrivialPick(const Cnf *pCnf)
+dpllTrivialPick(const Cnf* pCnf)
 {
-  return pCnf->pData[0];
+  return pCnf->pData[1u];
 }
 
 int

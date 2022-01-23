@@ -1,5 +1,5 @@
-#include <cnf/cnf.h>
 #include <assert.h>
+#include <cnf/cnf.h>
 
 static int
 test_Cnf_create()

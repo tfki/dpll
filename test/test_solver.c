@@ -1,5 +1,5 @@
-#include <solver/solver.h>
 #include <assert.h>
+#include <solver/solver.h>
 
 void
 test_dpllSolve_emptyCnf()
@@ -23,12 +23,12 @@ test_dpllSolve_precalculatedCnf()
   const int8_t result[] = { 1, 0, 1, 1 };
   const size_t variablesCount = 4u;
 
-  const int32_t clause1[] = { 3 , 4 };
+  const int32_t clause1[] = { 3, 4 };
   const int32_t clause2[] = { 1 };
   const int32_t clause3[] = { -2 };
   const int32_t clause4[] = { 3 };
   const int32_t clause5[] = { 4 };
-  const int32_t clause6[] = { 2 , -1, 4 };
+  const int32_t clause6[] = { 2, -1, 4 };
 
   const size_t clause1Count = 2u;
   const size_t clause2Count = 1u;
@@ -51,12 +51,34 @@ test_dpllSolve_precalculatedCnf()
 
   assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
-  for (size_t i = 0u; i < variablesCount; ++i)
-  {
+  for (size_t i = 0u; i < variablesCount; ++i) {
     int8_t value;
     assert(!Assignment_get(&assignment, variables[i], &value));
     assert(value == result[i]);
   }
+
+  Assignment_destroy(&assignment);
+  Cnf_destroy(&cnf);
+}
+
+void
+test_dpllSolve_unsatisfiableCnf()
+{
+  const int32_t clause1[] = { 1 };
+  const int32_t clause2[] = { -1 };
+
+  const size_t clause1Count = 1u;
+  const size_t clause2Count = 1u;
+
+  Cnf cnf;
+  Cnf_create(&cnf);
+  assert(!Cnf_pushClause(&cnf, clause1, clause1Count));
+  assert(!Cnf_pushClause(&cnf, clause2, clause2Count));
+
+  Assignment assignment;
+  Assignment_create(&assignment);
+
+  assert(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   Assignment_destroy(&assignment);
   Cnf_destroy(&cnf);
@@ -67,4 +89,5 @@ main()
 {
   test_dpllSolve_emptyCnf();
   test_dpllSolve_precalculatedCnf();
+  test_dpllSolve_unsatisfiableCnf();
 }

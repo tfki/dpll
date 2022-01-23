@@ -1,7 +1,7 @@
-#include <solver/solver.h>
 #include <assert.h>
-#include <time.h>
+#include <solver/solver.h>
 #include <stdio.h>
+#include <time.h>
 
 int
 main()
@@ -13,7 +13,6 @@ main()
 
   Assignment assignment;
   Assignment_create(&assignment);
-
 
   float start = ((float)clock()) / CLOCKS_PER_SEC;
 
