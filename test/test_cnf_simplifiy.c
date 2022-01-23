@@ -1,6 +1,6 @@
+#include <assert.h>
 #include <cnf/cnf.h>
 #include <solver/solver.h>
-#include <assert.h>
 
 void
 test_Cnf_simplify_withEmptyAssignment()
