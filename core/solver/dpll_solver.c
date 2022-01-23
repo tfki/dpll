@@ -12,7 +12,10 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAs
   Assignment emptyAssignment;
   Assignment_create(&emptyAssignment);
 
-  return dpllSolvePartial(pCnf, &emptyAssignment, pickAndRemove, pAssignmentResult);
+  int foundSolution = dpllSolvePartial(pCnf, &emptyAssignment, pickAndRemove, pAssignmentResult);
+  Assignment_destroy(&emptyAssignment);
+
+  return foundSolution;
 }
 
 int
@@ -28,7 +31,7 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
 
   // if Cnf is empty -> sat
   if (pCnf->count == 0u) {
-    *pAssignmentResult = *pAssignment;
+    Assignment_swap(pAssignmentResult, pAssignment);
     Cnf_destroy(&simplified);
     return 0;
   }
