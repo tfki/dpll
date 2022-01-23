@@ -11,7 +11,7 @@ test_cnf_clauseIterator_with_empty_cnf()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
@@ -30,13 +30,13 @@ test_cnf_clauseIterator_with_one_clause()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 3);
   TEST_ASSERT(iter.pData[0] == 1);
   TEST_ASSERT(iter.pData[1] == 2);
   TEST_ASSERT(iter.pData[2] == -3);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
@@ -48,31 +48,31 @@ test_cnf_clauseIterator_with_multiple_clauses()
   TEST_ASSERT(!Cnf_create(&cnf));
 
   int32_t clause1[] = { 1, 2, 3 };
-  size_t clause1Size = 3;
+  size_t clause1size = 3;
 
   int32_t clause2[] = { 5, 2, -6, 1 };
-  size_t clause2Size = 4;
+  size_t clause2size = 4;
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Size));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 3);
   TEST_ASSERT(iter.pData[0] == 1);
   TEST_ASSERT(iter.pData[1] == 2);
   TEST_ASSERT(iter.pData[2] == 3);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 4);
   TEST_ASSERT(iter.pData[0] == 5);
   TEST_ASSERT(iter.pData[1] == 2);
   TEST_ASSERT(iter.pData[2] == -6);
   TEST_ASSERT(iter.pData[3] == 1);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
@@ -99,23 +99,23 @@ test_cnf_clauseIterator_with_mixed()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 3);
   TEST_ASSERT(iter.pData[0] == 1);
   TEST_ASSERT(iter.pData[1] == 2);
   TEST_ASSERT(iter.pData[2] == 3);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 0);
 
-  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
   TEST_ASSERT(iter.count == 4);
   TEST_ASSERT(iter.pData[0] == 5);
   TEST_ASSERT(iter.pData[1] == 2);
   TEST_ASSERT(iter.pData[2] == -6);
   TEST_ASSERT(iter.pData[3] == 1);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT(!Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }

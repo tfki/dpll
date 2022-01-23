@@ -64,7 +64,7 @@ Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
   if (ClauseBuffer_create(&clauseBuffer))
     return 1;
 
-  while (!Cnf_ClauseIterator_next(&clauseIterator)) {
+  while (Cnf_ClauseIterator_next(&clauseIterator)) {
 
     int8_t clauseTrue = 0u;
 

@@ -79,20 +79,20 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
   pCnfClauseIterator->count = 0u;
 }
 
-int
+int8_t
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
   // + 1u to skip the 0 at pCnfClauseIterator->pData
   const int32_t* pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
   if (pNextData >= pCnfClauseIterator->pDataEnd)
-    return 1;
+    return 0;
 
   for (size_t i = 0u;; ++i) {
 
     if (pNextData[i] == 0u) {
       pCnfClauseIterator->pData = pNextData;
       pCnfClauseIterator->count = i;
-      return 0;
+      return 1;
     }
   }
 }

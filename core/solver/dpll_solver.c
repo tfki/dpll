@@ -40,7 +40,7 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &simplified);
 
-  while (!Cnf_ClauseIterator_next(&iter)) {
+  while (Cnf_ClauseIterator_next(&iter)) {
     if (iter.count == 0) {
       Cnf_destroy(&simplified);
       return 1;
