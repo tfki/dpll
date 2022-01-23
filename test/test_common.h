@@ -3,6 +3,9 @@
 
 #include <stdlib.h>
 
-#define TEST_ASSERT(c) if (!(c)) { exit(-1); }
+#define TEST_ASSERT(c)                                                                                                                                         \
+  if (!(c)) {                                                                                                                                                  \
+    exit(-1);                                                                                                                                                  \
+  }
 
 #endif
