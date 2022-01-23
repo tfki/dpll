@@ -16,12 +16,12 @@ test_dpllSolve_emptyCnf()
 void
 test_dpllSolve_precalculatedCnf()
 {
-  const int32_t clause0[] = { 10, -13, 11, -14 };
-  const int32_t clause1[] = { -10, -11 };
-  const int32_t clause2[] = { 16, -13, -11 };
-  const size_t clause0Count = 4u;
-  const size_t clause1Count = 2u;
-  const size_t clause2Count = 3u;
+  // const int32_t clause0[] = { 10, -13, 11, -14 };
+  // const int32_t clause1[] = { -10, -11 };
+  // const int32_t clause2[] = { 16, -13, -11 };
+  // const size_t clause0Count = 4u;
+  // const size_t clause1Count = 2u;
+  // const size_t clause2Count = 3u;
 
   // TODO
 

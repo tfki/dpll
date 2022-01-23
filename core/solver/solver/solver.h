@@ -1,5 +1,5 @@
-#ifndef SOLVER_SOLVER_H
-#define SOLVER_SOLVER_H
+#ifndef DPLLSOLVER_SOLVER_H
+#define DPLLSOLVER_SOLVER_H
 
 #include "assignment.h"
 #include "dpll_solver.h"

@@ -1,5 +1,5 @@
-#ifndef CNF_CNF_H
-#define CNF_CNF_H
+#ifndef DPLLSOLVER_CNF_H
+#define DPLLSOLVER_CNF_H
 
 #include <stdint.h>
 #include <stdlib.h>
