@@ -25,6 +25,9 @@ int
 Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value);
 
 void
+Assignment_swap(Assignment* a, Assignment* b);
+
+void
 Assignment_destroy(Assignment* pAssignment);
 
 #endif

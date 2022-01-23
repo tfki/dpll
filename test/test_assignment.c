@@ -97,6 +97,42 @@ test_Assignment_destroy()
   TEST_ASSERT(assignment.pValues == NULL);
 }
 
+void
+test_Assignment_swap()
+{
+  Assignment a;
+  assert(!Assignment_create(&a));
+
+  Assignment b;
+  assert(!Assignment_create(&b));
+
+  assert(!Assignment_set(&a, 1u, 0));
+  assert(!Assignment_set(&a, 3u, 1));
+
+  assert(!Assignment_set(&b, 2u, 1));
+  assert(!Assignment_set(&b, 4u, 0));
+  assert(!Assignment_set(&b, 6u, 1));
+
+  Assignment_swap(&a, &b);
+
+  assert(a.count == 3);
+  assert(a.pKeys[0] == 2u);
+  assert(a.pKeys[1] == 4u);
+  assert(a.pKeys[2] == 6u);
+  assert(a.pValues[0] == 1);
+  assert(a.pValues[1] == 0);
+  assert(a.pValues[2] == 1);
+
+  assert(b.count == 2);
+  assert(b.pKeys[0] == 1u);
+  assert(b.pKeys[1] == 3u);
+  assert(b.pValues[0] == 0);
+  assert(b.pValues[1] == 1);
+
+  Assignment_destroy(&b);
+  Assignment_destroy(&a);
+}
+
 int
 main()
 {
@@ -104,6 +140,7 @@ main()
   test_Assignment_getAndSet();
   test_Assignment_copy();
   test_Assignment_destroy();
+  test_Assignment_swap();
 
   return 0;
 }

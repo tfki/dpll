@@ -84,6 +84,24 @@ Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
 }
 
 void
+Assignment_swap(Assignment* a, Assignment* b){
+  uint32_t* pKeysTmp = a->pKeys;
+  int8_t* pValuesTmp = a->pValues;
+  size_t countTmp = a->count;
+  size_t capacityTmp = a->capacity;
+
+  a->pKeys = b->pKeys;
+  a->pValues = b->pValues;
+  a->count = b->count;
+  a->capacity = b->capacity;
+
+  b->pKeys = pKeysTmp;
+  b->pValues = pValuesTmp;
+  b->count = countTmp;
+  b->capacity = capacityTmp;
+}
+
+void
 Assignment_destroy(Assignment* pAssignment)
 {
   free(pAssignment->pKeys);
