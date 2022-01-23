@@ -21,7 +21,7 @@ set_target_properties("${TARGET_NAME}" PROPERTIES
 
 message("${PROJECT_NAME}: Static Library '${TARGET_NAME}' added")
 
-# solver lib
+# Solver lib
 
 set(TARGET_NAME Solver)
 set(TARGET_INCLUDE_DIRECTORIES solver)

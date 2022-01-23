@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-# application executable
+# Application executable
 
 set(TARGET_NAME Application)
 set(TARGET_LINK_LIBRARIES Cnf Solver)
@@ -18,7 +18,7 @@ set_target_properties("${TARGET_NAME}" PROPERTIES
 
 message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
 
-# scratch executable
+# Scratch executable
 
 set(TARGET_NAME Scratch)
 set(TARGET_LINK_LIBRARIES Cnf Solver)
@@ -37,7 +37,7 @@ set_target_properties("${TARGET_NAME}" PROPERTIES
 message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
 
 
-# benchmark executable
+# Benchmark executable
 
 set(TARGET_NAME Benchmark)
 set(TARGET_LINK_LIBRARIES Cnf Solver)

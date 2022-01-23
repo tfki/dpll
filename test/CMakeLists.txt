@@ -1,12 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-#  _____                _
-# |_   _|   ___   ___  | |_   ___
-#   | |    / _ \ / __| | __| / __|
-#   | |   |  __/ \__ \ | |_  \__ \
-#   |_|    \___| |___/  \__| |___/
-#
-
 # macro for converting snake_case to Pascal_Snake_Case
 # which is not trivial in cmake as cmake regex does not
 # support case replacements
