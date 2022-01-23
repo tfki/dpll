@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 # Application executable
 
 set(TARGET_NAME Application)
-set(TARGET_LINK_LIBRARIES Cnf Solver)
+set(TARGET_LINK_LIBRARIES Common Cnf Solver)
 
 file(GLOB_RECURSE TARGET_HEADER app/*.h)
 file(GLOB_RECURSE TARGET_SOURCE app/*.c)
@@ -21,7 +21,7 @@ message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
 # Scratch executable
 
 set(TARGET_NAME Scratch)
-set(TARGET_LINK_LIBRARIES Cnf Solver)
+set(TARGET_LINK_LIBRARIES Common Cnf Solver)
 
 file(GLOB_RECURSE TARGET_HEADER scratch/*.h)
 file(GLOB_RECURSE TARGET_SOURCE scratch/*.c)
@@ -40,7 +40,7 @@ message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
 # Benchmark executable
 
 set(TARGET_NAME Benchmark)
-set(TARGET_LINK_LIBRARIES Cnf Solver)
+set(TARGET_LINK_LIBRARIES Common Cnf Solver)
 
 file(GLOB_RECURSE TARGET_HEADER benchmark/*.h)
 file(GLOB_RECURSE TARGET_SOURCE benchmark/*.c)
