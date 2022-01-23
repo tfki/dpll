@@ -1,7 +1,7 @@
 #include "solver/dpll_solver.h"
 
 int32_t
-dpllTrivialPick(const Cnf* pCnf)
+dpllTrivialPick(const Cnf *pCnf)
 {
   return pCnf->pData[0];
 }
@@ -29,6 +29,7 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   // if Cnf is empty -> sat
   if (pCnf->count == 0u) {
     *pAssignmentResult = *pAssignment;
+    Cnf_destroy(&simplified);
     return 0;
   }
 
@@ -36,9 +37,12 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &simplified);
 
-  while (!Cnf_ClauseIterator_next(&iter))
-    if (iter.count == 0)
+  while (!Cnf_ClauseIterator_next(&iter)) {
+    if (iter.count == 0) {
+      Cnf_destroy(&simplified);
       return 1;
+    }
+  }
 
   int32_t nextLiteral = pickAndRemove(pCnf);
   uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
@@ -55,13 +59,19 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   // set value of nextVariable in pFalseAssigment, so that it evaluates to false
   Assignment_set(&pFalseAssignment, nextVariable, (nextLiteral < 0) ? 1 : 0);
 
-  if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult))
+  if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult)) {
+    Cnf_destroy(&simplified);
+    Assignment_destroy(&pFalseAssignment);
     return 0;
+  }
 
+  if (!dpllSolvePartial(&simplified, &pFalseAssignment, pickAndRemove, pAssignmentResult)) {
+    Cnf_destroy(&simplified);
+    Assignment_destroy(&pFalseAssignment);
+    return 0;
+  }
+
+  Assignment_destroy(&pFalseAssignment);
   Cnf_destroy(&simplified);
-
-  if (!dpllSolvePartial(pCnf, &pFalseAssignment, pickAndRemove, pAssignmentResult))
-    return 0;
-
   return 1;
 }
