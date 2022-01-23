@@ -31,6 +31,10 @@ test_Cnf_simplify_withEmptyAssignment()
   for (size_t i = 0u; i < cnf.count; ++i) {
     assert(cnf.pData[i] == resultCnf.pData[i]);
   }
+
+  Assignment_destroy(&emptyAssignment);
+  Cnf_destroy(&cnf);
+  Cnf_destroy(&resultCnf);
 }
 
 void
@@ -53,6 +57,10 @@ test_Cnf_simplify_withTrueClause()
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
   assert(resultCnf.count == 0u);
+
+  Assignment_destroy(&assignment);
+  Cnf_destroy(&cnf);
+  Cnf_destroy(&resultCnf);
 }
 
 void
@@ -75,6 +83,10 @@ test_Cnf_simplify_withFalseClause()
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
   assert(resultCnf.count == (cnf.count - 1u));
+
+  Assignment_destroy(&assignment);
+  Cnf_destroy(&cnf);
+  Cnf_destroy(&resultCnf);
 }
 
 void
@@ -93,21 +105,34 @@ test_Cnf_simplify_withMixedClauses()
   int32_t clause2[] = { 3, -4, 5 };
   size_t clause2Count = 3u;
 
+  // this clause should be unchanged int the result
+  int32_t clause3[] = { 6, -7, 8 };
+  size_t clause3Count = 3u;
+
   Cnf cnf;
   Cnf_create(&cnf);
   Cnf_pushClause(&cnf, clause1, clause1Count);
   Cnf_pushClause(&cnf, clause2, clause2Count);
+  Cnf_pushClause(&cnf, clause3, clause3Count);
 
   Cnf resultCnf;
   Cnf_create(&resultCnf);
 
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultCnf.count == 4u);
+  assert(resultCnf.count == 8u);
   assert(resultCnf.pData[0u] == 0);
   assert(resultCnf.pData[1u] == -2);
   assert(resultCnf.pData[2u] == 3);
-  assert(resultCnf.pData[0u] == 0);
+  assert(resultCnf.pData[3u] == 0);
+  assert(resultCnf.pData[4u] == 6);
+  assert(resultCnf.pData[5u] == -7);
+  assert(resultCnf.pData[6u] == 8);
+  assert(resultCnf.pData[7u] == 0);
+
+  Assignment_destroy(&assignment);
+  Cnf_destroy(&cnf);
+  Cnf_destroy(&resultCnf);
 }
 
 int
