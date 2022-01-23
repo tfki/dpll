@@ -6,6 +6,7 @@
 #define TEST_ASSERT(c)                                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \
     exit(-1);                                                                                                                                                  \
-  }
+  }                                                                                                                                                            \
+  ((void)0)
 
 #endif

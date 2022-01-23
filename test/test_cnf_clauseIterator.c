@@ -23,9 +23,9 @@ test_cnf_clauseIterator_with_one_clause()
   TEST_ASSERT(!Cnf_create(&cnf));
 
   int32_t clause1[] = { 1, 2, -3 };
-  size_t clause1size = 3;
+  size_t clause1Size = 3;
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
@@ -48,13 +48,13 @@ test_cnf_clauseIterator_with_multiple_clauses()
   TEST_ASSERT(!Cnf_create(&cnf));
 
   int32_t clause1[] = { 1, 2, 3 };
-  size_t clause1size = 3;
+  size_t clause1Size = 3;
 
   int32_t clause2[] = { 5, 2, -6, 1 };
-  size_t clause2size = 4;
+  size_t clause2Size = 4;
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
@@ -84,17 +84,17 @@ test_cnf_clauseIterator_with_mixed()
   TEST_ASSERT(!Cnf_create(&cnf));
 
   int32_t clause1[] = { 1, 2, 3 };
-  size_t clause1size = 3;
+  size_t clause1Size = 3;
 
   int32_t clause2[] = {};
-  size_t clause2size = 0;
+  size_t clause2Size = 0;
 
   int32_t clause3[] = { 5, 2, -6, 1 };
-  size_t clause3size = 4;
+  size_t clause3Size = 4;
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1size));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2size));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause3, clause3size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Size));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause3, clause3Size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
