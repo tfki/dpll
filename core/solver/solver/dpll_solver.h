@@ -1,13 +1,14 @@
-#ifndef DPLLSOLVER_DPLL_SOLVER_H
-#define DPLLSOLVER_DPLL_SOLVER_H
+#ifndef SOLVER_DPLLSOLVER_H
+#define SOLVER_DPLLSOLVER_H
 
 #include "solver.h"
-#include "solver/assignment.h"
-
+#include "assignment.h"
 #include <cnf/cnf.h>
 
-int dpll_solve(const cnf* pCnf, int32_t (*pickAndRemove)(const cnf *), assignment* pAssignmentResult);
+int
+dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult);
 
-int dpll_solve_partial(const cnf *pCnf, assignment *pAssignment, int32_t (*pickAndRemove)(const cnf *), assignment *pAssignmentResult);
+int
+dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult);
 
 #endif

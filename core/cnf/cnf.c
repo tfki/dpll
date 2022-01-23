@@ -1,9 +1,8 @@
 #include "cnf/cnf.h"
-
-#include <string.h> // memcpy
+#include <string.h>
 
 int
-cnf_create(cnf* pCnf)
+Cnf_create(Cnf* pCnf)
 {
   pCnf->count = 0u;
   pCnf->capacity = 1024u;
@@ -16,7 +15,7 @@ cnf_create(cnf* pCnf)
 }
 
 int
-cnf_copy(cnf* pDest, const cnf* pSrc)
+Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 {
   pDest->count = pSrc->count;
   pDest->capacity = pSrc->capacity;
@@ -34,10 +33,10 @@ cnf_copy(cnf* pDest, const cnf* pSrc)
 }
 
 int
-cnf_pushClause(cnf* pCnf, const int32_t* pValues, size_t count)
+Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 {
-  // if cnf empty, add leading 0
-  if (pCnf->count == 0u){
+  // if Cnf empty, add leading 0
+  if (pCnf->count == 0u) {
     pCnf->pData[0u] = 0;
     ++pCnf->count;
   }
@@ -63,7 +62,7 @@ cnf_pushClause(cnf* pCnf, const int32_t* pValues, size_t count)
 }
 
 void
-cnf_destroy(cnf* pCnf)
+Cnf_destroy(Cnf* pCnf)
 {
   free(pCnf->pData);
   pCnf->pData = NULL;
@@ -72,13 +71,13 @@ cnf_destroy(cnf* pCnf)
 }
 
 void
-cnf_reset(cnf* pCnf)
+Cnf_reset(Cnf* pCnf)
 {
   pCnf->count = 0u;
 }
 
 void
-cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* pCnf)
+Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {
   pCnfClauseIterator->pData = pCnf->pData;
   pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
@@ -86,14 +85,14 @@ cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* p
 }
 
 int
-cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator)
+Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
   // + 1u to skip the 0 at pCnfClauseIterator->pData
-  const int32_t * pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
+  const int32_t* pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
   if (pNextData >= pCnfClauseIterator->pDataEnd)
     return 1;
 
-  for (size_t i = 0u;;++i) {
+  for (size_t i = 0u;; ++i) {
 
     if (pNextData[i] == 0u) {
       pCnfClauseIterator->pData = pNextData;

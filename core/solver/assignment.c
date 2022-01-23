@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int
-assignment_create(assignment* pAssignment)
+Assignment_create(Assignment* pAssignment)
 {
   pAssignment->count = 0u;
   pAssignment->capacity = 1024u;
@@ -17,7 +17,7 @@ assignment_create(assignment* pAssignment)
 }
 
 int
-assignment_copy(assignment* pDest, const assignment* pSrc)
+Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 {
   pDest->capacity = pSrc->capacity;
   pDest->count = pSrc->count;
@@ -41,7 +41,7 @@ assignment_copy(assignment* pDest, const assignment* pSrc)
 }
 
 int
-assignment_set(assignment* pAssignment, uint32_t key, int8_t value)
+Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 {
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
@@ -74,7 +74,7 @@ assignment_set(assignment* pAssignment, uint32_t key, int8_t value)
 }
 
 int
-assignment_get(const assignment* pAssignment, uint32_t key, int8_t* value)
+Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
 {
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
@@ -88,7 +88,7 @@ assignment_get(const assignment* pAssignment, uint32_t key, int8_t* value)
 }
 
 void
-assignment_destroy(assignment* pAssignment)
+Assignment_destroy(Assignment* pAssignment)
 {
   free(pAssignment->pKeys);
   pAssignment->pKeys = NULL;

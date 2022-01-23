@@ -1,42 +1,42 @@
 #ifndef CNF_CNF_H
 #define CNF_CNF_H
 
-#include <stdint.h> // int32_t
-#include <stdlib.h> // size_t
+#include <stdint.h>
+#include <stdlib.h>
 
-typedef struct cnf
+typedef struct Cnf
 {
   int32_t* pData;
   size_t capacity;
   size_t count;
-} cnf;
+} Cnf;
 
 int
-cnf_create(cnf* pCnf);
+Cnf_create(Cnf* pCnf);
 
 int
-cnf_copy(cnf* pDest, const cnf* pSrc);
+Cnf_copy(Cnf* pDest, const Cnf* pSrc);
 
 int
-cnf_pushClause(cnf* pCnf, const int32_t* pValues, size_t count);
+Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count);
 
 void
-cnf_destroy(cnf* pCnf);
+Cnf_destroy(Cnf* pCnf);
 
 void
-cnf_reset(cnf* pCnf);
+Cnf_reset(Cnf* pCnf);
 
-typedef struct cnf_clause_iterator
+typedef struct Cnf_ClauseIterator
 {
   const int32_t* pData;    /// position of the current clause
-  const int32_t* pDataEnd; /// end of cnf
+  const int32_t* pDataEnd; /// end of Cnf
   size_t count;            /// count of literals in current clause
-} cnf_clause_iterator;
+} Cnf_ClauseIterator;
 
 void
-cnf_clause_iterator_create(cnf_clause_iterator* pCnfClauseIterator, const cnf* pCnf);
+Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf);
 
 int
-cnf_clause_iterator_next(cnf_clause_iterator* pCnfClauseIterator);
+Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator);
 
 #endif

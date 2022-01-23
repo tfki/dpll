@@ -3,114 +3,118 @@
 #include <assert.h>
 
 void
-test_cnf_simplify_with_empty_assignment() {
-  assignment emptyAssignment;
-  assignment_create(&emptyAssignment);
+test_Cnf_simplify_withEmptyAssignment()
+{
+  Assignment emptyAssignment;
+  Assignment_create(&emptyAssignment);
 
-  int32_t clause1[] = {1, -2, 3};
-  size_t clause1Lenght = 3;
-  int32_t clause2[] = {5, 3, -1};
-  size_t clause2Lenght = 3;
-  int32_t clause3[] = {4, 2, -3};
-  size_t clause3Lenght = 3;
+  int32_t clause1[] = { 1, -2, 3 };
+  int32_t clause2[] = { 5, 3, -1 };
+  int32_t clause3[] = { 4, 2, -3 };
+  size_t clause1Count = 3u;
+  size_t clause2Count = 3u;
+  size_t clause3Count = 3u;
 
+  Cnf cnf;
+  Cnf_create(&cnf);
+  Cnf_pushClause(&cnf, clause1, clause1Count);
+  Cnf_pushClause(&cnf, clause2, clause2Count);
+  Cnf_pushClause(&cnf, clause3, clause3Count);
 
-  cnf formula;
-  cnf_create(&formula);
-  cnf_pushClause(&formula, clause1, clause1Lenght);
-  cnf_pushClause(&formula, clause2, clause2Lenght);
-  cnf_pushClause(&formula, clause3, clause3Lenght);
+  Cnf resultCnf;
+  Cnf_create(&resultCnf);
 
-  cnf resultFormula;
-  cnf_create(&resultFormula);
+  Cnf_simplify(&cnf, &emptyAssignment, &resultCnf);
 
-  cnf_simplify(&formula, &emptyAssignment, &resultFormula);
+  assert(cnf.count == resultCnf.count);
 
-  assert(formula.count == resultFormula.count);
-
-  for (int i = 0; i < formula.count; ++i) {
-    assert(formula.pData[i] == resultFormula.pData[i]);
+  for (int i = 0; i < cnf.count; ++i) {
+    assert(cnf.pData[i] == resultCnf.pData[i]);
   }
 }
 
 void
-test_cnf_simplify_with_true_clause() {
-  assignment assignment;
-  assignment_create(&assignment);
-  assignment_set(&assignment, 1, 1);
+test_Cnf_simplify_withTrueClause()
+{
+  Assignment assignment;
+  Assignment_create(&assignment);
+  Assignment_set(&assignment, 1, 1);
 
-  int32_t clause1[] = {1, -2, 3};
-  size_t clause1Length = 3;
+  int32_t clause[] = { 1, -2, 3 };
+  size_t clauseCount = 3;
 
-  cnf formula;
-  cnf_create(&formula);
-  cnf_pushClause(&formula, clause1, clause1Length);
+  Cnf cnf;
+  Cnf_create(&cnf);
+  Cnf_pushClause(&cnf, clause, clauseCount);
 
-  cnf resultFormula;
-  cnf_create(&resultFormula);
+  Cnf resultCnf;
+  Cnf_create(&resultCnf);
 
-  cnf_simplify(&formula, &assignment, &resultFormula);
+  Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultFormula.count == 0);
+  assert(resultCnf.count == 0);
 }
 
 void
-test_cnf_simplify_with_false_clause() {
-  assignment assignment;
-  assignment_create(&assignment);
-  assignment_set(&assignment, 1, 0);
+test_Cnf_simplify_withFalseClause()
+{
+  Assignment assignment;
+  Assignment_create(&assignment);
+  Assignment_set(&assignment, 1, 0);
 
-  int32_t clause1[] = {1, -2, 3};
-  size_t clause1Length = 3;
+  int32_t clause[] = { 1, -2, 3 };
+  size_t clause1Count = 3;
 
-  cnf formula;
-  cnf_create(&formula);
-  cnf_pushClause(&formula, clause1, clause1Length);
+  Cnf cnf;
+  Cnf_create(&cnf);
+  Cnf_pushClause(&cnf, clause, clause1Count);
 
-  cnf resultFormula;
-  cnf_create(&resultFormula);
+  Cnf resultCnf;
+  Cnf_create(&resultCnf);
 
-  cnf_simplify(&formula, &assignment, &resultFormula);
+  Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultFormula.count == (formula.count - 1));
+  assert(resultCnf.count == (cnf.count - 1));
 }
 
 void
-test_cnf_simplify_with_mixed_clauses() {
-  assignment assignment;
-  assignment_create(&assignment);
-  assignment_set(&assignment, 1, 0);
-  assignment_set(&assignment, 5, 1);
+test_Cnf_simplify_withMixedClauses()
+{
+  Assignment assignment;
+  Assignment_create(&assignment);
+  Assignment_set(&assignment, 1, 0);
+  Assignment_set(&assignment, 5, 1);
 
   // this clause should have the 1 omitted
-  int32_t clause1[] = {1, -2, 3};
-  size_t clause1Length = 3;
+  int32_t clause1[] = { 1, -2, 3 };
+  size_t clause1Count = 3;
 
   // this clause should be absent from the result
-  int32_t clause2[] = {3, -4, 5};
-  size_t clause2Length = 3;
+  int32_t clause2[] = { 3, -4, 5 };
+  size_t clause2Count = 3;
 
-  cnf formula;
-  cnf_create(&formula);
-  cnf_pushClause(&formula, clause1, clause1Length);
-  cnf_pushClause(&formula, clause2, clause2Length);
+  Cnf cnf;
+  Cnf_create(&cnf);
+  Cnf_pushClause(&cnf, clause1, clause1Count);
+  Cnf_pushClause(&cnf, clause2, clause2Count);
 
-  cnf resultFormula;
-  cnf_create(&resultFormula);
+  Cnf resultCnf;
+  Cnf_create(&resultCnf);
 
-  cnf_simplify(&formula, &assignment, &resultFormula);
+  Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultFormula.count == 4);
-  assert(resultFormula.pData[0] == 0);
-  assert(resultFormula.pData[1] == -2);
-  assert(resultFormula.pData[2] == 3);
-  assert(resultFormula.pData[0] == 0);
+  assert(resultCnf.count == 4);
+  assert(resultCnf.pData[0] == 0);
+  assert(resultCnf.pData[1] == -2);
+  assert(resultCnf.pData[2] == 3);
+  assert(resultCnf.pData[0] == 0);
 }
 
 int
-main() {
-  test_cnf_simplify_with_empty_assignment();
-  test_cnf_simplify_with_true_clause();
-  test_cnf_simplify_with_false_clause();
-  test_cnf_simplify_with_mixed_clauses();
+main()
+{
+  test_Cnf_simplify_withEmptyAssignment();
+  test_Cnf_simplify_withTrueClause();
+  test_Cnf_simplify_withFalseClause();
+  test_Cnf_simplify_withMixedClauses();
 }

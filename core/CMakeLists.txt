@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 
-# cnf lib
+# Cnf lib
 
 set(TARGET_NAME Cnf)
 set(TARGET_INCLUDE_DIRECTORIES cnf)
-set(TARGET_LINK_LIBRARIES )
+set(TARGET_LINK_LIBRARIES)
 
 file(GLOB_RECURSE TARGET_HEADER cnf/*.h)
 file(GLOB_RECURSE TARGET_SOURCE cnf/*.c)

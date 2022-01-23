@@ -1,14 +1,14 @@
 #include "solver/solver.h"
 
-typedef struct clauseBuffer
+typedef struct ClauseBuffer
 {
   int32_t* pData;
   size_t capacity;
   size_t count;
-} clauseBuffer;
+} ClauseBuffer;
 
 static inline int
-clauseBuffer_create(clauseBuffer* pClauseBuffer)
+ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 {
   pClauseBuffer->count = 0u;
   pClauseBuffer->capacity = 1024u;
@@ -21,7 +21,7 @@ clauseBuffer_create(clauseBuffer* pClauseBuffer)
 }
 
 static inline int
-clauseBuffer_push(clauseBuffer* pClauseBuffer, int32_t literal)
+ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 {
   if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
 
@@ -40,7 +40,7 @@ clauseBuffer_push(clauseBuffer* pClauseBuffer, int32_t literal)
 }
 
 static inline void
-clauseBuffer_destroy(clauseBuffer* pClauseBuffer)
+ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 {
   free(pClauseBuffer->pData);
   pClauseBuffer->pData = NULL;
@@ -49,22 +49,22 @@ clauseBuffer_destroy(clauseBuffer* pClauseBuffer)
 }
 
 static inline void
-clauseBuffer_reset(clauseBuffer* pClauseBuffer)
+ClauseBuffer_reset(ClauseBuffer* pClauseBuffer)
 {
   pClauseBuffer->count = 0u;
 }
 
 int
-cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
+Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
 {
-  cnf_clause_iterator clauseIterator;
-  cnf_clause_iterator_create(&clauseIterator, pCnf);
+  Cnf_ClauseIterator clauseIterator;
+  Cnf_ClauseIterator_create(&clauseIterator, pCnf);
 
-  clauseBuffer clauseBuffer;
-  if (clauseBuffer_create(&clauseBuffer))
+  ClauseBuffer clauseBuffer;
+  if (ClauseBuffer_create(&clauseBuffer))
     return 1;
 
-  while (!cnf_clause_iterator_next(&clauseIterator)) {
+  while (!Cnf_ClauseIterator_next(&clauseIterator)) {
 
     int8_t clauseTrue = 0u;
 
@@ -74,28 +74,28 @@ cnf_simplify(const cnf* pCnf, const assignment* pAssignment, cnf* pNextCnf)
       uint32_t variable = literal < 0 ? -literal : literal;
 
       int8_t variableAssignment;
-      if (assignment_get(pAssignment, variable, &variableAssignment)) {
-        // assignment does not specify literal value
-        clauseBuffer_push(&clauseBuffer, literal);
+      if (Assignment_get(pAssignment, variable, &variableAssignment)) {
+        // Assignment does not specify literal value
+        ClauseBuffer_push(&clauseBuffer, literal);
         continue;
       }
 
       if (!(variableAssignment ^ (literal > 0))) {
-        // assignment makes the whole clause true
-        clauseBuffer_reset(&clauseBuffer);
+        // Assignment makes the whole clause true
+        ClauseBuffer_reset(&clauseBuffer);
         clauseTrue = 1u;
         break;
       }
 
-      // assignment makes the literal false
+      // Assignment makes the literal false
     }
 
     if (!clauseTrue) {
-      cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
-      clauseBuffer_reset(&clauseBuffer);
+      Cnf_pushClause(pNextCnf, clauseBuffer.pData, clauseBuffer.count);
+      ClauseBuffer_reset(&clauseBuffer);
     }
   }
 
-  clauseBuffer_destroy(&clauseBuffer);
+  ClauseBuffer_destroy(&clauseBuffer);
   return 0;
 }
