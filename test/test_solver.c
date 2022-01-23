@@ -12,6 +12,9 @@ test_dpllSolve_emptyCnf()
   Assignment_create(&assignment);
 
   TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+
+  Assignment_destroy(&assignment);
+  Cnf_destroy(&cnf);
 }
 
 void
