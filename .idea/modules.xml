@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/DpllSolver.iml" filepath="$PROJECT_DIR$/.idea/DpllSolver.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/dpll.iml" filepath="$PROJECT_DIR$/.idea/dpll.iml" />
     </modules>
   </component>

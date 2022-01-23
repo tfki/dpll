@@ -32,13 +32,13 @@ test_Cnf_pushClause()
   assert(!Cnf_create(&cnf));
 
   assert(!Cnf_pushClause(&cnf, clause0, clause0Count));
-  assert(cnf.count == 6);
+  assert(cnf.count == 6u);
 
   assert(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  assert(cnf.count == 9);
+  assert(cnf.count == 9u);
 
   assert(!Cnf_pushClause(&cnf, clause2, clause2Count));
-  assert(cnf.count == 13);
+  assert(cnf.count == 13u);
 
   for (size_t i = 0u; i < rawCnfCount; ++i)
     assert(cnf.pData[i] == rawCnf[i]);
@@ -61,7 +61,7 @@ test_Cnf_capacityOverflow()
   assert(!Cnf_pushClause(&cnf, clause, clauseCount));
 
   const size_t testCnfCapacity = cnf.capacity;
-  for (size_t i = cnf.count; i + 2 < testCnfCapacity; i += 2)
+  for (size_t i = cnf.count; i + 2u < testCnfCapacity; i += 2u)
     assert(!Cnf_pushClause(&cnf, clause, clauseCount));
 
   assert(cnf.capacity == 1024u);

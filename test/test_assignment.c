@@ -1,5 +1,5 @@
-#include <solver/assignment.h>
 #include <assert.h>
+#include <solver/assignment.h>
 
 static void
 test_Assignment_create()
@@ -47,16 +47,19 @@ test_Assignment_getAndSet()
 static void
 test_Assignment_copy()
 {
+  uint32_t keys[] = { 1u, 2u, 3u, 4u };
+  int8_t values[] = { 1, 1, 0, 0 };
+
   Assignment assignment1;
   assert(!Assignment_create(&assignment1));
 
-  assert(!Assignment_set(&assignment1, 1u, 1));
-  assert(!Assignment_set(&assignment1, 2u, 1));
-  assert(!Assignment_set(&assignment1, 3u, 0));
-  assert(!Assignment_set(&assignment1, 4u, 0));
+  assert(!Assignment_set(&assignment1, keys[0u], values[0u]));
+  assert(!Assignment_set(&assignment1, keys[1u], values[1u]));
+  assert(!Assignment_set(&assignment1, keys[2u], values[2u]));
+  assert(!Assignment_set(&assignment1, keys[3u], values[3u]));
 
-  assert(assignment1.count == 4);
-  assert(assignment1.capacity == 1024);
+  assert(assignment1.count == 4u);
+  assert(assignment1.capacity == 1024u);
 
   Assignment assignment2;
   Assignment_copy(&assignment2, &assignment1);
@@ -64,9 +67,10 @@ test_Assignment_copy()
   for (size_t i = 0u; i < assignment1.count; ++i) {
     int8_t value1;
     int8_t value2;
-    Assignment_get(&assignment1, i, &value1);
-    Assignment_get(&assignment2, i, &value2);
-    assert(value1 == value2);
+    Assignment_get(&assignment1, keys[i], &value1);
+    Assignment_get(&assignment2, keys[i], &value2);
+    assert(values[i] == value1);
+    assert(values[i] == value2);
   }
 
   Assignment_destroy(&assignment1);
