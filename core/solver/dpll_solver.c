@@ -36,11 +36,9 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &simplified);
 
-  while (!Cnf_ClauseIterator_next(&iter)) {
-    if (iter.count == 0) {
+  while (!Cnf_ClauseIterator_next(&iter))
+    if (iter.count == 0)
       return 1;
-    }
-  }
 
   int32_t nextLiteral = pickAndRemove(pCnf);
   uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
@@ -57,15 +55,13 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   // set value of nextVariable in pFalseAssigment, so that it evaluates to false
   Assignment_set(&pFalseAssignment, nextVariable, (nextLiteral < 0) ? 1 : 0);
 
-  if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult)) {
+  if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult))
     return 0;
-  }
 
   Cnf_destroy(&simplified);
 
-  if (!dpllSolvePartial(pCnf, &pFalseAssignment, pickAndRemove, pAssignmentResult)) {
+  if (!dpllSolvePartial(pCnf, &pFalseAssignment, pickAndRemove, pAssignmentResult))
     return 0;
-  }
 
   return 1;
 }
