@@ -6,7 +6,7 @@ void
 test_cnf_clauseIterator_with_empty_cnf()
 {
   Cnf cnf;
-  Cnf_create(&cnf);
+  assert(!Cnf_create(&cnf));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
@@ -20,12 +20,12 @@ void
 test_cnf_clauseIterator_with_one_clause()
 {
   Cnf cnf;
-  Cnf_create(&cnf);
+  assert(!Cnf_create(&cnf));
 
   int32_t clause1[] = {1, 2, -3};
   size_t clause1size = 3;
 
-  Cnf_pushClause(&cnf, clause1, clause1size);
+  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
@@ -44,7 +44,7 @@ test_cnf_clauseIterator_with_one_clause()
 void
 test_cnf_clauseIterator_with_multiple_clauses(){
   Cnf cnf;
-  Cnf_create(&cnf);
+  assert(!Cnf_create(&cnf));
 
   int32_t clause1[] = {1, 2, 3};
   size_t clause1size = 3;
@@ -52,8 +52,8 @@ test_cnf_clauseIterator_with_multiple_clauses(){
   int32_t clause2[] = {5, 2, -6, 1};
   size_t clause2size = 4;
 
-  Cnf_pushClause(&cnf, clause1, clause1size);
-  Cnf_pushClause(&cnf, clause2, clause2size);
+  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
+  assert(!Cnf_pushClause(&cnf, clause2, clause2size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
@@ -79,7 +79,7 @@ test_cnf_clauseIterator_with_multiple_clauses(){
 void
 test_cnf_clauseIterator_with_mixed(){
   Cnf cnf;
-  Cnf_create(&cnf);
+  assert(!Cnf_create(&cnf));
 
   int32_t clause1[] = {1, 2, 3};
   size_t clause1size = 3;
@@ -91,9 +91,9 @@ test_cnf_clauseIterator_with_mixed(){
   size_t clause3size = 4;
 
 
-  Cnf_pushClause(&cnf, clause1, clause1size);
-  Cnf_pushClause(&cnf, clause2, clause2size);
-  Cnf_pushClause(&cnf, clause3, clause3size);
+  assert(!Cnf_pushClause(&cnf, clause1, clause1size));
+  assert(!Cnf_pushClause(&cnf, clause2, clause2size));
+  assert(!Cnf_pushClause(&cnf, clause3, clause3size));
 
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
