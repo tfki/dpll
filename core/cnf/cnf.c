@@ -24,11 +24,7 @@ Cnf_copy(Cnf* pDest, const Cnf* pSrc)
   if (!pDest->pData)
     return 1;
 
-  if (memcpy_s(pDest->pData, pDest->capacity * sizeof(int32_t), pSrc->pData, pSrc->count * sizeof(int32_t))) {
-    free(pDest->pData);
-    return 1;
-  }
-
+  memcpy(pDest->pData, pSrc->pData, pSrc->count * sizeof(int32_t));
   return 0;
 }
 
@@ -51,8 +47,7 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
     pCnf->capacity *= 2u;
   }
 
-  if (memcpy_s(pCnf->pData + pCnf->count, (pCnf->capacity - pCnf->count) * sizeof(int32_t), pValues, count * sizeof(int32_t)))
-    return 1;
+  memcpy(pCnf->pData + pCnf->count, pValues, count * sizeof(int32_t));
 
   pCnf->count += count;
   pCnf->pData[pCnf->count] = 0;

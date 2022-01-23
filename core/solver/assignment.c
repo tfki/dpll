@@ -27,15 +27,8 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
   if (!pDest->pKeys)
     return 1;
 
-  if (memcpy_s(pDest->pKeys, pDest->capacity * sizeof(uint32_t), pSrc->pKeys, pSrc->count * sizeof(uint32_t))) {
-    free(pDest->pKeys);
-    return 1;
-  }
-
-  if (memcpy_s(pDest->pValues, pDest->capacity * sizeof(uint8_t), pSrc->pValues, pSrc->count * sizeof(uint8_t))) {
-    free(pDest->pKeys);
-    return 1;
-  }
+  memcpy(pDest->pKeys, pSrc->pKeys, pSrc->count * sizeof(uint32_t));
+  memcpy(pDest->pValues, pSrc->pValues, pSrc->count * sizeof(uint8_t));
 
   return 0;
 }
