@@ -1,4 +1,7 @@
 #include <solver/solver.h>
+#include <assert.h>
+#include <time.h>
+#include <stdio.h>
 
 int
 main()
@@ -11,7 +14,13 @@ main()
   Assignment assignment;
   Assignment_create(&assignment);
 
-  dpllSolve(&cnf, dpllTrivialPick, &assignment);
 
+  float start = ((float)clock()) / CLOCKS_PER_SEC;
 
+  assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+
+  float end = ((float)clock()) / CLOCKS_PER_SEC;
+  float time = end - start;
+
+  printf("time to solve: %f sec.", time);
 }
