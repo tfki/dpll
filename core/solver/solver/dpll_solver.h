@@ -5,6 +5,9 @@
 #include "assignment.h"
 #include <cnf/cnf.h>
 
+int32_t
+dpllTrivialPick(const Cnf* pCnf);
+
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult);
 

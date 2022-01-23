@@ -1,12 +1,6 @@
 #include <solver/solver.h>
 #include <assert.h>
 
-int32_t
-trivialPick(const Cnf* pCnf)
-{
-  return pCnf->pData[0];
-}
-
 void
 test_dpllSolve_emptyCnf()
 {
@@ -16,7 +10,7 @@ test_dpllSolve_emptyCnf()
   Assignment assignment;
   Assignment_create(&assignment);
 
-  assert(!dpllSolve(&cnf, trivialPick, &assignment));
+  assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 }
 
 void
@@ -37,7 +31,7 @@ test_dpllSolve_precalculatedCnf()
   Assignment assignment;
   Assignment_create(&assignment);
 
-  assert(!dpllSolve(&cnf, trivialPick, &assignment));
+  assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 }
 
 int

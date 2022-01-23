@@ -35,3 +35,22 @@ set_target_properties("${TARGET_NAME}" PROPERTIES
         C_STANDARD_REQUIRED ON)
 
 message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
+
+
+# benchmark executable
+
+set(TARGET_NAME Benchmark)
+set(TARGET_LINK_LIBRARIES Cnf Solver)
+
+file(GLOB_RECURSE TARGET_HEADER benchmark/*.h)
+file(GLOB_RECURSE TARGET_SOURCE benchmark/*.c)
+
+add_executable("${TARGET_NAME}")
+target_sources("${TARGET_NAME}" PRIVATE ${TARGET_HEADER} ${TARGET_SOURCE})
+target_link_libraries("${TARGET_NAME}" PRIVATE ${TARGET_LINK_LIBRARIES})
+set_target_properties("${TARGET_NAME}" PROPERTIES
+        LINKER_LANGUAGE C
+        C_STANDARD 99
+        C_STANDARD_REQUIRED ON)
+
+message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")

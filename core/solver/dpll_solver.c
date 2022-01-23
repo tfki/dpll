@@ -1,5 +1,11 @@
 #include "solver/dpll_solver.h"
 
+int32_t
+dpllTrivialPick(const Cnf* pCnf)
+{
+  return pCnf->pData[0];
+}
+
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
 {
@@ -12,6 +18,9 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAs
 int
 dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
 {
+  // TODO we should not require pCnf to be const, so we can reset and reuse it.
+  //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!
+
   Cnf simplified;
   Cnf_create(&simplified);
 
@@ -51,6 +60,8 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
   if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult)) {
     return 0;
   }
+
+  Cnf_destroy(&simplified);
 
   if (!dpllSolvePartial(pCnf, &pFalseAssignment, pickAndRemove, pAssignmentResult)) {
     return 0;
