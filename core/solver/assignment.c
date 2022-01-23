@@ -1,5 +1,6 @@
 #include "solver/assignment.h"
 #include <stdlib.h>
+#include <assert.h>
 
 int
 Assignment_create(Assignment* pAssignment)
@@ -36,6 +37,8 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 int
 Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 {
+  assert(key); // zero key is not allowed!
+
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
     // if so, set its new value and return

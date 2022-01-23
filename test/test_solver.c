@@ -1,4 +1,5 @@
-#include <assert.h>
+#include "test_common.h"
+
 #include <solver/solver.h>
 
 void
@@ -10,7 +11,7 @@ test_dpllSolve_emptyCnf()
   Assignment assignment;
   Assignment_create(&assignment);
 
-  assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+  TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 }
 
 void
@@ -39,22 +40,22 @@ test_dpllSolve_precalculatedCnf()
 
   Cnf cnf;
   Cnf_create(&cnf);
-  assert(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  assert(!Cnf_pushClause(&cnf, clause2, clause2Count));
-  assert(!Cnf_pushClause(&cnf, clause3, clause3Count));
-  assert(!Cnf_pushClause(&cnf, clause4, clause4Count));
-  assert(!Cnf_pushClause(&cnf, clause5, clause5Count));
-  assert(!Cnf_pushClause(&cnf, clause6, clause6Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause3, clause3Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause4, clause4Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause5, clause5Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause6, clause6Count));
 
   Assignment assignment;
   Assignment_create(&assignment);
 
-  assert(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+  TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   for (size_t i = 0u; i < variablesCount; ++i) {
     int8_t value;
-    assert(!Assignment_get(&assignment, variables[i], &value));
-    assert(value == result[i]);
+    TEST_ASSERT(!Assignment_get(&assignment, variables[i], &value));
+    TEST_ASSERT(value == result[i]);
   }
 
   Assignment_destroy(&assignment);
@@ -72,13 +73,13 @@ test_dpllSolve_unsatisfiableCnf()
 
   Cnf cnf;
   Cnf_create(&cnf);
-  assert(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  assert(!Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
 
   Assignment assignment;
   Assignment_create(&assignment);
 
-  assert(dpllSolve(&cnf, dpllTrivialPick, &assignment));
+  TEST_ASSERT(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   Assignment_destroy(&assignment);
   Cnf_destroy(&cnf);

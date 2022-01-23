@@ -1,4 +1,5 @@
-#include <assert.h>
+#include "test_common.h"
+
 #include <cnf/cnf.h>
 #include <solver/solver.h>
 
@@ -26,10 +27,10 @@ test_Cnf_simplify_withEmptyAssignment()
 
   Cnf_simplify(&cnf, &emptyAssignment, &resultCnf);
 
-  assert(cnf.count == resultCnf.count);
+  TEST_ASSERT(cnf.count == resultCnf.count);
 
   for (size_t i = 0u; i < cnf.count; ++i) {
-    assert(cnf.pData[i] == resultCnf.pData[i]);
+    TEST_ASSERT(cnf.pData[i] == resultCnf.pData[i]);
   }
 
   Assignment_destroy(&emptyAssignment);
@@ -56,7 +57,7 @@ test_Cnf_simplify_withTrueClause()
 
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultCnf.count == 0u);
+  TEST_ASSERT(resultCnf.count == 0u);
 
   Assignment_destroy(&assignment);
   Cnf_destroy(&cnf);
@@ -82,7 +83,7 @@ test_Cnf_simplify_withFalseClause()
 
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultCnf.count == (cnf.count - 1u));
+  TEST_ASSERT(resultCnf.count == (cnf.count - 1u));
 
   Assignment_destroy(&assignment);
   Cnf_destroy(&cnf);
@@ -120,15 +121,15 @@ test_Cnf_simplify_withMixedClauses()
 
   Cnf_simplify(&cnf, &assignment, &resultCnf);
 
-  assert(resultCnf.count == 8u);
-  assert(resultCnf.pData[0u] == 0);
-  assert(resultCnf.pData[1u] == -2);
-  assert(resultCnf.pData[2u] == 3);
-  assert(resultCnf.pData[3u] == 0);
-  assert(resultCnf.pData[4u] == 6);
-  assert(resultCnf.pData[5u] == -7);
-  assert(resultCnf.pData[6u] == 8);
-  assert(resultCnf.pData[7u] == 0);
+  TEST_ASSERT(resultCnf.count == 8u);
+  TEST_ASSERT(resultCnf.pData[0u] == 0);
+  TEST_ASSERT(resultCnf.pData[1u] == -2);
+  TEST_ASSERT(resultCnf.pData[2u] == 3);
+  TEST_ASSERT(resultCnf.pData[3u] == 0);
+  TEST_ASSERT(resultCnf.pData[4u] == 6);
+  TEST_ASSERT(resultCnf.pData[5u] == -7);
+  TEST_ASSERT(resultCnf.pData[6u] == 8);
+  TEST_ASSERT(resultCnf.pData[7u] == 0);
 
   Assignment_destroy(&assignment);
   Cnf_destroy(&cnf);

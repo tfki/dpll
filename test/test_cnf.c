@@ -1,4 +1,5 @@
-#include <assert.h>
+#include "test_common.h"
+
 #include <cnf/cnf.h>
 
 static int
@@ -6,10 +7,10 @@ test_Cnf_create()
 {
   Cnf cnf;
 
-  assert(!Cnf_create(&cnf));
-  assert(cnf.count == 0u);
-  assert(cnf.capacity == 1024u);
-  assert(cnf.pData != NULL);
+  TEST_ASSERT(!Cnf_create(&cnf));
+  TEST_ASSERT(cnf.count == 0u);
+  TEST_ASSERT(cnf.capacity == 1024u);
+  TEST_ASSERT(cnf.pData != NULL);
 
   Cnf_destroy(&cnf);
   return 0;
@@ -29,19 +30,19 @@ test_Cnf_pushClause()
   const size_t clause2Count = 3u;
 
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
-  assert(!Cnf_pushClause(&cnf, clause0, clause0Count));
-  assert(cnf.count == 6u);
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause0, clause0Count));
+  TEST_ASSERT(cnf.count == 6u);
 
-  assert(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  assert(cnf.count == 9u);
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT(cnf.count == 9u);
 
-  assert(!Cnf_pushClause(&cnf, clause2, clause2Count));
-  assert(cnf.count == 13u);
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT(cnf.count == 13u);
 
   for (size_t i = 0u; i < rawCnfCount; ++i)
-    assert(cnf.pData[i] == rawCnf[i]);
+    TEST_ASSERT(cnf.pData[i] == rawCnf[i]);
 
   Cnf_destroy(&cnf);
   return 0;
@@ -54,22 +55,22 @@ test_Cnf_capacityOverflow()
   const size_t clauseCount = 1u;
 
   Cnf cnf;
-  assert(!Cnf_create(&cnf));
+  TEST_ASSERT(!Cnf_create(&cnf));
 
   // push first clause separately, as it will also insert leading zero
   // so count will be +=3
-  assert(!Cnf_pushClause(&cnf, clause, clauseCount));
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
 
   const size_t testCnfCapacity = cnf.capacity;
   for (size_t i = cnf.count; i + 2u < testCnfCapacity; i += 2u)
-    assert(!Cnf_pushClause(&cnf, clause, clauseCount));
+    TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
 
-  assert(cnf.capacity == 1024u);
-  assert(cnf.count == 1023u);
+  TEST_ASSERT(cnf.capacity == 1024u);
+  TEST_ASSERT(cnf.count == 1023u);
 
-  assert(!Cnf_pushClause(&cnf, clause, clauseCount));
-  assert(cnf.capacity == 2048u);
-  assert(cnf.count == 1025u);
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
+  TEST_ASSERT(cnf.capacity == 2048u);
+  TEST_ASSERT(cnf.count == 1025u);
 
   Cnf_destroy(&cnf);
   return 0;
@@ -84,15 +85,15 @@ test_Cnf_copy()
   const size_t clause1Count = 2u;
 
   Cnf testCnf;
-  assert(!Cnf_create(&testCnf));
-  assert(!Cnf_pushClause(&testCnf, clause0, clause0Count));
-  assert(!Cnf_pushClause(&testCnf, clause1, clause1Count));
+  TEST_ASSERT(!Cnf_create(&testCnf));
+  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause0, clause0Count));
+  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause1, clause1Count));
 
   Cnf copyCnf;
-  assert(!Cnf_copy(&copyCnf, &testCnf));
+  TEST_ASSERT(!Cnf_copy(&copyCnf, &testCnf));
 
   for (size_t i = 0u; i < testCnf.count; ++i)
-    assert(testCnf.pData[i] == copyCnf.pData[i]);
+    TEST_ASSERT(testCnf.pData[i] == copyCnf.pData[i]);
 
   Cnf_destroy(&testCnf);
   Cnf_destroy(&copyCnf);
@@ -106,13 +107,13 @@ test_Cnf_destroy()
   const size_t clauseCount = 1u;
 
   Cnf testCnf;
-  assert(!Cnf_create(&testCnf));
-  assert(!Cnf_pushClause(&testCnf, clause, clauseCount));
+  TEST_ASSERT(!Cnf_create(&testCnf));
+  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause, clauseCount));
 
   Cnf_destroy(&testCnf);
-  assert(testCnf.pData == NULL);
-  assert(testCnf.capacity == 0u);
-  assert(testCnf.count == 0u);
+  TEST_ASSERT(testCnf.pData == NULL);
+  TEST_ASSERT(testCnf.capacity == 0u);
+  TEST_ASSERT(testCnf.count == 0u);
 
   return 0;
 }
