@@ -1,5 +1,5 @@
 #include "solver/assignment.h"
-#include <assert.h>
+#include <common/common.h>
 #include <stdlib.h>
 
 int
@@ -37,7 +37,7 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 int
 Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 {
-  assert(key); // zero key is not allowed!
+  SANITIZING_ASSERT(key); // zero key is not allowed!
 
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {

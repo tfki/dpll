@@ -1,7 +1,8 @@
 #ifndef DPLLSOLVER_COMMON_H
 #define DPLLSOLVER_COMMON_H
 
-#ifdef NDEBUG
+#ifdef NDEBUG // TODO replace with SANITIZING compiler flag if
+              //      the performance drops to much in debug mode
 
 #define SANITIZING_ASSERT(c) ((void)0)
 
@@ -12,6 +13,7 @@
     exit(-1);                                                                                                                                                  \
   }                                                                                                                                                            \
   ((void)0)
+
 #endif
 
 #endif

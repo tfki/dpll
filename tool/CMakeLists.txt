@@ -36,7 +36,6 @@ set_target_properties("${TARGET_NAME}" PROPERTIES
 
 message("${PROJECT_NAME}: Executable '${TARGET_NAME}' added")
 
-
 # Benchmark executable
 
 set(TARGET_NAME Benchmark)
