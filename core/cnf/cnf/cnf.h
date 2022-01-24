@@ -36,7 +36,7 @@ typedef struct Cnf_ClauseIterator
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf);
 
-int
+int8_t
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator);
 
 #endif
