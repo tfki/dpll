@@ -1,14 +1,21 @@
 #include "solver/dpll_solver.h"
 
+#include <common/common.h>
+
 int32_t
 dpllTrivialPick(const Cnf* pCnf)
 {
+  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
   return pCnf->pData[1u];
 }
 
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
 {
+  SANITIZING_ASSERT(pCnf);              // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pickAndRemove);     // pickAndRemove must be a valid pointer
+  SANITIZING_ASSERT(pAssignmentResult); // pAssignmentResult must be a valid pointer
+
   Assignment emptyAssignment;
   Assignment_create(&emptyAssignment);
 
@@ -21,6 +28,11 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAs
 int
 dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
 {
+  SANITIZING_ASSERT(pCnf);              // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pAssignment);       // pAssignment must be a valid pointer
+  SANITIZING_ASSERT(pickAndRemove);     // pickAndRemove must be a valid pointer
+  SANITIZING_ASSERT(pAssignmentResult); // pAssignmentResult must be a valid pointer
+
   // TODO we should not require pCnf to be const, so we can reset and reuse it.
   //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!
 

@@ -1,5 +1,7 @@
 #include "solver/solver.h"
 
+#include <common/common.h>
+
 typedef struct ClauseBuffer
 {
   int32_t* pData;
@@ -10,6 +12,8 @@ typedef struct ClauseBuffer
 static inline int
 ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 {
+  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+
   pClauseBuffer->count = 0u;
   pClauseBuffer->capacity = 1024u;
   pClauseBuffer->pData = malloc(pClauseBuffer->capacity * sizeof(int32_t));
@@ -23,6 +27,8 @@ ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 static inline int
 ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 {
+  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+
   if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
 
     int32_t* pNewData = realloc(pClauseBuffer->pData, pClauseBuffer->capacity * 2u * sizeof(int32_t));
@@ -42,6 +48,8 @@ ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 static inline void
 ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 {
+  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+
   free(pClauseBuffer->pData);
   pClauseBuffer->pData = NULL;
   pClauseBuffer->capacity = 0u;
@@ -51,12 +59,17 @@ ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 static inline void
 ClauseBuffer_reset(ClauseBuffer* pClauseBuffer)
 {
+  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
   pClauseBuffer->count = 0u;
 }
 
 int
 Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
 {
+  SANITIZING_ASSERT(pCnf);        // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZING_ASSERT(pNextCnf);    // pNextCnf must be a valid pointer
+
   Cnf_ClauseIterator clauseIterator;
   Cnf_ClauseIterator_create(&clauseIterator, pCnf);
 

@@ -1,9 +1,13 @@
 #include "cnf/cnf.h"
+
+#include <common/common.h>
 #include <string.h>
 
 int
 Cnf_create(Cnf* pCnf)
 {
+  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+
   pCnf->count = 0u;
   pCnf->capacity = 1024u;
   pCnf->pData = malloc(pCnf->capacity * sizeof(int32_t));
@@ -17,6 +21,9 @@ Cnf_create(Cnf* pCnf)
 int
 Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 {
+  SANITIZING_ASSERT(pDest); // pDest must be a valid pointer
+  SANITIZING_ASSERT(pSrc);  // pSrc must be a valid pointer
+
   pDest->count = pSrc->count;
   pDest->capacity = pSrc->capacity;
   pDest->pData = malloc(pSrc->capacity * sizeof(int32_t));
@@ -31,6 +38,8 @@ Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 int
 Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 {
+  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+
   // if Cnf empty, add leading 0
   if (pCnf->count == 0u) {
     pCnf->pData[0u] = 0;
@@ -59,6 +68,8 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 void
 Cnf_destroy(Cnf* pCnf)
 {
+  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+
   free(pCnf->pData);
   pCnf->pData = NULL;
   pCnf->capacity = 0u;
@@ -68,12 +79,16 @@ Cnf_destroy(Cnf* pCnf)
 void
 Cnf_reset(Cnf* pCnf)
 {
+  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
   pCnf->count = 0u;
 }
 
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {
+  SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer
+  SANITIZING_ASSERT(pCnf);               // pCnf must be a valid pointer
+
   pCnfClauseIterator->pData = pCnf->pData;
   pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
   pCnfClauseIterator->count = 0u;
@@ -82,6 +97,8 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
 int
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
+  SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer
+
   // + 1u to skip the 0 at pCnfClauseIterator->pData
   const int32_t* pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
   if (pNextData >= pCnfClauseIterator->pDataEnd)

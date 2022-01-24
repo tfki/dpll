@@ -5,6 +5,8 @@
 int
 Assignment_create(Assignment* pAssignment)
 {
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+
   pAssignment->count = 0u;
   pAssignment->capacity = 1024u;
   pAssignment->pKeys = malloc(pAssignment->capacity * sizeof(uint32_t) + pAssignment->capacity * sizeof(int8_t));
@@ -20,6 +22,9 @@ Assignment_create(Assignment* pAssignment)
 int
 Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 {
+  SANITIZING_ASSERT(pDest); // pDest must be a valid pointer
+  SANITIZING_ASSERT(pSrc);  // pSrc must be a valid pointer
+
   pDest->capacity = pSrc->capacity;
   pDest->count = pSrc->count;
   pDest->pKeys = malloc(pSrc->capacity * sizeof(int32_t) + pSrc->capacity * sizeof(int8_t));
@@ -37,7 +42,9 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 int
 Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 {
-  SANITIZING_ASSERT(key); // zero key is not allowed!
+  SANITIZING_ASSERT(pAssignment);              // pAssignment must be a valid pointer
+  SANITIZING_ASSERT(key);                      // zero key is not allowed!
+  SANITIZING_ASSERT(value == 0 || value == 1); // only "normalized' booleans are allowed
 
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
@@ -72,6 +79,8 @@ Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 int
 Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
 {
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
     if (pAssignment->pKeys[i] == key) {
@@ -86,6 +95,9 @@ Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
 void
 Assignment_swap(Assignment* a, Assignment* b)
 {
+  SANITIZING_ASSERT(a); // a must be a valid pointer
+  SANITIZING_ASSERT(b); // b must be a valid pointer
+
   uint32_t* pKeysTmp = a->pKeys;
   int8_t* pValuesTmp = a->pValues;
   size_t countTmp = a->count;
@@ -105,6 +117,8 @@ Assignment_swap(Assignment* a, Assignment* b)
 void
 Assignment_destroy(Assignment* pAssignment)
 {
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+
   free(pAssignment->pKeys);
   pAssignment->pKeys = NULL;
   pAssignment->pValues = NULL;
