@@ -27,7 +27,6 @@
 #define TEST_ASSERT_FALSE(c) TEST_ASSERT(!(c))
 
 #define TEST_ASSERT_EQ(v0,v1) TEST_ASSERT((v0)==(v1))
-#define TEST_ASSERT_NEQ(v0,v1) TEST_ASSERT((v0)!=(v1))
 
 #define TEST_ASSERT_NULL(p) TEST_ASSERT((p)==NULL)
 #define TEST_ASSERT_NON_NULL(p) TEST_ASSERT((p)!=NULL)
