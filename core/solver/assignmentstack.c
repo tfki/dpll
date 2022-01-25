@@ -40,22 +40,12 @@ AssignmentStack_copy(AssignmentStack* pDest, const AssignmentStack* pSrc)
 }
 
 int
-AssignmentStack_set(AssignmentStack* pAssignment, uint32_t key, bool value)
+AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value)
 {
   SANITIZING_ASSERT(pAssignment);              // pAssignment must be a valid pointer
   SANITIZING_ASSERT(key);                      // zero key is not allowed!
   SANITIZING_ASSERT(value == 0 || value == 1); // only "normalized' booleans are allowed
 
-  // see if key already exists in pKeys
-  for (int i = 0; i < pAssignment->count; ++i) {
-    // if so, set its new value and return
-    if (pAssignment->pKeys[i] == key) {
-      pAssignment->pValues[i] = value;
-      return 0;
-    }
-  }
-
-  // if key does not already exist
   if (pAssignment->count + 1 > pAssignment->capacity) {
     uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(uint32_t) + pAssignment->capacity * 2u * sizeof(bool));
     if (!pNewKeys)
@@ -70,9 +60,20 @@ AssignmentStack_set(AssignmentStack* pAssignment, uint32_t key, bool value)
   // insert key
   pAssignment->pKeys[pAssignment->count] = key;
   pAssignment->pValues[pAssignment->count] = value;
-
   ++pAssignment->count;
 
+  return 0;
+}
+
+int
+AssignmentStack_pop(AssignmentStack* pAssignment)
+{
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+
+  if (pAssignment->count == 0)
+    return 1;
+
+  --pAssignment->count;
   return 0;
 }
 
@@ -112,16 +113,6 @@ AssignmentStack_swap(AssignmentStack* a, AssignmentStack* b)
   b->pValues = pValuesTmp;
   b->count = countTmp;
   b->capacity = capacityTmp;
-}
-
-int
-AssignmentStack_setAll(AssignmentStack* target, AssignmentStack* src)
-{
-  for (size_t i = 0u; i < src->count; i++) {
-    if (AssignmentStack_set(target, src->pKeys[i], src->pValues[i])) {
-      return 1;
-    }
-  }
 }
 
 void

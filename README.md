@@ -23,3 +23,4 @@ TODO
 + get return type of dpllsolve sorted out
 + all tests should be static void
 + solve pickAndRemove Callback does not follow the return conventions
++ iterate assignmentstack get backwards if there is a use case

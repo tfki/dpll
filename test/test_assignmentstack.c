@@ -21,10 +21,10 @@ test_AssignmentStack_getAndSet()
   AssignmentStack assignment;
   TEST_ASSERT(!AssignmentStack_create(&assignment));
 
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 1u, true));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 2u, true));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 3u, false));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 4u, false));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 1u, true));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 2u, true));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 3u, false));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 4u, false));
 
   TEST_ASSERT(assignment.count == 4);
   TEST_ASSERT(assignment.capacity == 1024);
@@ -54,10 +54,10 @@ test_AssignmentStack_copy()
   AssignmentStack assignment1;
   TEST_ASSERT(!AssignmentStack_create(&assignment1));
 
-  TEST_ASSERT(!AssignmentStack_set(&assignment1, keys[0u], values[0u]));
-  TEST_ASSERT(!AssignmentStack_set(&assignment1, keys[1u], values[1u]));
-  TEST_ASSERT(!AssignmentStack_set(&assignment1, keys[2u], values[2u]));
-  TEST_ASSERT(!AssignmentStack_set(&assignment1, keys[3u], values[3u]));
+  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[0u], values[0u]));
+  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[1u], values[1u]));
+  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[2u], values[2u]));
+  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[3u], values[3u]));
 
   TEST_ASSERT(assignment1.count == 4u);
   TEST_ASSERT(assignment1.capacity == 1024u);
@@ -84,10 +84,10 @@ test_AssignmentStack_destroy()
   AssignmentStack assignment;
   TEST_ASSERT(!AssignmentStack_create(&assignment));
 
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 1u, true));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 2u, true));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 3u, false));
-  TEST_ASSERT(!AssignmentStack_set(&assignment, 4u, false));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 1u, true));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 2u, true));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 3u, false));
+  TEST_ASSERT(!AssignmentStack_push(&assignment, 4u, false));
 
   AssignmentStack_destroy(&assignment);
 
@@ -106,12 +106,12 @@ test_AssignmentStack_swap()
   AssignmentStack b;
   TEST_ASSERT(!AssignmentStack_create(&b));
 
-  TEST_ASSERT(!AssignmentStack_set(&a, 1u, false));
-  TEST_ASSERT(!AssignmentStack_set(&a, 3u, true));
+  TEST_ASSERT(!AssignmentStack_push(&a, 1u, false));
+  TEST_ASSERT(!AssignmentStack_push(&a, 3u, true));
 
-  TEST_ASSERT(!AssignmentStack_set(&b, 2u, true));
-  TEST_ASSERT(!AssignmentStack_set(&b, 4u, false));
-  TEST_ASSERT(!AssignmentStack_set(&b, 6u, true));
+  TEST_ASSERT(!AssignmentStack_push(&b, 2u, true));
+  TEST_ASSERT(!AssignmentStack_push(&b, 4u, false));
+  TEST_ASSERT(!AssignmentStack_push(&b, 6u, true));
 
   AssignmentStack_swap(&a, &b);
 
@@ -133,48 +133,6 @@ test_AssignmentStack_swap()
   AssignmentStack_destroy(&a);
 }
 
-void
-test_AssignmentStack_setAll()
-{
-  AssignmentStack a;
-  TEST_ASSERT(!AssignmentStack_create(&a));
-
-  AssignmentStack b;
-  TEST_ASSERT(!AssignmentStack_create(&b));
-
-  TEST_ASSERT(!AssignmentStack_set(&a, 1u, false));
-  TEST_ASSERT(!AssignmentStack_set(&a, 3u, true));
-
-  TEST_ASSERT(!AssignmentStack_set(&b, 2u, true));
-  TEST_ASSERT(!AssignmentStack_set(&b, 4u, false));
-  TEST_ASSERT(!AssignmentStack_set(&b, 6u, true));
-
-  AssignmentStack_setAll(&a, &b);
-
-  TEST_ASSERT(a.count == 5);
-  TEST_ASSERT(a.pKeys[0] == 1u);
-  TEST_ASSERT(a.pKeys[1] == 3u);
-  TEST_ASSERT(a.pKeys[2] == 2u);
-  TEST_ASSERT(a.pKeys[3] == 4u);
-  TEST_ASSERT(a.pKeys[4] == 6u);
-  TEST_ASSERT(a.pValues[0] == false);
-  TEST_ASSERT(a.pValues[1] == true);
-  TEST_ASSERT(a.pValues[2] == true);
-  TEST_ASSERT(a.pValues[3] == false);
-  TEST_ASSERT(a.pValues[4] == true);
-
-  TEST_ASSERT(b.count == 3);
-  TEST_ASSERT(b.pKeys[0] == 2u);
-  TEST_ASSERT(b.pKeys[1] == 4u);
-  TEST_ASSERT(b.pKeys[2] == 6u);
-  TEST_ASSERT(b.pValues[0] == true);
-  TEST_ASSERT(b.pValues[1] == false);
-  TEST_ASSERT(b.pValues[2] == true);
-
-  AssignmentStack_destroy(&b);
-  AssignmentStack_destroy(&a);
-}
-
 int
 main()
 {
@@ -183,7 +141,6 @@ main()
   test_AssignmentStack_copy();
   test_AssignmentStack_destroy();
   test_AssignmentStack_swap();
-  test_AssignmentStack_setAll();
 
   return 0;
 }

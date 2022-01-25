@@ -70,13 +70,14 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
   const uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
   const bool sign = (nextLiteral > 0) ? true : false;
 
-  AssignmentStack_set(pAssignment, nextVariable, sign);
+  AssignmentStack_push(pAssignment, nextVariable, sign);
   if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
     return 0;
   }
 
-  AssignmentStack_set(pAssignment, nextVariable, !sign);
+  AssignmentStack_pop(pAssignment);
+  AssignmentStack_push(pAssignment, nextVariable, !sign);
   if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
     return 0;

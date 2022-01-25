@@ -43,7 +43,7 @@ test_Cnf_simplify_withTrueClause()
 {
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
-  AssignmentStack_set(&assignment, 1u, 1);
+  AssignmentStack_push(&assignment, 1u, true);
 
   int32_t clause[] = { 1, -2, 3 };
   size_t clauseCount = 3u;
@@ -69,7 +69,7 @@ test_Cnf_simplify_withFalseClause()
 {
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
-  AssignmentStack_set(&assignment, 1u, 0);
+  AssignmentStack_push(&assignment, 1u, false);
 
   int32_t clause[] = { 1, -2, 3 };
   size_t clause1Count = 3u;
@@ -95,8 +95,8 @@ test_Cnf_simplify_withMixedClauses()
 {
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
-  AssignmentStack_set(&assignment, 1u, 0);
-  AssignmentStack_set(&assignment, 5u, 1);
+  AssignmentStack_push(&assignment, 1u, false);
+  AssignmentStack_push(&assignment, 5u, true);
 
   // this clause should have the 1 omitted
   int32_t clause1[] = { 1, -2, 3 };
