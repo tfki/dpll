@@ -6,7 +6,7 @@ static void
 test_AssignmentStack_create()
 {
   AssignmentStack assignment;
-  TEST_ASSERT(!AssignmentStack_create(&assignment));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
   TEST_ASSERT(assignment.count == 0u);
   TEST_ASSERT(assignment.capacity == 1024u);
   TEST_ASSERT(assignment.pKeys != NULL);
@@ -19,12 +19,12 @@ static void
 test_AssignmentStack_getAndSet()
 {
   AssignmentStack assignment;
-  TEST_ASSERT(!AssignmentStack_create(&assignment));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
 
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 1u, true));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 2u, true));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 3u, false));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 4u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 1u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 2u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 3u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 4u, false));
 
   TEST_ASSERT(assignment.count == 4);
   TEST_ASSERT(assignment.capacity == 1024);
@@ -37,10 +37,10 @@ test_AssignmentStack_getAndSet()
   TEST_ASSERT(value);
 
   AssignmentStack_get(&assignment, 3u, &value);
-  TEST_ASSERT(!value);
+  TEST_ASSERT_SUCCESS(value);
 
   AssignmentStack_get(&assignment, 4u, &value);
-  TEST_ASSERT(!value);
+  TEST_ASSERT_SUCCESS(value);
 
   AssignmentStack_destroy(&assignment);
 }
@@ -52,12 +52,12 @@ test_AssignmentStack_copy()
   bool values[] = { true, true, false, false };
 
   AssignmentStack assignment1;
-  TEST_ASSERT(!AssignmentStack_create(&assignment1));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment1));
 
-  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[0u], values[0u]));
-  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[1u], values[1u]));
-  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[2u], values[2u]));
-  TEST_ASSERT(!AssignmentStack_push(&assignment1, keys[3u], values[3u]));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment1, keys[0u], values[0u]));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment1, keys[1u], values[1u]));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment1, keys[2u], values[2u]));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment1, keys[3u], values[3u]));
 
   TEST_ASSERT(assignment1.count == 4u);
   TEST_ASSERT(assignment1.capacity == 1024u);
@@ -82,12 +82,12 @@ static void
 test_AssignmentStack_destroy()
 {
   AssignmentStack assignment;
-  TEST_ASSERT(!AssignmentStack_create(&assignment));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
 
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 1u, true));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 2u, true));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 3u, false));
-  TEST_ASSERT(!AssignmentStack_push(&assignment, 4u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 1u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 2u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 3u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&assignment, 4u, false));
 
   AssignmentStack_destroy(&assignment);
 
@@ -101,17 +101,17 @@ void
 test_AssignmentStack_swap()
 {
   AssignmentStack a;
-  TEST_ASSERT(!AssignmentStack_create(&a));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&a));
 
   AssignmentStack b;
-  TEST_ASSERT(!AssignmentStack_create(&b));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&b));
 
-  TEST_ASSERT(!AssignmentStack_push(&a, 1u, false));
-  TEST_ASSERT(!AssignmentStack_push(&a, 3u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&a, 1u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&a, 3u, true));
 
-  TEST_ASSERT(!AssignmentStack_push(&b, 2u, true));
-  TEST_ASSERT(!AssignmentStack_push(&b, 4u, false));
-  TEST_ASSERT(!AssignmentStack_push(&b, 6u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&b, 2u, true));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&b, 4u, false));
+  TEST_ASSERT_SUCCESS(AssignmentStack_push(&b, 6u, true));
 
   AssignmentStack_swap(&a, &b);
 

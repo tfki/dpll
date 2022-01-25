@@ -20,4 +20,7 @@
 
 #endif
 
+#define TEST_ASSERT_SUCCESS(status) TEST_ASSERT(!(status))
+#define TEST_ASSERT_FAILURE(status) TEST_ASSERT(status)
+
 #endif

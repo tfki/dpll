@@ -7,7 +7,7 @@ test_Cnf_create()
 {
   Cnf cnf;
 
-  TEST_ASSERT(!Cnf_create(&cnf));
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
   TEST_ASSERT(cnf.count == 0u);
   TEST_ASSERT(cnf.capacity == 1024u);
   TEST_ASSERT(cnf.pData != NULL);
@@ -30,15 +30,15 @@ test_Cnf_pushClause()
   const size_t clause2Count = 3u;
 
   Cnf cnf;
-  TEST_ASSERT(!Cnf_create(&cnf));
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause0, clause0Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause0, clause0Count));
   TEST_ASSERT(cnf.count == 6u);
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Count));
   TEST_ASSERT(cnf.count == 9u);
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Count));
   TEST_ASSERT(cnf.count == 13u);
 
   for (size_t i = 0u; i < rawCnfCount; ++i)
@@ -55,20 +55,20 @@ test_Cnf_capacityOverflow()
   const size_t clauseCount = 1u;
 
   Cnf cnf;
-  TEST_ASSERT(!Cnf_create(&cnf));
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
   // push first clause separately, as it will also insert leading zero
   // so count will be +=3
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause, clauseCount));
 
   const size_t testCnfCapacity = cnf.capacity;
   for (size_t i = cnf.count; i + 2u < testCnfCapacity; i += 2u)
-    TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
+    TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause, clauseCount));
 
   TEST_ASSERT(cnf.capacity == 1024u);
   TEST_ASSERT(cnf.count == 1023u);
 
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause, clauseCount));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause, clauseCount));
   TEST_ASSERT(cnf.capacity == 2048u);
   TEST_ASSERT(cnf.count == 1025u);
 
@@ -85,12 +85,12 @@ test_Cnf_copy()
   const size_t clause1Count = 2u;
 
   Cnf testCnf;
-  TEST_ASSERT(!Cnf_create(&testCnf));
-  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause0, clause0Count));
-  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause1, clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_create(&testCnf));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&testCnf, clause0, clause0Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&testCnf, clause1, clause1Count));
 
   Cnf copyCnf;
-  TEST_ASSERT(!Cnf_copy(&copyCnf, &testCnf));
+  TEST_ASSERT_SUCCESS(Cnf_copy(&copyCnf, &testCnf));
 
   for (size_t i = 0u; i < testCnf.count; ++i)
     TEST_ASSERT(testCnf.pData[i] == copyCnf.pData[i]);
@@ -107,8 +107,8 @@ test_Cnf_destroy()
   const size_t clauseCount = 1u;
 
   Cnf testCnf;
-  TEST_ASSERT(!Cnf_create(&testCnf));
-  TEST_ASSERT(!Cnf_pushClause(&testCnf, clause, clauseCount));
+  TEST_ASSERT_SUCCESS(Cnf_create(&testCnf));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&testCnf, clause, clauseCount));
 
   Cnf_destroy(&testCnf);
   TEST_ASSERT(testCnf.pData == NULL);
@@ -127,9 +127,9 @@ test_Cnf_Swap()
   const size_t cnf1clause2Count = 3u;
 
   Cnf cnf1;
-  TEST_ASSERT(!Cnf_create(&cnf1));
-  TEST_ASSERT(!Cnf_pushClause(&cnf1, cnf1clause1, cnf1clause1Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf1, cnf1clause2, cnf1clause2Count));
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf1));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf1, cnf1clause1, cnf1clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf1, cnf1clause2, cnf1clause2Count));
 
   TEST_ASSERT(cnf1.count == 8u);
 
@@ -137,8 +137,8 @@ test_Cnf_Swap()
   const size_t cnf2clause1Count = 2u;
 
   Cnf cnf2;
-  TEST_ASSERT(!Cnf_create(&cnf2));
-  TEST_ASSERT(!Cnf_pushClause(&cnf2, cnf2clause1, cnf2clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf2));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf2, cnf2clause1, cnf2clause1Count));
 
   TEST_ASSERT(cnf2.count == 4u);
 

@@ -11,7 +11,7 @@ test_dpllSolve_emptyCnf()
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
 
-  TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+  TEST_ASSERT_SUCCESS(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
@@ -43,21 +43,21 @@ test_dpllSolve_precalculatedCnf()
 
   Cnf cnf;
   Cnf_create(&cnf);
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause3, clause3Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause4, clause4Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause5, clause5Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause6, clause6Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause3, clause3Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause4, clause4Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause5, clause5Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause6, clause6Count));
 
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
 
-  TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
+  TEST_ASSERT_SUCCESS(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   for (size_t i = 0u; i < variablesCount; ++i) {
     bool value;
-    TEST_ASSERT(!AssignmentStack_get(&assignment, variables[i], &value));
+    TEST_ASSERT_SUCCESS(AssignmentStack_get(&assignment, variables[i], &value));
     TEST_ASSERT(value == result[i]);
   }
 
@@ -76,8 +76,8 @@ test_dpllSolve_unsatisfiableCnf()
 
   Cnf cnf;
   Cnf_create(&cnf);
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
-  TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Count));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Count));
 
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
@@ -92,18 +92,18 @@ void
 test_dpllSolver_unitPropagation_one_unit_clause()
 {
 //  Cnf cnf;
-//  TEST_ASSERT(!Cnf_create(&cnf));
+//  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 //
 //  ClauseBuffer clauseBuffer;
-//  TEST_ASSERT(!ClauseBuffer_create(&clauseBuffer));
-//  TEST_ASSERT(!ClauseBuffer_push(&clauseBuffer, -1));
+//  TEST_ASSERT_SUCCESS(ClauseBuffer_create(&clauseBuffer));
+//  TEST_ASSERT_SUCCESS(ClauseBuffer_push(&clauseBuffer, -1));
 //
-//  TEST_ASSERT(!Cnf_pushClause(&cnf, clauseBuffer.pData, clauseBuffer.count));
+//  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clauseBuffer.pData, clauseBuffer.count));
 //
 //  AssignmentStack result;
 //  AssignmentStack_create(&result);
 //
-//  TEST_ASSERT(!dpllUnitPropagation(&cnf, &result));
+//  TEST_ASSERT_SUCCESS(dpllUnitPropagation(&cnf, &result));
 //  TEST_ASSERT(result.count == 1);
 //  TEST_ASSERT(result.pKeys[0] == 1);
 //  TEST_ASSERT(result.pValues[0] == false);
