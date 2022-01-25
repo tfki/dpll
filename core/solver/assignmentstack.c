@@ -126,3 +126,39 @@ AssignmentStack_destroy(AssignmentStack* pAssignment)
   pAssignment->capacity = 0u;
   pAssignment->count = 0u;
 }
+
+void
+AssignmentStackView_beginView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment)
+{
+  SANITIZING_ASSERT(pAssignmentView); // pAssignmentView must be a valid pointer
+  SANITIZING_ASSERT(pAssignment);     // pAssignment must be a valid pointer
+  pAssignmentView->count = pAssignment->count;
+}
+
+void
+AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment)
+{
+  SANITIZING_ASSERT(pAssignmentView);                             // pAssignmentView must be a valid pointer
+  SANITIZING_ASSERT(pAssignment);                                 // pAssignment must be a valid pointer
+  SANITIZING_ASSERT(pAssignmentView->count < pAssignment->count); // only pushes are allowed between beginWatch and finalizeView
+
+  pAssignmentView->pKeys = &pAssignment->pKeys[pAssignmentView->count];
+  pAssignmentView->pValues = &pAssignment->pValues[pAssignmentView->count];
+  pAssignmentView->count = pAssignment->count - pAssignmentView->count;
+}
+
+int
+AssignmentStackView_get(const AssignmentStackView* pAssignment, uint32_t key, bool* value)
+{
+  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
+
+  // see if key already exists in pKeys
+  for (int i = 0; i < pAssignment->count; ++i) {
+    if (pAssignment->pKeys[i] == key) {
+      *value = pAssignment->pValues[i];
+      return 0;
+    }
+  }
+
+  return 1;
+}

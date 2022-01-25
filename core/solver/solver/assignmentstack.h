@@ -34,4 +34,20 @@ AssignmentStack_swap(AssignmentStack* a, AssignmentStack* b);
 void
 AssignmentStack_destroy(AssignmentStack* pAssignment);
 
+typedef struct AssignmentStackView
+{
+  const uint32_t* pKeys;
+  const bool* pValues;
+  size_t count;
+} AssignmentStackView;
+
+void
+AssignmentStackView_beginView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment);
+
+void
+AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment);
+
+int
+AssignmentStackView_get(const AssignmentStackView* pAssignment, uint32_t key, bool* value);
+
 #endif
