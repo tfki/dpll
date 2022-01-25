@@ -1,9 +1,9 @@
 #ifndef DPLLSOLVER_CNF_H
 #define DPLLSOLVER_CNF_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 typedef struct Cnf
 {

@@ -1,7 +1,7 @@
 #include "cnf/dimacs.h"
 #include <common/common.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 typedef enum dimacsParserState
 {
@@ -121,7 +121,7 @@ parseDimacs(char* dimacs, Cnf* cnf)
             literalEnd = dimacs + dimacsOffset - 1;
             int32_t value = strtol(literalStart, &literalEnd, 10);
 
-            if (ClauseBuffer_push(&clauseBuffer, value)){
+            if (ClauseBuffer_push(&clauseBuffer, value)) {
               return false;
             }
             break;

@@ -61,12 +61,12 @@ test_parseDimacs_with_multiple_clauses()
   Cnf_create(&cnf);
 
   char* dimacs = "1 -2 5 0 2 1 5 0\n -4 2 -8 0 9 -2 4 \n8 0";
-  int32_t rawCnf[] = {0, 1, -2, 5, 0, 2, 1, 5, 0, -4, 2, -8, 0, 9, -2, 4, 8, 0};
+  int32_t rawCnf[] = { 0, 1, -2, 5, 0, 2, 1, 5, 0, -4, 2, -8, 0, 9, -2, 4, 8, 0 };
 
   parseDimacs(dimacs, &cnf);
 
   TEST_ASSERT(cnf.count == 18);
-  for (size_t i = 0u; i < cnf.count; ++i){
+  for (size_t i = 0u; i < cnf.count; ++i) {
     assert(cnf.pData[i] == rawCnf[i]);
   }
 

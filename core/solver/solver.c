@@ -2,7 +2,6 @@
 
 #include <common/common.h>
 
-
 int
 Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
 {

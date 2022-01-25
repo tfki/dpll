@@ -1,9 +1,9 @@
 #ifndef DPLLSOLVER_ASSIGNMENT_H
 #define DPLLSOLVER_ASSIGNMENT_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
-#include <stdbool.h>
 
 typedef struct Assignment
 {

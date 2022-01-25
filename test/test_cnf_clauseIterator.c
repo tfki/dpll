@@ -86,7 +86,7 @@ test_cnf_clauseIterator_with_mixed()
   int32_t clause1[] = { 1, 2, 3 };
   size_t clause1Size = 3u;
 
-  int32_t *clause2 = NULL;
+  int32_t* clause2 = NULL;
   size_t clause2Size = 0u;
 
   int32_t clause3[] = { 5, 2, -6, 1 };

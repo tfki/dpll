@@ -21,8 +21,8 @@ test_Assignment_getAndSet()
   Assignment assignment;
   TEST_ASSERT(!Assignment_create(&assignment));
 
-  TEST_ASSERT(!Assignment_set(&assignment, 1u,true));
-  TEST_ASSERT(!Assignment_set(&assignment, 2u,true));
+  TEST_ASSERT(!Assignment_set(&assignment, 1u, true));
+  TEST_ASSERT(!Assignment_set(&assignment, 2u, true));
   TEST_ASSERT(!Assignment_set(&assignment, 3u, false));
   TEST_ASSERT(!Assignment_set(&assignment, 4u, false));
 
@@ -134,7 +134,8 @@ test_Assignment_swap()
 }
 
 void
-test_Assignment_setAll(){
+test_Assignment_setAll()
+{
   Assignment a;
   TEST_ASSERT(!Assignment_create(&a));
 

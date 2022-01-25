@@ -117,8 +117,8 @@ Assignment_swap(Assignment* a, Assignment* b)
 int
 Assignment_setAll(Assignment* target, Assignment* src)
 {
-  for (size_t i = 0u; i < src->count; i++){
-    if (Assignment_set(target, src->pKeys[i], src->pValues[i])){
+  for (size_t i = 0u; i < src->count; i++) {
+    if (Assignment_set(target, src->pKeys[i], src->pValues[i])) {
       return 1;
     }
   }
