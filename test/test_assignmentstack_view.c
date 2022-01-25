@@ -22,14 +22,15 @@ test_AssignmentStackView_get()
   AssignmentStackView_endView(&assignmentView, &assignment);
   TEST_ASSERT(assignmentView.count == 2u);
 
-  bool value;
-  TEST_ASSERT(AssignmentStackView_get(&assignmentView, 1u, &value));
-  TEST_ASSERT(AssignmentStackView_get(&assignmentView, 2u, &value));
+  // last parameter should not be touched! So NULL is ok here.
+  TEST_ASSERT_FAILURE(AssignmentStackView_get(&assignmentView, 1u, NULL));
+  TEST_ASSERT_FAILURE(AssignmentStackView_get(&assignmentView, 2u, NULL));
 
-  TEST_ASSERT_SUCCESS(AssignmentStackView_get(&assignmentView, 3u, &value));
-  TEST_ASSERT(value);
-  TEST_ASSERT_SUCCESS(AssignmentStackView_get(&assignmentView, 4u, &value));
-  TEST_ASSERT(!value);
+  bool v1, v2;
+  TEST_ASSERT_SUCCESS(AssignmentStackView_get(&assignmentView, 3u, &v1));
+  TEST_ASSERT_SUCCESS(AssignmentStackView_get(&assignmentView, 4u, &v2));
+  TEST_ASSERT_TRUE(v1);
+  TEST_ASSERT_FALSE(v2);
 
   AssignmentStack_destroy(&assignment);
 }
@@ -38,5 +39,4 @@ int
 main()
 {
   test_AssignmentStackView_get();
-  return 0;
 }

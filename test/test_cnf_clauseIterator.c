@@ -11,7 +11,8 @@ test_cnf_clauseIterator_with_empty_cnf()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT_SUCCESS(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_FALSE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_FALSE(Cnf_ClauseIterator_next(&iter));
 
   Cnf_destroy(&cnf);
 }
@@ -30,11 +31,11 @@ test_cnf_clauseIterator_with_one_clause()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 3u);
-  TEST_ASSERT(iter.pData[0] == 1);
-  TEST_ASSERT(iter.pData[1] == 2);
-  TEST_ASSERT(iter.pData[2] == -3);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 3u);
+  TEST_ASSERT_EQ(iter.pData[0], 1);
+  TEST_ASSERT_EQ(iter.pData[1], 2);
+  TEST_ASSERT_EQ(iter.pData[2], -3);
 
   TEST_ASSERT_SUCCESS(Cnf_ClauseIterator_next(&iter));
 
@@ -59,18 +60,18 @@ test_cnf_clauseIterator_with_multiple_clauses()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 3u);
-  TEST_ASSERT(iter.pData[0] == 1);
-  TEST_ASSERT(iter.pData[1] == 2);
-  TEST_ASSERT(iter.pData[2] == 3);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 3u);
+  TEST_ASSERT_EQ(iter.pData[0], 1);
+  TEST_ASSERT_EQ(iter.pData[1], 2);
+  TEST_ASSERT_EQ(iter.pData[2], 3);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 4u);
-  TEST_ASSERT(iter.pData[0] == 5);
-  TEST_ASSERT(iter.pData[1] == 2);
-  TEST_ASSERT(iter.pData[2] == -6);
-  TEST_ASSERT(iter.pData[3] == 1);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 4u);
+  TEST_ASSERT_EQ(iter.pData[0], 5);
+  TEST_ASSERT_EQ(iter.pData[1], 2);
+  TEST_ASSERT_EQ(iter.pData[2], -6);
+  TEST_ASSERT_EQ(iter.pData[3], 1);
 
   TEST_ASSERT_SUCCESS(Cnf_ClauseIterator_next(&iter));
 
@@ -99,21 +100,21 @@ test_cnf_clauseIterator_with_mixed()
   Cnf_ClauseIterator iter;
   Cnf_ClauseIterator_create(&iter, &cnf);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 3u);
-  TEST_ASSERT(iter.pData[0] == 1);
-  TEST_ASSERT(iter.pData[1] == 2);
-  TEST_ASSERT(iter.pData[2] == 3);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 3u);
+  TEST_ASSERT_EQ(iter.pData[0], 1);
+  TEST_ASSERT_EQ(iter.pData[1], 2);
+  TEST_ASSERT_EQ(iter.pData[2], 3);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 0u);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 0u);
 
-  TEST_ASSERT(Cnf_ClauseIterator_next(&iter));
-  TEST_ASSERT(iter.count == 4u);
-  TEST_ASSERT(iter.pData[0] == 5);
-  TEST_ASSERT(iter.pData[1] == 2);
-  TEST_ASSERT(iter.pData[2] == -6);
-  TEST_ASSERT(iter.pData[3] == 1);
+  TEST_ASSERT_TRUE(Cnf_ClauseIterator_next(&iter));
+  TEST_ASSERT_EQ(iter.count, 4u);
+  TEST_ASSERT_EQ(iter.pData[0], 5);
+  TEST_ASSERT_EQ(iter.pData[1], 2);
+  TEST_ASSERT_EQ(iter.pData[2], -6);
+  TEST_ASSERT_EQ(iter.pData[3], 1);
 
   TEST_ASSERT_SUCCESS(Cnf_ClauseIterator_next(&iter));
 
@@ -127,6 +128,4 @@ main()
   test_cnf_clauseIterator_with_one_clause();
   test_cnf_clauseIterator_with_multiple_clauses();
   test_cnf_clauseIterator_with_mixed();
-
-  return 0;
 }
