@@ -39,4 +39,23 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
 int8_t
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator);
 
+typedef struct ClauseBuffer
+{
+  int32_t* pData;
+  size_t capacity;
+  size_t count;
+} ClauseBuffer;
+
+int
+ClauseBuffer_create(ClauseBuffer* pClauseBuffer);
+
+int
+ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal);
+
+void
+ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer);
+
+void
+ClauseBuffer_reset(ClauseBuffer* pClauseBuffer);
+
 #endif
