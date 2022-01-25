@@ -1,0 +1,14 @@
+c 1 32-Bit
+c 2 Eneergiemanagement 
+c 3 64-Bit
+c 4 Betriebssystem
+c 5 Architektur 
+p cnf 5 8
+4 0
+4 -2 0
+4 -5 0
+5 -4 0
+5 -1 0
+5 -3 0
+1 3 -5 0
+-1 -3 0

@@ -1,0 +1,33 @@
+c 1 Energiemanagement
+c 2 Scheduler
+c 3 User Interface
+c 4 Betriebssystem
+c 5 Programme
+c 6 Firefox
+c 7 Architektur
+c 8 Desktop
+c 9 Thunderbird
+c 10 64 Bit
+c 11 32 Bit
+c 12 Konsole
+p cnf 12 20
+4 0
+3 -12 0
+3 -8 0
+12 -3 0
+4 -2 0
+4 -1 0
+4 -3 0
+4 -7 0
+4 -5 0
+2 -4 0
+3 -4 0
+7 -4 0
+5 -6 0
+5 -9 0
+6 9 -5 0
+7 -11 0
+7 -10 0
+11 10 -7 0
+-11 -10 0
+-6 8 0
