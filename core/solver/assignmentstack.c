@@ -140,7 +140,7 @@ AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const Assignme
 {
   SANITIZING_ASSERT(pAssignmentView);                             // pAssignmentView must be a valid pointer
   SANITIZING_ASSERT(pAssignment);                                 // pAssignment must be a valid pointer
-  SANITIZING_ASSERT(pAssignmentView->count < pAssignment->count); // only pushes are allowed between beginWatch and finalizeView
+  SANITIZING_ASSERT(pAssignmentView->count <= pAssignment->count); // only pushes are allowed between beginView and endView
 
   pAssignmentView->pKeys = &pAssignment->pKeys[pAssignmentView->count];
   pAssignmentView->pValues = &pAssignment->pValues[pAssignmentView->count];
