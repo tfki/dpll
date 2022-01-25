@@ -9,6 +9,6 @@ int32_t
 dpllTrivialPick(const Cnf* pCnf);
 
 int
-dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult);
+dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment);
 
 #endif

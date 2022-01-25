@@ -1,25 +1,25 @@
-#include "solver/assignment.h"
+#include "solver/assignmentstack.h"
 
 int
 main()
 {
-  Assignment assignment;
-  Assignment_create(&assignment);
+  AssignmentStack assignment;
+  AssignmentStack_create(&assignment);
 
-  Assignment_set(&assignment, 3, 1);
-  Assignment_set(&assignment, 5, 1);
-  Assignment_set(&assignment, 2, 0);
-  Assignment_set(&assignment, 1, 1);
+  AssignmentStack_set(&assignment, 3, 1);
+  AssignmentStack_set(&assignment, 5, 1);
+  AssignmentStack_set(&assignment, 2, 0);
+  AssignmentStack_set(&assignment, 1, 1);
 
-  int8_t val3;
-  Assignment_get(&assignment, 3, &val3);
+  bool val3;
+  AssignmentStack_get(&assignment, 3, &val3);
 
-  int8_t val5;
-  Assignment_get(&assignment, 5, &val5);
+  bool val5;
+  AssignmentStack_get(&assignment, 5, &val5);
 
-  int8_t val2;
-  Assignment_get(&assignment, 2, &val2);
+  bool val2;
+  AssignmentStack_get(&assignment, 2, &val2);
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   return 0;
 }

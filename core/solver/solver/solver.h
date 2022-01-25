@@ -8,7 +8,7 @@
 int
 Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf);
 
-int
-Cnf_simplify(const Cnf* pCnf, uint32_t variable, bool assignment, Cnf* pNextCnf);
+// int
+// Cnf_simplify(const Cnf* pCnf, uint32_t variable, bool assignment, Cnf* pNextCnf);
 
 #endif

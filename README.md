@@ -22,3 +22,4 @@ TODO
 + Assignment_setAll has room for optimization
 + get return type of dpllsolve sorted out
 + all tests should be static void
++ solve pickAndRemove Callback does not follow the return conventions

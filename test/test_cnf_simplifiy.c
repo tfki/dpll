@@ -7,7 +7,7 @@ void
 test_Cnf_simplify_withEmptyAssignment()
 {
   AssignmentStack emptyAssignment;
-  Assignment_create(&emptyAssignment);
+  AssignmentStack_create(&emptyAssignment);
 
   int32_t clause1[] = { 1, -2, 3 };
   int32_t clause2[] = { 5, 3, -1 };
@@ -33,7 +33,7 @@ test_Cnf_simplify_withEmptyAssignment()
     TEST_ASSERT(cnf.pData[i] == resultCnf.pData[i]);
   }
 
-  Assignment_destroy(&emptyAssignment);
+  AssignmentStack_destroy(&emptyAssignment);
   Cnf_destroy(&cnf);
   Cnf_destroy(&resultCnf);
 }
@@ -42,8 +42,8 @@ void
 test_Cnf_simplify_withTrueClause()
 {
   AssignmentStack assignment;
-  Assignment_create(&assignment);
-  Assignment_set(&assignment, 1u, 1);
+  AssignmentStack_create(&assignment);
+  AssignmentStack_set(&assignment, 1u, 1);
 
   int32_t clause[] = { 1, -2, 3 };
   size_t clauseCount = 3u;
@@ -59,7 +59,7 @@ test_Cnf_simplify_withTrueClause()
 
   TEST_ASSERT(resultCnf.count == 0u);
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
   Cnf_destroy(&resultCnf);
 }
@@ -68,8 +68,8 @@ void
 test_Cnf_simplify_withFalseClause()
 {
   AssignmentStack assignment;
-  Assignment_create(&assignment);
-  Assignment_set(&assignment, 1u, 0);
+  AssignmentStack_create(&assignment);
+  AssignmentStack_set(&assignment, 1u, 0);
 
   int32_t clause[] = { 1, -2, 3 };
   size_t clause1Count = 3u;
@@ -85,7 +85,7 @@ test_Cnf_simplify_withFalseClause()
 
   TEST_ASSERT(resultCnf.count == (cnf.count - 1u));
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
   Cnf_destroy(&resultCnf);
 }
@@ -94,9 +94,9 @@ void
 test_Cnf_simplify_withMixedClauses()
 {
   AssignmentStack assignment;
-  Assignment_create(&assignment);
-  Assignment_set(&assignment, 1u, 0);
-  Assignment_set(&assignment, 5u, 1);
+  AssignmentStack_create(&assignment);
+  AssignmentStack_set(&assignment, 1u, 0);
+  AssignmentStack_set(&assignment, 5u, 1);
 
   // this clause should have the 1 omitted
   int32_t clause1[] = { 1, -2, 3 };
@@ -131,7 +131,7 @@ test_Cnf_simplify_withMixedClauses()
   TEST_ASSERT(resultCnf.pData[6u] == 8);
   TEST_ASSERT(resultCnf.pData[7u] == 0);
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
   Cnf_destroy(&resultCnf);
 }
