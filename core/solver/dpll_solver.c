@@ -11,43 +11,38 @@ dpllTrivialPick(const Cnf* pCnf)
 }
 
 int
-dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
-{
-  SANITIZING_ASSERT(pCnf);              // pCnf must be a valid pointer
-  SANITIZING_ASSERT(pickAndRemove);     // pickAndRemove must be a valid pointer
-  SANITIZING_ASSERT(pAssignmentResult); // pAssignmentResult must be a valid pointer
-
-  Assignment emptyAssignment;
-  Assignment_create(&emptyAssignment);
-
-  int foundSolution = dpllSolvePartial(pCnf, &emptyAssignment, pickAndRemove, pAssignmentResult);
-  Assignment_destroy(&emptyAssignment);
-
-  return foundSolution;
-}
-
-int
-dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemove)(const Cnf*), Assignment* pAssignmentResult)
+dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment)
 {
   SANITIZING_ASSERT(pCnf);              // pCnf must be a valid pointer
   SANITIZING_ASSERT(pAssignment);       // pAssignment must be a valid pointer
   SANITIZING_ASSERT(pickAndRemove);     // pickAndRemove must be a valid pointer
-  SANITIZING_ASSERT(pAssignmentResult); // pAssignmentResult must be a valid pointer
 
   // TODO we should not require pCnf to be const, so we can reset and reuse it.
   //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!
 
-  Cnf simplified;
-  Cnf_create(&simplified);
-
-  Cnf_simplify(pCnf, pAssignment, &simplified);
+  //  _____          _           _           _        _                                   _
+  // |_   _|  _ __  (_) __   __ (_)   __ _  | |      / \      ___    ___    ___   _ __   | |_
+  //   | |   | '__| | | \ \ / / | |  / _` | | |     / _ \    / __|  / __|  / _ \ | '_ \  | __|
+  //   | |   | |    | |  \ V /  | | | (_| | | |    / ___ \  | (__  | (__  |  __/ | |_) | | |_
+  //   |_|   |_|    |_|   \_/   |_|  \__,_| |_|   /_/   \_\  \___|  \___|  \___| | .__/   \__|
+  //                                                                             |_|
 
   // if Cnf is empty -> sat
-  if (pCnf->count == 0u) {
-    Assignment_swap(pAssignmentResult, pAssignment);
+  Cnf simplified;
+  Cnf_create(&simplified);
+  Cnf_simplify(pCnf, pAssignment, &simplified);
+
+  if (simplified.count == 0u) {
     Cnf_destroy(&simplified);
     return 0;
   }
+
+  //  _____          _           _           _     ____             _                 _
+  // |_   _|  _ __  (_) __   __ (_)   __ _  | |   |  _ \    ___    (_)   ___    ___  | |_
+  //   | |   | '__| | | \ \ / / | |  / _` | | |   | |_) |  / _ \   | |  / _ \  / __| | __|
+  //   | |   | |    | |  \ V /  | | | (_| | | |   |  _ <  |  __/   | | |  __/ | (__  | |_
+  //   |_|   |_|    |_|   \_/   |_|  \__,_| |_|   |_| \_\  \___|  _/ |  \___|  \___|  \__|
+  //                                                             |__/
 
   // if Cnf contains empty clause -> unsat
   Cnf_ClauseIterator iter;
@@ -60,34 +55,33 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
     }
   }
 
-  int32_t nextLiteral = pickAndRemove(&simplified);
-  uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
+  //   ____                                                  _   _                 _
+  //  |  _ \   _ __    ___   _ __     __ _   _ __    ___    | \ | |   ___  __  __ | |_
+  //  | |_) | | '__|  / _ \ | '_ \   / _` | | '__|  / _ \   |  \| |  / _ \ \ \/ / | __|
+  //  |  __/  | |    |  __/ | |_) | | (_| | | |    |  __/   | |\  | |  __/  >  <  | |_
+  //  |_|     |_|     \___| | .__/   \__,_| |_|     \___|   |_| \_|  \___| /_/\_\  \__|
+  //                        |_|
 
-  // Assignment with nextLiteral evaluating to false
-  Assignment pFalseAssignment;
-  Assignment_copy(&pFalseAssignment, pAssignment);
+  // Choose another variable and try to solve the
+  // formula by setting it first to true and then to false.
+  // The evaluation is done by a recursive call.
 
-  // for the Assignment where nextLiteral evaluates to false we just reuse pAssignment
+  const int32_t nextLiteral = pickAndRemove(&simplified);
+  const uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
+  const bool sign = (nextLiteral > 0) ? true : false;
 
-  // set value of nextVariable in pAssignment, so that it evaluates to true
-  Assignment_set(pAssignment, nextVariable, (nextLiteral > 0) ? 1 : 0);
-
-  // set value of nextVariable in pFalseAssigment, so that it evaluates to false
-  Assignment_set(&pFalseAssignment, nextVariable, (nextLiteral < 0) ? 1 : 0);
-
-  if (!dpllSolvePartial(&simplified, pAssignment, pickAndRemove, pAssignmentResult)) {
+  AssignmentStack_set(pAssignment, nextVariable, sign);
+  if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
-    Assignment_destroy(&pFalseAssignment);
     return 0;
   }
 
-  if (!dpllSolvePartial(&simplified, &pFalseAssignment, pickAndRemove, pAssignmentResult)) {
+  AssignmentStack_set(pAssignment, nextVariable, !sign);
+  if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
-    Assignment_destroy(&pFalseAssignment);
     return 0;
   }
 
-  Assignment_destroy(&pFalseAssignment);
   Cnf_destroy(&simplified);
   return 1;
 }
