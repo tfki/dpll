@@ -11,4 +11,7 @@ dpllTrivialPick(const Cnf* pCnf);
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment);
 
+int
+dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack);
+
 #endif

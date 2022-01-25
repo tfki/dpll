@@ -1,5 +1,6 @@
 #include "solver/dpll_solver.h"
 
+#include <cnf/cnf.h>
 #include <common/common.h>
 #include <stdbool.h>
 
@@ -13,9 +14,9 @@ dpllTrivialPick(const Cnf* pCnf)
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment)
 {
-  SANITIZING_ASSERT(pCnf);              // pCnf must be a valid pointer
-  SANITIZING_ASSERT(pAssignment);       // pAssignment must be a valid pointer
-  SANITIZING_ASSERT(pickAndRemove);     // pickAndRemove must be a valid pointer
+  SANITIZING_ASSERT(pCnf);          // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pAssignment);   // pAssignment must be a valid pointer
+  SANITIZING_ASSERT(pickAndRemove); // pickAndRemove must be a valid pointer
 
   // TODO we should not require pCnf to be const, so we can reset and reuse it.
   //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!
@@ -85,4 +86,41 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 
   Cnf_destroy(&simplified);
   return 1;
+}
+
+int
+dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack)
+{
+  bool foundAtLeasOneUnitClause;
+
+  Cnf simplified;
+  if (Cnf_create(&simplified))
+    return 1;
+
+  do {
+    AssignmentStackView assignmentView;
+    AssignmentStackView_beginView(&assignmentView, assignmentStack);
+    foundAtLeasOneUnitClause = false;
+
+    for (size_t i = 0u; i + 2 < cnf->count; i++) {
+      if (cnf->pData[i] == 0 && cnf->pData[i + 2] == 0) {
+        // unit clause found
+        int32_t literal = cnf->pData[i + 1];
+        uint32_t variable = literal > 0 ? literal : -literal;
+        bool value = literal > 0;
+        AssignmentStack_push(assignmentStack, variable, value);
+
+        foundAtLeasOneUnitClause = true;
+      }
+    }
+
+    AssignmentStackView_endView(&assignmentView, assignmentStack);
+    if (Cnf_simplifyWithView(cnf, &assignmentView, &simplified))
+      return 1;
+
+    Cnf_swap(cnf, &simplified);
+    Cnf_reset(&simplified);
+  } while (foundAtLeasOneUnitClause);
+
+  return 0;
 }
