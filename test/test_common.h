@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #ifndef NDEBUG // TODO replace with SANITIZING compiler flag if
-               //      the performance drops to much in debug mode
+              //      the performance drops to much in debug mode
 
 #define TEST_ASSERT(c) assert(c)
 
@@ -13,6 +13,7 @@
 
 #define TEST_ASSERT(c)                                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \
+    printf("assert failed in file %s on line %d", __FILE__, __LINE__);                                                                                         \
     exit(__LINE__);                                                                                                                                            \
   }                                                                                                                                                            \
   ((void)0)
