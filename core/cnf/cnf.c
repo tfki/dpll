@@ -84,6 +84,22 @@ Cnf_reset(Cnf* pCnf)
 }
 
 void
+Cnf_swap(Cnf* a, Cnf* b)
+{
+  int32_t* tmpPData = a->pData;
+  size_t tmpCapacity = a->capacity;
+  size_t tmpCount = a->count;
+
+  a->pData = b->pData;
+  a->count = b->count;
+  a->capacity = b->capacity;
+
+  b->pData = tmpPData;
+  b->count = tmpCount;
+  b->capacity = tmpCapacity;
+}
+
+void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {
   SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer

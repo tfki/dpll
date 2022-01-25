@@ -27,6 +27,9 @@ Cnf_destroy(Cnf* pCnf);
 void
 Cnf_reset(Cnf* pCnf);
 
+void
+Cnf_swap(Cnf* a, Cnf* b);
+
 typedef struct Cnf_ClauseIterator
 {
   const int32_t* pData;    /// position of the current clause

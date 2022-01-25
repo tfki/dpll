@@ -118,6 +118,52 @@ test_Cnf_destroy()
   return 0;
 }
 
+static void
+test_Cnf_Swap()
+{
+  const int32_t cnf1clause1[] = {1, 2};
+  const size_t cnf1clause1Count = 2u;
+  const int32_t cnf1clause2[] = {3, -4, 5};
+  const size_t cnf1clause2Count = 3u;
+
+  Cnf cnf1;
+  TEST_ASSERT(!Cnf_create(&cnf1));
+  TEST_ASSERT(!Cnf_pushClause(&cnf1, cnf1clause1, cnf1clause1Count));
+  TEST_ASSERT(!Cnf_pushClause(&cnf1, cnf1clause2, cnf1clause2Count));
+
+  TEST_ASSERT(cnf1.count == 8u);
+
+  const int32_t cnf2clause1[] = {7, 8};
+  const size_t cnf2clause1Count = 2u;
+
+  Cnf cnf2;
+  TEST_ASSERT(!Cnf_create(&cnf2));
+  TEST_ASSERT(!Cnf_pushClause(&cnf2, cnf2clause1, cnf2clause1Count));
+
+  TEST_ASSERT(cnf2.count == 4u);
+
+  Cnf_swap(&cnf1, &cnf2);
+
+  TEST_ASSERT(cnf1.count == 4u);
+  TEST_ASSERT(cnf1.pData[0] == 0);
+  TEST_ASSERT(cnf1.pData[1] == 7);
+  TEST_ASSERT(cnf1.pData[2] == 8);
+  TEST_ASSERT(cnf1.pData[3] == 0);
+
+  TEST_ASSERT(cnf2.count == 8u);
+  TEST_ASSERT(cnf2.pData[0] == 0);
+  TEST_ASSERT(cnf2.pData[1] == 1);
+  TEST_ASSERT(cnf2.pData[2] == 2);
+  TEST_ASSERT(cnf2.pData[3] == 0);
+  TEST_ASSERT(cnf2.pData[4] == 3);
+  TEST_ASSERT(cnf2.pData[5] == -4);
+  TEST_ASSERT(cnf2.pData[6] == 5);
+  TEST_ASSERT(cnf2.pData[7] == 0);
+
+  Cnf_destroy(&cnf1);
+  Cnf_destroy(&cnf2);
+}
+
 int
 main()
 {
@@ -126,4 +172,5 @@ main()
   test_Cnf_capacityOverflow();
   test_Cnf_copy();
   test_Cnf_destroy();
+  test_Cnf_Swap();
 }
