@@ -9,12 +9,12 @@ Assignment_create(Assignment* pAssignment)
 
   pAssignment->count = 0u;
   pAssignment->capacity = 1024u;
-  pAssignment->pKeys = malloc(pAssignment->capacity * sizeof(uint32_t) + pAssignment->capacity * sizeof(int8_t));
+  pAssignment->pKeys = malloc(pAssignment->capacity * sizeof(uint32_t) + pAssignment->capacity * sizeof(bool));
 
   if (!pAssignment->pKeys)
     return 1;
 
-  pAssignment->pValues = (int8_t*)(pAssignment->pKeys + pAssignment->capacity);
+  pAssignment->pValues = (bool*)(pAssignment->pKeys + pAssignment->capacity);
 
   return 0;
 }
@@ -27,20 +27,20 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 
   pDest->capacity = pSrc->capacity;
   pDest->count = pSrc->count;
-  pDest->pKeys = malloc(pSrc->capacity * sizeof(int32_t) + pSrc->capacity * sizeof(int8_t));
-  pDest->pValues = (int8_t*)(pDest->pKeys + pSrc->capacity);
+  pDest->pKeys = malloc(pSrc->capacity * sizeof(int32_t) + pSrc->capacity * sizeof(bool));
+  pDest->pValues = (bool*)(pDest->pKeys + pSrc->capacity);
 
   if (!pDest->pKeys)
     return 1;
 
   memcpy(pDest->pKeys, pSrc->pKeys, pSrc->count * sizeof(uint32_t));
-  memcpy(pDest->pValues, pSrc->pValues, pSrc->count * sizeof(uint8_t));
+  memcpy(pDest->pValues, pSrc->pValues, pSrc->count * sizeof(bool));
 
   return 0;
 }
 
 int
-Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
+Assignment_set(Assignment* pAssignment, uint32_t key, bool value)
 {
   SANITIZING_ASSERT(pAssignment);              // pAssignment must be a valid pointer
   SANITIZING_ASSERT(key);                      // zero key is not allowed!
@@ -57,13 +57,13 @@ Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 
   // if key does not already exist
   if (pAssignment->count + 1 > pAssignment->capacity) {
-    uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(uint32_t) + pAssignment->capacity * 2u * sizeof(uint8_t));
+    uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(uint32_t) + pAssignment->capacity * 2u * sizeof(bool));
     if (!pNewKeys)
       return 1;
 
     pAssignment->pKeys = pNewKeys;
 
-    pAssignment->pValues = (int8_t*)(pAssignment->pKeys + pAssignment->capacity * 2u);
+    pAssignment->pValues = (bool*)(pAssignment->pKeys + pAssignment->capacity * 2u);
     pAssignment->capacity *= 2;
   }
 
@@ -77,7 +77,7 @@ Assignment_set(Assignment* pAssignment, uint32_t key, int8_t value)
 }
 
 int
-Assignment_get(const Assignment* pAssignment, uint32_t key, int8_t* value)
+Assignment_get(const Assignment* pAssignment, uint32_t key, bool* value)
 {
   SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
 
@@ -99,7 +99,7 @@ Assignment_swap(Assignment* a, Assignment* b)
   SANITIZING_ASSERT(b); // b must be a valid pointer
 
   uint32_t* pKeysTmp = a->pKeys;
-  int8_t* pValuesTmp = a->pValues;
+  bool* pValuesTmp = a->pValues;
   size_t countTmp = a->count;
   size_t capacityTmp = a->capacity;
 
@@ -112,6 +112,16 @@ Assignment_swap(Assignment* a, Assignment* b)
   b->pValues = pValuesTmp;
   b->count = countTmp;
   b->capacity = capacityTmp;
+}
+
+int
+Assignment_setAll(Assignment* target, Assignment* src)
+{
+  for (size_t i = 0u; i < src->count; i++){
+    if (Assignment_set(target, src->pKeys[i], src->pValues[i])){
+      return 1;
+    }
+  }
 }
 
 void

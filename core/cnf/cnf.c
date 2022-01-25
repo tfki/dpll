@@ -94,7 +94,7 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
   pCnfClauseIterator->count = 0u;
 }
 
-int8_t
+bool
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
   SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer

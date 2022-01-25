@@ -21,26 +21,26 @@ test_Assignment_getAndSet()
   Assignment assignment;
   TEST_ASSERT(!Assignment_create(&assignment));
 
-  TEST_ASSERT(!Assignment_set(&assignment, 1u, 1));
-  TEST_ASSERT(!Assignment_set(&assignment, 2u, 1));
-  TEST_ASSERT(!Assignment_set(&assignment, 3u, 0));
-  TEST_ASSERT(!Assignment_set(&assignment, 4u, 0));
+  TEST_ASSERT(!Assignment_set(&assignment, 1u,true));
+  TEST_ASSERT(!Assignment_set(&assignment, 2u,true));
+  TEST_ASSERT(!Assignment_set(&assignment, 3u, false));
+  TEST_ASSERT(!Assignment_set(&assignment, 4u, false));
 
   TEST_ASSERT(assignment.count == 4);
   TEST_ASSERT(assignment.capacity == 1024);
 
-  int8_t value;
+  bool value;
   Assignment_get(&assignment, 1u, &value);
-  TEST_ASSERT(value == 1);
+  TEST_ASSERT(value);
 
   Assignment_get(&assignment, 2u, &value);
-  TEST_ASSERT(value == 1);
+  TEST_ASSERT(value);
 
   Assignment_get(&assignment, 3u, &value);
-  TEST_ASSERT(value == 0);
+  TEST_ASSERT(!value);
 
   Assignment_get(&assignment, 4u, &value);
-  TEST_ASSERT(value == 0);
+  TEST_ASSERT(!value);
 
   Assignment_destroy(&assignment);
 }
@@ -49,7 +49,7 @@ static void
 test_Assignment_copy()
 {
   uint32_t keys[] = { 1u, 2u, 3u, 4u };
-  int8_t values[] = { 1, 1, 0, 0 };
+  bool values[] = { true, true, false, false };
 
   Assignment assignment1;
   TEST_ASSERT(!Assignment_create(&assignment1));
@@ -66,8 +66,8 @@ test_Assignment_copy()
   Assignment_copy(&assignment2, &assignment1);
 
   for (size_t i = 0u; i < assignment1.count; ++i) {
-    int8_t value1;
-    int8_t value2;
+    bool value1;
+    bool value2;
     Assignment_get(&assignment1, keys[i], &value1);
     Assignment_get(&assignment2, keys[i], &value2);
     TEST_ASSERT(values[i] == value1);
@@ -84,10 +84,10 @@ test_Assignment_destroy()
   Assignment assignment;
   TEST_ASSERT(!Assignment_create(&assignment));
 
-  TEST_ASSERT(!Assignment_set(&assignment, 1u, 1));
-  TEST_ASSERT(!Assignment_set(&assignment, 2u, 1));
-  TEST_ASSERT(!Assignment_set(&assignment, 3u, 0));
-  TEST_ASSERT(!Assignment_set(&assignment, 4u, 0));
+  TEST_ASSERT(!Assignment_set(&assignment, 1u, true));
+  TEST_ASSERT(!Assignment_set(&assignment, 2u, true));
+  TEST_ASSERT(!Assignment_set(&assignment, 3u, false));
+  TEST_ASSERT(!Assignment_set(&assignment, 4u, false));
 
   Assignment_destroy(&assignment);
 
@@ -106,12 +106,12 @@ test_Assignment_swap()
   Assignment b;
   TEST_ASSERT(!Assignment_create(&b));
 
-  TEST_ASSERT(!Assignment_set(&a, 1u, 0));
-  TEST_ASSERT(!Assignment_set(&a, 3u, 1));
+  TEST_ASSERT(!Assignment_set(&a, 1u, false));
+  TEST_ASSERT(!Assignment_set(&a, 3u, true));
 
-  TEST_ASSERT(!Assignment_set(&b, 2u, 1));
-  TEST_ASSERT(!Assignment_set(&b, 4u, 0));
-  TEST_ASSERT(!Assignment_set(&b, 6u, 1));
+  TEST_ASSERT(!Assignment_set(&b, 2u, true));
+  TEST_ASSERT(!Assignment_set(&b, 4u, false));
+  TEST_ASSERT(!Assignment_set(&b, 6u, true));
 
   Assignment_swap(&a, &b);
 
@@ -119,15 +119,56 @@ test_Assignment_swap()
   TEST_ASSERT(a.pKeys[0] == 2u);
   TEST_ASSERT(a.pKeys[1] == 4u);
   TEST_ASSERT(a.pKeys[2] == 6u);
-  TEST_ASSERT(a.pValues[0] == 1);
-  TEST_ASSERT(a.pValues[1] == 0);
-  TEST_ASSERT(a.pValues[2] == 1);
+  TEST_ASSERT(a.pValues[0] == true);
+  TEST_ASSERT(a.pValues[1] == false);
+  TEST_ASSERT(a.pValues[2] == true);
 
   TEST_ASSERT(b.count == 2);
   TEST_ASSERT(b.pKeys[0] == 1u);
   TEST_ASSERT(b.pKeys[1] == 3u);
-  TEST_ASSERT(b.pValues[0] == 0);
-  TEST_ASSERT(b.pValues[1] == 1);
+  TEST_ASSERT(b.pValues[0] == false);
+  TEST_ASSERT(b.pValues[1] == true);
+
+  Assignment_destroy(&b);
+  Assignment_destroy(&a);
+}
+
+void
+test_Assignment_setAll(){
+  Assignment a;
+  TEST_ASSERT(!Assignment_create(&a));
+
+  Assignment b;
+  TEST_ASSERT(!Assignment_create(&b));
+
+  TEST_ASSERT(!Assignment_set(&a, 1u, false));
+  TEST_ASSERT(!Assignment_set(&a, 3u, true));
+
+  TEST_ASSERT(!Assignment_set(&b, 2u, true));
+  TEST_ASSERT(!Assignment_set(&b, 4u, false));
+  TEST_ASSERT(!Assignment_set(&b, 6u, true));
+
+  Assignment_setAll(&a, &b);
+
+  TEST_ASSERT(a.count == 5);
+  TEST_ASSERT(a.pKeys[0] == 1u);
+  TEST_ASSERT(a.pKeys[1] == 3u);
+  TEST_ASSERT(a.pKeys[2] == 2u);
+  TEST_ASSERT(a.pKeys[3] == 4u);
+  TEST_ASSERT(a.pKeys[4] == 6u);
+  TEST_ASSERT(a.pValues[0] == false);
+  TEST_ASSERT(a.pValues[1] == true);
+  TEST_ASSERT(a.pValues[2] == true);
+  TEST_ASSERT(a.pValues[3] == false);
+  TEST_ASSERT(a.pValues[4] == true);
+
+  TEST_ASSERT(b.count == 3);
+  TEST_ASSERT(b.pKeys[0] == 2u);
+  TEST_ASSERT(b.pKeys[1] == 4u);
+  TEST_ASSERT(b.pKeys[2] == 6u);
+  TEST_ASSERT(b.pValues[0] == true);
+  TEST_ASSERT(b.pValues[1] == false);
+  TEST_ASSERT(b.pValues[2] == true);
 
   Assignment_destroy(&b);
   Assignment_destroy(&a);
@@ -141,6 +182,7 @@ main()
   test_Assignment_copy();
   test_Assignment_destroy();
   test_Assignment_swap();
+  test_Assignment_setAll();
 
   return 0;
 }

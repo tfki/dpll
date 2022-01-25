@@ -24,7 +24,7 @@ test_dpllSolve_precalculatedCnf()
   // { 3 , 4 }, { 1 }, { -2 }, { 3 }, { 4 }, { 2 , -1, 4 }
 
   const uint32_t variables[] = { 1u, 2u, 3u, 4u };
-  const int8_t result[] = { 1, 0, 1, 1 };
+  const bool result[] = { 1, 0, 1, 1 };
   const size_t variablesCount = 4u;
 
   const int32_t clause1[] = { 3, 4 };
@@ -56,7 +56,7 @@ test_dpllSolve_precalculatedCnf()
   TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   for (size_t i = 0u; i < variablesCount; ++i) {
-    int8_t value;
+    bool value;
     TEST_ASSERT(!Assignment_get(&assignment, variables[i], &value));
     TEST_ASSERT(value == result[i]);
   }

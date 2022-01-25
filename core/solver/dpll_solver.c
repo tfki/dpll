@@ -1,6 +1,7 @@
 #include "solver/dpll_solver.h"
 
 #include <common/common.h>
+#include <stdbool.h>
 
 int32_t
 dpllTrivialPick(const Cnf* pCnf)
@@ -59,7 +60,7 @@ dpllSolvePartial(const Cnf* pCnf, Assignment* pAssignment, int32_t (*pickAndRemo
     }
   }
 
-  int32_t nextLiteral = pickAndRemove(pCnf);
+  int32_t nextLiteral = pickAndRemove(&simplified);
   uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
 
   // Assignment with nextLiteral evaluating to false

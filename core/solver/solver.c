@@ -19,14 +19,14 @@ Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
 
   while (Cnf_ClauseIterator_next(&clauseIterator)) {
 
-    int8_t clauseTrue = 0u;
+    bool clauseTrue = 0u;
 
     for (size_t literalIndex = 0u; literalIndex < clauseIterator.count; ++literalIndex) {
 
       int32_t literal = clauseIterator.pData[literalIndex];
       uint32_t variable = literal < 0 ? -literal : literal;
 
-      int8_t variableAssignment;
+      bool variableAssignment;
       if (Assignment_get(pAssignment, variable, &variableAssignment)) {
         // Assignment does not specify literal value
         ClauseBuffer_push(&clauseBuffer, literal);

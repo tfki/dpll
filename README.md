@@ -9,5 +9,5 @@ TODO
 + simplify for single variable instead of whole assignment
 + complete solver tests
 + complete benchmark code
-+ use stdbool everywhere instead of int or int8_t
 + discuss status type
++ Assignment_setAll has room for optimization

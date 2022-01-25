@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct Cnf
 {
@@ -36,7 +37,7 @@ typedef struct Cnf_ClauseIterator
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf);
 
-int8_t
+bool
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator);
 
 typedef struct ClauseBuffer
