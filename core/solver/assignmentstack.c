@@ -1,9 +1,9 @@
-#include "solver/assignment.h"
+#include "solver/assignmentstack.h"
 #include <common/common.h>
 #include <stdlib.h>
 
 int
-Assignment_create(Assignment* pAssignment)
+AssignmentStack_create(AssignmentStack* pAssignment)
 {
   SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
 
@@ -20,7 +20,7 @@ Assignment_create(Assignment* pAssignment)
 }
 
 int
-Assignment_copy(Assignment* pDest, const Assignment* pSrc)
+AssignmentStack_copy(AssignmentStack* pDest, const AssignmentStack* pSrc)
 {
   SANITIZING_ASSERT(pDest); // pDest must be a valid pointer
   SANITIZING_ASSERT(pSrc);  // pSrc must be a valid pointer
@@ -40,7 +40,7 @@ Assignment_copy(Assignment* pDest, const Assignment* pSrc)
 }
 
 int
-Assignment_set(Assignment* pAssignment, uint32_t key, bool value)
+AssignmentStack_set(AssignmentStack* pAssignment, uint32_t key, bool value)
 {
   SANITIZING_ASSERT(pAssignment);              // pAssignment must be a valid pointer
   SANITIZING_ASSERT(key);                      // zero key is not allowed!
@@ -77,7 +77,7 @@ Assignment_set(Assignment* pAssignment, uint32_t key, bool value)
 }
 
 int
-Assignment_get(const Assignment* pAssignment, uint32_t key, bool* value)
+AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* value)
 {
   SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
 
@@ -93,7 +93,7 @@ Assignment_get(const Assignment* pAssignment, uint32_t key, bool* value)
 }
 
 void
-Assignment_swap(Assignment* a, Assignment* b)
+AssignmentStack_swap(AssignmentStack* a, AssignmentStack* b)
 {
   SANITIZING_ASSERT(a); // a must be a valid pointer
   SANITIZING_ASSERT(b); // b must be a valid pointer
@@ -115,17 +115,17 @@ Assignment_swap(Assignment* a, Assignment* b)
 }
 
 int
-Assignment_setAll(Assignment* target, Assignment* src)
+AssignmentStack_setAll(AssignmentStack* target, AssignmentStack* src)
 {
   for (size_t i = 0u; i < src->count; i++) {
-    if (Assignment_set(target, src->pKeys[i], src->pValues[i])) {
+    if (AssignmentStack_set(target, src->pKeys[i], src->pValues[i])) {
       return 1;
     }
   }
 }
 
 void
-Assignment_destroy(Assignment* pAssignment)
+AssignmentStack_destroy(AssignmentStack* pAssignment)
 {
   SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
 

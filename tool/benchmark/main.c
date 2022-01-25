@@ -11,8 +11,8 @@ main()
 
   // TODO create complex cnf
 
-  Assignment assignment;
-  Assignment_create(&assignment);
+  AssignmentStack assignment;
+  AssignmentStack_create(&assignment);
 
   float start = ((float)clock()) / CLOCKS_PER_SEC;
 

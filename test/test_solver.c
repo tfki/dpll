@@ -8,12 +8,12 @@ test_dpllSolve_emptyCnf()
   Cnf cnf;
   Cnf_create(&cnf);
 
-  Assignment assignment;
-  Assignment_create(&assignment);
+  AssignmentStack assignment;
+  AssignmentStack_create(&assignment);
 
   TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
 }
 
@@ -50,18 +50,18 @@ test_dpllSolve_precalculatedCnf()
   TEST_ASSERT(!Cnf_pushClause(&cnf, clause5, clause5Count));
   TEST_ASSERT(!Cnf_pushClause(&cnf, clause6, clause6Count));
 
-  Assignment assignment;
-  Assignment_create(&assignment);
+  AssignmentStack assignment;
+  AssignmentStack_create(&assignment);
 
   TEST_ASSERT(!dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   for (size_t i = 0u; i < variablesCount; ++i) {
     bool value;
-    TEST_ASSERT(!Assignment_get(&assignment, variables[i], &value));
+    TEST_ASSERT(!AssignmentStack_get(&assignment, variables[i], &value));
     TEST_ASSERT(value == result[i]);
   }
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
 }
 
@@ -79,12 +79,39 @@ test_dpllSolve_unsatisfiableCnf()
   TEST_ASSERT(!Cnf_pushClause(&cnf, clause1, clause1Count));
   TEST_ASSERT(!Cnf_pushClause(&cnf, clause2, clause2Count));
 
-  Assignment assignment;
-  Assignment_create(&assignment);
+  AssignmentStack assignment;
+  AssignmentStack_create(&assignment);
 
   TEST_ASSERT(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
-  Assignment_destroy(&assignment);
+  AssignmentStack_destroy(&assignment);
+  Cnf_destroy(&cnf);
+}
+
+void
+test_dpllSolver_unitPropagation_one_unit_clause()
+{
+  Cnf cnf;
+  TEST_ASSERT(!Cnf_create(&cnf));
+
+  ClauseBuffer clauseBuffer;
+  TEST_ASSERT(!ClauseBuffer_create(&clauseBuffer));
+  TEST_ASSERT(!ClauseBuffer_push(&clauseBuffer, -1));
+
+  TEST_ASSERT(!Cnf_pushClause(&cnf, clauseBuffer.pData, clauseBuffer.count));
+
+  AssignmentStack result;
+  AssignmentStack_create(&result);
+
+  TEST_ASSERT(!dpllUnitPropagation(&cnf, &result));
+  TEST_ASSERT(result.count == 1);
+  TEST_ASSERT(result.pKeys[0] == 1);
+  TEST_ASSERT(result.pValues[0] == false);
+
+  TEST_ASSERT(cnf.count == 0);
+
+  AssignmentStack_destroy(&result);
+  ClauseBuffer_destroy(&clauseBuffer);
   Cnf_destroy(&cnf);
 }
 
@@ -94,4 +121,5 @@ main()
   test_dpllSolve_emptyCnf();
   test_dpllSolve_precalculatedCnf();
   test_dpllSolve_unsatisfiableCnf();
+  test_dpllSolver_unitPropagation_one_unit_clause();
 }

@@ -6,7 +6,7 @@
 void
 test_Cnf_simplify_withEmptyAssignment()
 {
-  Assignment emptyAssignment;
+  AssignmentStack emptyAssignment;
   Assignment_create(&emptyAssignment);
 
   int32_t clause1[] = { 1, -2, 3 };
@@ -41,7 +41,7 @@ test_Cnf_simplify_withEmptyAssignment()
 void
 test_Cnf_simplify_withTrueClause()
 {
-  Assignment assignment;
+  AssignmentStack assignment;
   Assignment_create(&assignment);
   Assignment_set(&assignment, 1u, 1);
 
@@ -67,7 +67,7 @@ test_Cnf_simplify_withTrueClause()
 void
 test_Cnf_simplify_withFalseClause()
 {
-  Assignment assignment;
+  AssignmentStack assignment;
   Assignment_create(&assignment);
   Assignment_set(&assignment, 1u, 0);
 
@@ -93,7 +93,7 @@ test_Cnf_simplify_withFalseClause()
 void
 test_Cnf_simplify_withMixedClauses()
 {
-  Assignment assignment;
+  AssignmentStack assignment;
   Assignment_create(&assignment);
   Assignment_set(&assignment, 1u, 0);
   Assignment_set(&assignment, 5u, 1);

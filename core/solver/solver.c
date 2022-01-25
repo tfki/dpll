@@ -3,7 +3,7 @@
 #include <common/common.h>
 
 int
-Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
+Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf)
 {
   SANITIZING_ASSERT(pCnf);        // pCnf must be a valid pointer
   SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
@@ -26,20 +26,20 @@ Cnf_simplify(const Cnf* pCnf, const Assignment* pAssignment, Cnf* pNextCnf)
       uint32_t variable = literal < 0 ? -literal : literal;
 
       bool variableAssignment;
-      if (Assignment_get(pAssignment, variable, &variableAssignment)) {
-        // Assignment does not specify literal value
+      if (AssignmentStack_get(pAssignment, variable, &variableAssignment)) {
+        // AssignmentStack does not specify literal value
         ClauseBuffer_push(&clauseBuffer, literal);
         continue;
       }
 
       if (!(variableAssignment ^ (literal > 0))) {
-        // Assignment makes the whole clause true
+        // AssignmentStack makes the whole clause true
         ClauseBuffer_reset(&clauseBuffer);
         clauseTrue = 1u;
         break;
       }
 
-      // Assignment makes the literal false
+      // AssignmentStack makes the literal false
     }
 
     if (!clauseTrue) {
