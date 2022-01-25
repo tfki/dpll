@@ -5,7 +5,7 @@
 #include "cnf/cnf.h"
 #include <stdbool.h>
 
-bool
+int
 parseDimacs(char* dimacs, Cnf* result);
 
 #endif

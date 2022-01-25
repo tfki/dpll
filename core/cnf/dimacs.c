@@ -12,7 +12,7 @@ typedef enum dimacsParserState
   PARSING_LITERAL
 } dimacsParserState;
 
-bool
+int
 parseDimacs(char* dimacs, Cnf* cnf)
 {
   SANITIZING_ASSERT(dimacs);     // dimacs must not be NULL

@@ -1,6 +1,15 @@
 DPLL Solver
 ===========
 
+Return Type Conventions
+-----------------------
+
+Functions returning void a guaranteed to not fail.
+Functions returning int must be expected to fail.
+Functions returning bool are used to support a better flow in conditions/loops. (E.g. iterators)
+Results are always written using out variable pointers which are placed at the end of the parameter list.
+Non out variable pointers are marked as const.
+
 TODO
 ----
 
