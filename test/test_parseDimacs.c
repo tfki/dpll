@@ -41,7 +41,7 @@ test_parseDimacs_with_one_clause()
 
   char* dimacs = "1 -2 5 0";
 
-  TEST_ASSERT_FAILURE(parseDimacs(dimacs, &cnf));
+  TEST_ASSERT_SUCCESS(parseDimacs(dimacs, &cnf));
 
   TEST_ASSERT_EQ(cnf.count, 5u);
   TEST_ASSERT_EQ(cnf.pData[0], 0);

@@ -6,15 +6,14 @@ void
 test_dpllSolve_emptyCnf()
 {
   Cnf cnf;
-  Cnf_create(&cnf);
-
   AssignmentStack assignment;
-  AssignmentStack_create(&assignment);
 
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
   TEST_ASSERT_SUCCESS(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
-  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&assignment);
 }
 
 void
@@ -24,7 +23,7 @@ test_dpllSolve_precalculatedCnf()
   // { 3 , 4 }, { 1 }, { -2 }, { 3 }, { 4 }, { 2 , -1, 4 }
 
   const uint32_t variables[] = { 1u, 2u, 3u, 4u };
-  const bool result[] = { 1, 0, 1, 1 };
+  const bool result[] = { true, false, true, true };
   const size_t variablesCount = 4u;
 
   const int32_t clause1[] = { 3, 4 };
@@ -42,7 +41,7 @@ test_dpllSolve_precalculatedCnf()
   const size_t clause6Count = 3u;
 
   Cnf cnf;
-  Cnf_create(&cnf);
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Count));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Count));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause3, clause3Count));
@@ -51,18 +50,17 @@ test_dpllSolve_precalculatedCnf()
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause6, clause6Count));
 
   AssignmentStack assignment;
-  AssignmentStack_create(&assignment);
-
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
   TEST_ASSERT_SUCCESS(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
   for (size_t i = 0u; i < variablesCount; ++i) {
     bool value;
     TEST_ASSERT_SUCCESS(AssignmentStack_get(&assignment, variables[i], &value));
-    TEST_ASSERT(value == result[i]);
+    TEST_ASSERT_EQ(value, result[i]);
   }
 
-  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&assignment);
 }
 
 void
@@ -75,17 +73,16 @@ test_dpllSolve_unsatisfiableCnf()
   const size_t clause2Count = 1u;
 
   Cnf cnf;
-  Cnf_create(&cnf);
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Count));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Count));
 
   AssignmentStack assignment;
-  AssignmentStack_create(&assignment);
-
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
   TEST_ASSERT(dpllSolve(&cnf, dpllTrivialPick, &assignment));
 
-  AssignmentStack_destroy(&assignment);
   Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&assignment);
 }
 
 void
