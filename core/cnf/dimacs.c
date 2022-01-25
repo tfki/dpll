@@ -39,7 +39,7 @@ parseDimacs(char* dimacs, Cnf* cnf)
           case '\0':
             // we are at the end of dimacs
             ClauseBuffer_destroy(&clauseBuffer);
-            return true;
+            return 0;
           case 'c':
             state = PARSING_COMMENT;
             break;
@@ -98,7 +98,7 @@ parseDimacs(char* dimacs, Cnf* cnf)
           default:
             ClauseBuffer_destroy(&clauseBuffer);
             printf("unexpected character '%c' at index %d. expected whitespace or number or sign", inputChar, dimacsOffset);
-            return false;
+            return 1;
         }
         break;
 
@@ -122,7 +122,7 @@ parseDimacs(char* dimacs, Cnf* cnf)
             int32_t value = strtol(literalStart, &literalEnd, 10);
 
             if (ClauseBuffer_push(&clauseBuffer, value)) {
-              return false;
+              return 1;
             }
             break;
         }
@@ -145,5 +145,5 @@ parseDimacs(char* dimacs, Cnf* cnf)
 
   ClauseBuffer_destroy(&clauseBuffer);
 
-  return true;
+  return 0;
 }
