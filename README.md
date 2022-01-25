@@ -20,3 +20,5 @@ TODO
 + complete benchmark code
 + discuss status type
 + Assignment_setAll has room for optimization
++ get return type of dpllsolve sorted out
++ all tests should be static void
