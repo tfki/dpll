@@ -180,7 +180,7 @@ test_Cnf_toStr_singleClause()
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
-  int32_t clause[] = {1, -2, 4, -3};
+  int32_t clause[] = { 1, -2, 4, -3 };
   size_t clauseSize = 4;
 
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause, clauseSize));
@@ -217,11 +217,11 @@ test_Cnf_toStr_mixedClauses()
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
-  int32_t clause1[] = {1, -2, 4, -3};
+  int32_t clause1[] = { 1, -2, 4, -3 };
   size_t clause1Size = 4;
-  int32_t clause2[] = {};
+  int32_t* clause2 = NULL;
   size_t clause2Size = 0;
-  int32_t clause3[] = {2, -5, 3, 1};
+  int32_t clause3[] = { 2, -5, 3, 1 };
   size_t clause3Size = 4;
 
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
