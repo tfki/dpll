@@ -1,6 +1,7 @@
 #include "test_common.h"
 
 #include <cnf/cnf.h>
+#include <string.h>
 
 static void
 test_Cnf_create()
@@ -156,6 +157,87 @@ test_Cnf_Swap()
   Cnf_destroy(&cnf2);
 }
 
+void
+test_Cnf_toStr_emptyClause()
+{
+  Cnf cnf;
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, NULL, 0u));
+
+  char* cnfStr;
+  TEST_ASSERT_SUCCESS(Cnf_toStr(&cnf, &cnfStr));
+
+  char* expectedCnfStr = "()";
+
+  TEST_ASSERT_EQ(strcmp(cnfStr, expectedCnfStr), 0);
+
+  Cnf_destroy(&cnf);
+}
+
+void
+test_Cnf_toStr_singleClause()
+{
+  Cnf cnf;
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
+
+  int32_t clause[] = {1, -2, 4, -3};
+  size_t clauseSize = 4;
+
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause, clauseSize));
+
+  char* cnfStr;
+  TEST_ASSERT_SUCCESS(Cnf_toStr(&cnf, &cnfStr));
+
+  char* expectedCnfStr = "(1 OR -2 OR 4 OR -3)";
+
+  TEST_ASSERT_EQ(strcmp(cnfStr, expectedCnfStr), 0);
+
+  Cnf_destroy(&cnf);
+}
+
+void
+test_Cnf_toStr_emptyCnf()
+{
+  Cnf cnf;
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
+
+  char* cnfStr;
+  TEST_ASSERT_SUCCESS(Cnf_toStr(&cnf, &cnfStr));
+
+  char* expectedCnfStr = "";
+
+  TEST_ASSERT_EQ(strcmp(cnfStr, expectedCnfStr), 0);
+
+  Cnf_destroy(&cnf);
+}
+
+void
+test_Cnf_toStr_mixedClauses()
+{
+  Cnf cnf;
+  TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
+
+  int32_t clause1[] = {1, -2, 4, -3};
+  size_t clause1Size = 4;
+  int32_t clause2[] = {};
+  size_t clause2Size = 0;
+  int32_t clause3[] = {2, -5, 3, 1};
+  size_t clause3Size = 4;
+
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Size));
+  TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause3, clause3Size));
+
+  char* cnfStr;
+  TEST_ASSERT_SUCCESS(Cnf_toStr(&cnf, &cnfStr));
+
+  char* expectedCnfStr = "(1 OR -2 OR 4 OR -3) AND () AND (2 OR -5 OR 3 OR 1)";
+
+  TEST_ASSERT_EQ(strcmp(cnfStr, expectedCnfStr), 0);
+
+  Cnf_destroy(&cnf);
+}
+
 int
 main()
 {
@@ -165,4 +247,8 @@ main()
   test_Cnf_copy();
   test_Cnf_destroy();
   test_Cnf_Swap();
+  test_Cnf_toStr_emptyClause();
+  test_Cnf_toStr_singleClause();
+  test_Cnf_toStr_emptyCnf();
+  test_Cnf_toStr_mixedClauses();
 }

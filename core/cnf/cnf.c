@@ -99,6 +99,112 @@ Cnf_swap(Cnf* a, Cnf* b)
   b->capacity = tmpCapacity;
 }
 
+int
+Cnf_toStr(const Cnf* cnf, char** str)
+{
+  Cnf_ClauseIterator iter;
+  Cnf_ClauseIterator_create(&iter, cnf);
+
+  // cnf->count * 2 is just a starting point
+  // we cannot easily find out how long str will need to be
+  size_t strLen = 128;
+  *str = malloc(strLen * sizeof(char));
+
+  if (!*str)
+    return 1;
+
+  size_t strIndex = 0u;
+  while (Cnf_ClauseIterator_next(&iter)) {
+
+    if (strIndex + 1 >= strLen) {
+      *str = realloc(*str, strLen * 2 * sizeof(char));
+      strLen *= 2;
+
+      if (!*str) {
+        free(*str);
+        return 2;
+      }
+    }
+    (*str)[strIndex++] = '(';
+    for (size_t i = 0u; i < iter.count; ++i) {
+
+      size_t literalLength;
+
+      literalLength = snprintf(&(*str)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
+
+      while (strIndex + literalLength >= strLen) {
+        *str = realloc(*str, strLen * 2 * sizeof(char));
+        strLen *= 2;
+
+        if (!*str) {
+          free(*str);
+          return 3;
+        }
+
+        literalLength = snprintf(&(*str)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
+      }
+
+      strIndex += literalLength;
+
+      if (strIndex + 4 >= strLen) {
+        *str = realloc(*str, strLen * 2 * sizeof(char));
+        strLen *= 2;
+
+        if (!*str) {
+          free(*str);
+          return 4;
+        }
+      }
+      (*str)[strIndex++] = ' ';
+      (*str)[strIndex++] = 'O';
+      (*str)[strIndex++] = 'R';
+      (*str)[strIndex++] = ' ';
+    }
+    if (iter.count > 0) {
+      // if clause has any literals
+      // overwrite the last 'OR'
+      (*str)[strIndex - 4] = ')';
+      strIndex -= 3;
+    }else{
+      (*str)[strIndex++] = ')';
+    }
+
+    if (strIndex + 5 >= strLen) {
+      *str = realloc(*str, strLen * 2 * sizeof(char));
+      strLen *= 2;
+
+      if (!*str) {
+        free(*str);
+        return 4;
+      }
+    }
+    (*str)[strIndex++] = ' ';
+    (*str)[strIndex++] = 'A';
+    (*str)[strIndex++] = 'N';
+    (*str)[strIndex++] = 'D';
+    (*str)[strIndex++] = ' ';
+  }
+
+  if (strIndex + 1 >= strLen) {
+    *str = realloc(*str, strLen * 2 * sizeof(char));
+    strLen *= 2;
+
+    if (!*str) {
+      free(*str);
+      return 4;
+    }
+  }
+
+  if (strIndex >= 5) {
+    // -5 to overwrite last 'AND'
+    (*str)[strIndex - 5] = '\0';
+  } else {
+    // cnf is empty
+    (*str)[0] = '\0';
+  }
+  return 0;
+}
+
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {

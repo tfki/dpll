@@ -30,6 +30,9 @@ Cnf_reset(Cnf* pCnf);
 void
 Cnf_swap(Cnf* a, Cnf* b);
 
+int
+Cnf_toStr(const Cnf* cnf, char** str);
+
 typedef struct Cnf_ClauseIterator
 {
   const int32_t* pData;    /// position of the current clause
