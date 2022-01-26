@@ -1,0 +1,28 @@
+c Random 4-CNF over 20 variables and 20 clauses
+c Generated with `cnfgen`
+c (C) 2012-2019 Massimo Lauria <massimo.lauria@uniroma1.it>
+c https://massimolauria.net/cnfgen
+c
+c COMMAND LINE: cnfgen randkcnf 4 20 20
+c
+p cnf 20 20
+2 3 -11 -20 0
+-2 3 10 14 0
+4 -15 18 19 0
+-4 15 -17 18 0
+1 10 14 20 0
+2 12 14 15 0
+4 9 -10 17 0
+3 11 16 17 0
+-2 10 12 16 0
+-1 5 -9 13 0
+-3 14 16 -17 0
+4 -8 -9 18 0
+3 10 -13 -20 0
+5 -9 11 19 0
+2 -4 -6 -19 0
+-1 6 -11 -17 0
+-4 5 -9 16 0
+-7 -8 10 -15 0
+4 10 -12 13 0
+-1 -7 8 19 0

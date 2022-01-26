@@ -1,0 +1,557 @@
+[
+  {
+    "file": "lochau-dp-example-mod.cnf",
+    "satisfiable": true,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "simple_sample.cnf",
+    "satisfiable": false,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "simple_v3_c2.cnf",
+    "satisfiable": true,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "trivial.cnf",
+    "satisfiable": true,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "trivial2.cnf",
+    "satisfiable": false,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "tutorial.cnf",
+    "satisfiable": true,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "os-model-sampling.cnf",
+    "satisfiable": true,
+    "complexity": "TRIVIAL"
+  },
+  {
+    "file": "random-10-cnf-100v-5c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "sampler-test.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-2-cnf-10v-10c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-3-cnf-20v-10c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-4-cnf-20v-20c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-4-cnf-20v-40c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-5-cnf-20v-20c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "random-6-cnf-20v-10c.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "quinn.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "os-example.cnf",
+    "satisfiable": true,
+    "complexity": "EASY"
+  },
+  {
+    "file": "uf20-01.cnf",
+    "satisfiable": true,
+    "complexity": "MEDIUM"
+  },
+  {
+    "file": "random-8-cnf-40v-20c.cnf",
+    "satisfiable": true,
+    "complexity": "MEDIUM"
+  },
+  {
+    "file": "random-6-cnf-100v-50c.cnf",
+    "satisfiable": true,
+    "complexity": "MEDIUM"
+  },
+  {
+    "file": "hole6.cnf",
+    "satisfiable": false,
+    "complexity": "MEDIUM"
+  },
+  {
+    "file": "aim-50-1_6-yes1-4-reordered.cnf",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "aim-50-1_6-yes1-4.cnf",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-2.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-3.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-4.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-5.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-6.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-7.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-8.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-9.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-SAT-10.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-2.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-3.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-4.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-5.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-6.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-7.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-8.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-9.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-SAT-10.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "Adrians-3CNF-FM-2000-400-0,50-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-2.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-3.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-4.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-5.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-6.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-7.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-8.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-9.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-0.50-SAT-10.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-2.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-3.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-4.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-5.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-6.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-7.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-8.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-9.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-5000-500-0.30-SAT-10.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-1.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-2.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-3.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-4.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-5.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-6.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-7.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-8.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-9.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-10000-1000-0.10-SAT-10.dimacs",
+    "satisfiable": true,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-1.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-2.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-3.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-4.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-5.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-6.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-7.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-8.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-9.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-500-50-1.00-UNSAT-10.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-1.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-2.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-3.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-4.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-5.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-6.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-7.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-8.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-9.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-1000-100-1.00-UNSAT-10.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-1.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-2.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-3.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-4.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-5.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-6.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-7.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-8.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-9.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "SPLOT-3CNF-FM-2000-200-1.00-UNSAT-10.dimacs",
+    "satisfiable": false,
+    "complexity": "HARD"
+  },
+  {
+    "file": "zebra_v155_c1135.cnf",
+    "satisfiable": false,
+    "complexity": "MEDIUM"
+  },
+  {
+    "file": "dubois20.cnf",
+    "satisfiable": false,
+    "complexity": "INSANE"
+  },
+  {
+    "file": "dubois21.cnf",
+    "satisfiable": false,
+    "complexity": "INSANE"
+  },
+  {
+    "file": "dubois22.cnf",
+    "satisfiable": false,
+    "complexity": "INSANE"
+  },
+  {
+    "file": "aim-100-1_6-no-1.cnf",
+    "satisfiable": false,
+    "complexity": "INSANE"
+  },
+  {
+    "file": "bf0432-007.cnf",
+    "satisfiable": false,
+    "complexity": "INSANE"
+  },
+  {
+    "file": "uf225-0100.cnf",
+    "satisfiable": true,
+    "complexity": "INSANE"
+  }
+]
