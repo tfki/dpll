@@ -1,4 +1,3 @@
-
 #ifndef DPLLSOLVER_DIMACS_H
 #define DPLLSOLVER_DIMACS_H
 
