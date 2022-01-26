@@ -30,8 +30,19 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 
   // if Cnf is empty -> sat
   Cnf simplified;
-  Cnf_create(&simplified);
-  Cnf_simplify(pCnf, pAssignment, &simplified);
+  if (Cnf_create(&simplified))
+    return 1;
+  if (Cnf_simplify(pCnf, pAssignment, &simplified)) {
+    Cnf_destroy(&simplified);
+    return 1;
+  }
+
+  if (simplified.count == 0u) {
+    Cnf_destroy(&simplified);
+    return 0;
+  }
+
+  //  dpllUnitPropagation(&simplified, pAssignment);
 
   if (simplified.count == 0u) {
     Cnf_destroy(&simplified);
@@ -103,12 +114,15 @@ dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack)
     foundAtLeasOneUnitClause = false;
 
     for (size_t i = 0u; i + 2 < cnf->count; i++) {
-      if (cnf->pData[i] == 0 && cnf->pData[i + 2] == 0) {
+      if (cnf->pData[i] == 0 && cnf->pData[i + 1] != 0 && cnf->pData[i + 2] == 0) {
         // unit clause found
         int32_t literal = cnf->pData[i + 1];
         uint32_t variable = literal > 0 ? literal : -literal;
         bool value = literal > 0;
-        AssignmentStack_push(assignmentStack, variable, value);
+        if (AssignmentStack_push(assignmentStack, variable, value)) {
+          Cnf_destroy(&simplified);
+          return 1;
+        }
 
         foundAtLeasOneUnitClause = true;
       }
