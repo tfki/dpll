@@ -21,7 +21,7 @@
 #define SANITIZING_ASSERT(c)                                                                                                                                   \
   if (!(c)) {                                                                                                                                                  \
     printf("assert failed in file %s on line %d", __FILE__, __LINE__);                                                                                         \
-    exit(-1);                                                                                                                                                  \
+    exit(1);                                                                                                                                                  \
   }                                                                                                                                                            \
   ((void)0)
 

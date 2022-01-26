@@ -9,8 +9,8 @@ int
 freadall(const char* fileName, char** raw)
 {
   const size_t elementSize = 1u;
-  const size_t bufferSize = 16384u;
-  char buffer[16384u];
+  const size_t bufferSize = 8192u;
+  char buffer[8192u];
 
   // open the file
 
@@ -24,11 +24,12 @@ freadall(const char* fileName, char** raw)
   const size_t fileSize = ftell(file);
   rewind(file);
 
-  // allocate the string and add zero termination
+  // allocate the string
 
   const size_t stringSize = fileSize + 1u;
   char* string = malloc(stringSize);
-  string[fileSize] = '\0';
+  if (!string)
+    return 1;
 
   // copy the file content into the string
 
@@ -39,10 +40,12 @@ freadall(const char* fileName, char** raw)
     currentPos += numRead;
   } while (currentPos < fileSize);
 
-  // write back the result
+  // add zero termination and write back the result
 
+  string[fileSize] = '\0';
   *raw = string;
+
   return 0;
 }
 
-#endif // DPLLSOLVER_FREADALL_H
+#endif
