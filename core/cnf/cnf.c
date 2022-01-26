@@ -2,6 +2,7 @@
 
 #include <common/common.h>
 #include <string.h>
+#include <stdio.h>
 
 int
 Cnf_create(Cnf* pCnf)

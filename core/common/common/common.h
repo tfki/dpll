@@ -17,10 +17,11 @@
   ((void)0)
 
 #else
-
+#include <stdio.h>
 #define SANITIZING_ASSERT(c)                                                                                                                                   \
   if (!(c)) {                                                                                                                                                  \
-    exit(__LINE__);                                                                                                                                            \
+    printf("assert failed in file %s on line %d", __FILE__, __LINE__);                                                                                         \
+    exit(-1);                                                                                                                                                  \
   }                                                                                                                                                            \
   ((void)0)
 
