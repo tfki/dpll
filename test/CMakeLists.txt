@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.1)
 
+#  ____                                 _     ____                    _                ____
+# |  _ \    __ _   ___    ___    __ _  | |   / ___|   _ __     __ _  | | __   ___     / ___|   __ _   ___    ___
+# | |_) |  / _` | / __|  / __|  / _` | | |   \___ \  | '_ \   / _` | | |/ /  / _ \   | |      / _` | / __|  / _ \
+# |  __/  | (_| | \__ \ | (__  | (_| | | |    ___) | | | | | | (_| | |   <  |  __/   | |___  | (_| | \__ \ |  __/
+# |_|      \__,_| |___/  \___|  \__,_| |_|   |____/  |_| |_|  \__,_| |_|\_\  \___|    \____|  \__,_| |___/  \___|
+
 # macro for converting snake_case to Pascal_Snake_Case
 # which is not trivial in cmake as cmake regex does not
 # support case replacements
@@ -11,6 +17,29 @@ macro(snake_case_to_pascal_snake_case OUTPUT_VARIABLE INPUT)
         string(REGEX REPLACE "_${LOWER_LETTER}" "_${UPPER_LETTER}" ${OUTPUT_VARIABLE} ${${OUTPUT_VARIABLE}})
     endforeach ()
 endmacro()
+
+#   ____                             ____
+#  / ___|   ___    _ __    _   _    |  _ \    ___   ___    ___    _   _   _ __    ___    ___   ___
+# | |      / _ \  | '_ \  | | | |   | |_) |  / _ \ / __|  / _ \  | | | | | '__|  / __|  / _ \ / __|
+# | |___  | (_) | | |_) | | |_| |   |  _ <  |  __/ \__ \ | (_) | | |_| | | |    | (__  |  __/ \__ \
+#  \____|  \___/  | .__/   \__, |   |_| \_\  \___| |___/  \___/   \__,_| |_|     \___|  \___| |___/
+#                 |_|      |___/
+
+# Create a target that can be a dependency to all tests.
+# If there is no test this target is never build.
+
+set(TEST_RESOURCES_SRC "${CMAKE_CURRENT_LIST_DIR}/resources")
+set(TEST_RESOURCES_DST "${CMAKE_CURRENT_BINARY_DIR}/resources")
+add_custom_target(Test_Resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${TEST_RESOURCES_SRC}" "${TEST_RESOURCES_DST}")
+message("${PROJECT_NAME}: 'Test_Resources' added")
+
+#     _          _       _        _      _   _     _____                _
+#    / \      __| |   __| |      / \    | | | |   |_   _|   ___   ___  | |_   ___
+#   / _ \    / _` |  / _` |     / _ \   | | | |     | |    / _ \ / __| | __| / __|
+#  / ___ \  | (_| | | (_| |    / ___ \  | | | |     | |   |  __/ \__ \ | |_  \__ \
+# /_/   \_\  \__,_|  \__,_|   /_/   \_\ |_| |_|     |_|    \___| |___/  \__| |___/
+#
 
 set(TEST_COUNT 0)
 set(TEST_LINK_LIBRARIES Cnf Solver)
@@ -27,6 +56,7 @@ foreach (TEST_SOURCE ${TEST_SOURCE})
 
     # create executable for the test
     add_executable("${TEST_NAME}")
+    add_dependencies("${TEST_NAME}" Test_Resources)
     target_sources("${TEST_NAME}" PRIVATE "${TEST_SOURCE}")
     target_link_libraries("${TEST_NAME}" PRIVATE "${TEST_LINK_LIBRARIES}")
     set_target_properties("${TEST_NAME}" PROPERTIES
