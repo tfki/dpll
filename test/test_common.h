@@ -3,6 +3,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #ifndef NDEBUG // TODO replace with SANITIZING compiler flag if
               //      the performance drops to much in debug mode
