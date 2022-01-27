@@ -34,7 +34,7 @@ test_AssignmentStackView_get()
   AssignmentStack_destroy(&assignment);
 }
 
-void
+static void
 test_AssignmentStackView_with_max_size()
 {
   AssignmentStack assignment;
@@ -64,7 +64,7 @@ test_AssignmentStackView_with_max_size()
   AssignmentStack_destroy(&assignment);
 }
 
-void
+static void
 test_AssignmentStackView_empty()
 {
   AssignmentStack assignment;

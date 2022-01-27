@@ -26,13 +26,13 @@ typedef struct IndexEntryArray
   size_t count;
 } IndexEntryArray;
 
-void
+static void
 IndexEntryArray_create(IndexEntryArray* pIndexEntryArray)
 {
   pIndexEntryArray->count = 0u;
 }
 
-int
+static int
 IndexEntryArray_push(IndexEntryArray* pIndexEntryArray, IndexEntry indexEntry)
 {
   if (pIndexEntryArray->count + 1u > 512u)
@@ -44,13 +44,13 @@ IndexEntryArray_push(IndexEntryArray* pIndexEntryArray, IndexEntry indexEntry)
   return 0;
 }
 
-void
+static void
 IndexEntryArray_destroy(IndexEntryArray* pIndexEntryArray)
 {
   pIndexEntryArray->count = 0u;
 }
 
-int
+static int
 freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 {
   char* csvString;
@@ -174,7 +174,7 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
   }
 }
 
-void
+static void
 test_dpllsolver_res(const IndexEntry* entry)
 {
   TEST_ASSERT_NON_NULL(entry);
@@ -185,22 +185,24 @@ test_dpllsolver_res(const IndexEntry* entry)
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
   TEST_ASSERT_SUCCESS(parseDimacs(dimacs, &cnf));
+  free(dimacs);
 
   AssignmentStack assignmentStack;
   TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfyable);
 
-  free(dimacs);
+  Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&assignmentStack);
 }
 
 int
 main()
 {
-  char* filename = "res/_index.csv";
+  char* fileName = "res/_index.csv";
 
   IndexEntryArray iea;
   IndexEntryArray_create(&iea);
 
-  TEST_ASSERT_SUCCESS(freadindex(filename, &iea));
+  TEST_ASSERT_SUCCESS(freadindex(fileName, &iea));
 
   for (size_t i = 0u; i < iea.count; ++i) {
 
@@ -210,4 +212,6 @@ main()
 
     test_dpllsolver_res(&iea.pData[i]);
   }
+
+  IndexEntryArray_destroy(&iea);
 }

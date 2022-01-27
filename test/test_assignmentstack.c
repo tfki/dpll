@@ -96,7 +96,7 @@ test_AssignmentStack_destroy()
   TEST_ASSERT_NULL(assignment.pValues);
 }
 
-void
+static void
 test_AssignmentStack_swap()
 {
   AssignmentStack a;

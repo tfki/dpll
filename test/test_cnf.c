@@ -157,7 +157,7 @@ test_Cnf_Swap()
   Cnf_destroy(&cnf2);
 }
 
-void
+static void
 test_Cnf_toStr_emptyClause()
 {
   Cnf cnf;
@@ -174,7 +174,7 @@ test_Cnf_toStr_emptyClause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_Cnf_toStr_singleClause()
 {
   Cnf cnf;
@@ -195,7 +195,7 @@ test_Cnf_toStr_singleClause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_Cnf_toStr_emptyCnf()
 {
   Cnf cnf;
@@ -211,7 +211,7 @@ test_Cnf_toStr_emptyCnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_Cnf_toStr_mixedClauses()
 {
   Cnf cnf;

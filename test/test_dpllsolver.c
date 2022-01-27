@@ -2,7 +2,7 @@
 
 #include <solver/solver.h>
 
-void
+static void
 test_dpllSolve_emptyCnf()
 {
   Cnf cnf;
@@ -17,7 +17,7 @@ test_dpllSolve_emptyCnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_dpllSolve_precalculatedCnf()
 {
   // { C , D }, { A }, { -B }, { C }, { D }, { B , -A, D }
@@ -65,7 +65,7 @@ test_dpllSolve_precalculatedCnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_dpllSolve_unsatisfiableCnf()
 {
   const int32_t clause1[] = { 1 };
@@ -88,7 +88,7 @@ test_dpllSolve_unsatisfiableCnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_dpllSolver_unitPropagation_no_unitclause()
 {
   Cnf cnf;
@@ -110,7 +110,7 @@ test_dpllSolver_unitPropagation_no_unitclause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_dpllSolver_unitPropagation_with_mixed_clauses()
 {
   Cnf cnf;

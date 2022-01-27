@@ -2,7 +2,7 @@
 #include "test_common.h"
 #include <cnf/dimacs.h>
 
-void
+static void
 test_parseDimacs_with_empty_cnf()
 {
   Cnf cnf;
@@ -16,7 +16,7 @@ test_parseDimacs_with_empty_cnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_parseDimacs_with_empty_clause()
 {
   Cnf cnf;
@@ -33,7 +33,7 @@ test_parseDimacs_with_empty_clause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_parseDimacs_with_one_clause()
 {
   Cnf cnf;
@@ -53,7 +53,7 @@ test_parseDimacs_with_one_clause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_parseDimacs_with_multiple_clauses()
 {
   Cnf cnf;

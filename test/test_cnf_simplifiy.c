@@ -3,7 +3,7 @@
 #include <cnf/cnf.h>
 #include <solver/solver.h>
 
-void
+static void
 test_Cnf_simplify_withEmptyAssignment()
 {
   AssignmentStack emptyAssignment;
@@ -36,7 +36,7 @@ test_Cnf_simplify_withEmptyAssignment()
   Cnf_destroy(&resultCnf);
 }
 
-void
+static void
 test_Cnf_simplify_withTrueClause()
 {
   AssignmentStack assignment;
@@ -61,7 +61,7 @@ test_Cnf_simplify_withTrueClause()
   Cnf_destroy(&resultCnf);
 }
 
-void
+static void
 test_Cnf_simplify_withFalseClause()
 {
   AssignmentStack assignment;
@@ -86,7 +86,7 @@ test_Cnf_simplify_withFalseClause()
   Cnf_destroy(&resultCnf);
 }
 
-void
+static void
 test_Cnf_simplify_withMixedClauses()
 {
   AssignmentStack assignment;

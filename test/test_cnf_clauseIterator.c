@@ -2,7 +2,7 @@
 
 #include <cnf/cnf.h>
 
-void
+static void
 test_cnf_clauseIterator_with_empty_cnf()
 {
   Cnf cnf;
@@ -17,7 +17,7 @@ test_cnf_clauseIterator_with_empty_cnf()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_cnf_clauseIterator_with_one_clause()
 {
   Cnf cnf;
@@ -42,7 +42,7 @@ test_cnf_clauseIterator_with_one_clause()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_cnf_clauseIterator_with_multiple_clauses()
 {
   Cnf cnf;
@@ -78,7 +78,7 @@ test_cnf_clauseIterator_with_multiple_clauses()
   Cnf_destroy(&cnf);
 }
 
-void
+static void
 test_cnf_clauseIterator_with_mixed()
 {
   Cnf cnf;
