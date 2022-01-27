@@ -94,7 +94,7 @@ test_dpllSolver_unitPropagation_no_unitclause()
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
-  int32_t clause1[] = {3, 4};
+  int32_t clause1[] = { 3, 4 };
   size_t clause1Size = 2;
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
 
@@ -116,13 +116,13 @@ test_dpllSolver_unitPropagation_with_mixed_clauses()
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
-  int32_t clause1[] = {1};
+  int32_t clause1[] = { 1 };
   size_t clause1Size = 1;
-  int32_t clause2[] = {-2};
+  int32_t clause2[] = { -2 };
   size_t clause2Size = 1;
-  int32_t clause3[] = {3, 4};
+  int32_t clause3[] = { 3, 4 };
   size_t clause3Size = 2;
-  int32_t clause4[] = {2, 5};
+  int32_t clause4[] = { 2, 5 };
   size_t clause4Size = 2;
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Size));

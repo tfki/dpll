@@ -1,8 +1,8 @@
 #include "cnf/cnf.h"
 
 #include <common/common.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 int
 Cnf_create(Cnf* pCnf)
@@ -166,7 +166,7 @@ Cnf_toStr(const Cnf* cnf, char** str)
       // overwrite the last 'OR'
       (*str)[strIndex - 4] = ')';
       strIndex -= 3;
-    }else{
+    } else {
       (*str)[strIndex++] = ')';
     }
 

@@ -2,11 +2,11 @@
 #define DPLLSOLVER_TEST_COMMON_H
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifndef NDEBUG // TODO replace with SANITIZING compiler flag if
-              //      the performance drops to much in debug mode
+               //      the performance drops to much in debug mode
 
 #define TEST_ASSERT(c) assert(c)
 
@@ -27,9 +27,9 @@
 #define TEST_ASSERT_TRUE(c) TEST_ASSERT(c)
 #define TEST_ASSERT_FALSE(c) TEST_ASSERT(!(c))
 
-#define TEST_ASSERT_EQ(v0,v1) TEST_ASSERT((v0)==(v1))
+#define TEST_ASSERT_EQ(v0, v1) TEST_ASSERT((v0) == (v1))
 
-#define TEST_ASSERT_NULL(p) TEST_ASSERT((p)==NULL)
-#define TEST_ASSERT_NON_NULL(p) TEST_ASSERT((p)!=NULL)
+#define TEST_ASSERT_NULL(p) TEST_ASSERT((p) == NULL)
+#define TEST_ASSERT_NON_NULL(p) TEST_ASSERT((p) != NULL)
 
 #endif

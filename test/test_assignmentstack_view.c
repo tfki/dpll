@@ -35,7 +35,8 @@ test_AssignmentStackView_get()
 }
 
 void
-test_AssignmentStackView_with_max_size(){
+test_AssignmentStackView_with_max_size()
+{
   AssignmentStack assignment;
   TEST_ASSERT(!AssignmentStack_create(&assignment));
 
@@ -64,7 +65,8 @@ test_AssignmentStackView_with_max_size(){
 }
 
 void
-test_AssignmentStackView_empty(){
+test_AssignmentStackView_empty()
+{
   AssignmentStack assignment;
   TEST_ASSERT(!AssignmentStack_create(&assignment));
 
