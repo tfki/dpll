@@ -19,6 +19,7 @@ TODO
 + get return type of dpllsolve sorted out
 + solve pickAndRemove Callback does not follow the return conventions
 + iterate assignmentstack get backwards if there is a use case
++ use sizeof ([variable]) instead of sizeof ([type])
 
 + for all methods that allocate a parameter should use an allocator passed as parameter
   - our allocator could look similar the vulkan allocator 
