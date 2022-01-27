@@ -15,7 +15,8 @@
 
 #define LOG(lvl, fmt, ...)                                                                                                                                     \
   printf("%-5s : %s (%d)\n", lvl, __FILE__, __LINE__);                                                                                                         \
-  printf("      : " fmt "\n", __VA_ARGS__)
+  printf("      : " fmt "\n", __VA_ARGS__);                                                                                                                     \
+  fflush(stdout)\
 
 #if LOG_LEVEL_FATAL <= LOG_LEVEL
 #define LOGF(fmt, ...) LOG("Fatal", fmt, __VA_ARGS__)

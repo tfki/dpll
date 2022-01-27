@@ -1,7 +1,6 @@
 #include "cnf/cnf.h"
 
 #include <common/common.h>
-#include <common/log.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -198,7 +197,7 @@ Cnf_toStr(const Cnf* cnf, char** str)
 
   if (strIndex + 1 >= strLen) {
     *str = realloc(*str, strLen * 2 * sizeof(char));
-    strLen *= 2;
+    strLen *= 2u;
 
     if (!*str) {
       free(*str);

@@ -22,13 +22,13 @@ main()
 
   parseDimacs(dimacs, &cnf);
 
-  SANITIZING_ASSERT(FALSE);
-
   LOGF("no formatting");
   LOGE("format a %%d: %d", 1);
   LOGW("format a %%s: %s", "Hallo log");
   LOGI("just print an info ...");
   LOGD("just print a debug ...");
+
+  SANITIZING_ASSERT(true && false, "I assumed that should work ...");
 
   return dpllSolve(&cnf, &dpllTrivialPick, &assignment);
 }
