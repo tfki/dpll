@@ -42,7 +42,7 @@
 #endif
 
 #if LOG_LEVEL_DEBUG <= LOG_LEVEL
-#define LOGD(fmt, ...) LOG("Fatal", fmt, __VA_ARGS__)
+#define LOGD(fmt, ...) LOG("Debug", fmt, __VA_ARGS__)
 #else
 #define LOGD(fmt, ...) ((void)0)
 #endif

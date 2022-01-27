@@ -7,21 +7,23 @@
 
 #else
 
+#include "log.h"
+
 #ifdef _WIN32
 #include <windows.h>
-#define SANITIZING_ASSERT(c)                                                                                                                                   \
+#define SANITIZING_ASSERT(c, fmt, ...)                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \
+    LOGE("Assertion failed! (" #c "); " fmt, __VA_ARGS__);                                                                                                     \
     DebugBreak();                                                                                                                                              \
     ExitProcess(__LINE__);                                                                                                                                     \
   }                                                                                                                                                            \
   ((void)0)
 
 #else
-#include <stdio.h>
-#define SANITIZING_ASSERT(c)                                                                                                                                   \
+#define SANITIZING_ASSERT(c, fmt, ...)                                                                                                                                   \
   if (!(c)) {                                                                                                                                                  \
-    printf("assert failed in file %s on line %d", __FILE__, __LINE__);                                                                                         \
-    exit(1);                                                                                                                                                   \
+    LOGE("Assertion failed! (" #c "); " fmt, __VA_ARGS__);                                                                                                     \
+    exit(__LINE__);                                                                                                                                            \
   }                                                                                                                                                            \
   ((void)0)
 

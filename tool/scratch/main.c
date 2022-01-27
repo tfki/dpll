@@ -1,5 +1,6 @@
 
 #include <cnf/dimacs.h>
+#include <common/common.h>
 #include <common/freadall.h>
 #include <common/log.h>
 #include <solver/dpll_solver.h>
@@ -20,6 +21,8 @@ main()
   AssignmentStack_create(&assignment);
 
   parseDimacs(dimacs, &cnf);
+
+  SANITIZING_ASSERT(FALSE);
 
   LOGF("no formatting");
   LOGE("format a %%d: %d", 1);

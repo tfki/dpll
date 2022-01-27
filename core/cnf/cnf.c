@@ -1,48 +1,55 @@
 #include "cnf/cnf.h"
 
 #include <common/common.h>
+#include <common/log.h>
 #include <stdio.h>
 #include <string.h>
 
 int
 Cnf_create(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
 
   pCnf->count = 0u;
-  pCnf->capacity = 1024u;
+  pCnf->capacity = 512u;
   pCnf->pData = malloc(pCnf->capacity * sizeof(int32_t));
 
-  if (!pCnf->pData)
+  if (!pCnf->pData) {
+    LOGE("Cnf memory could not be allocated during creation!");
     return 1;
+  }
 
+  LOGD("Cnf created successfully. %%s"); // TODO insert Cnf_str(pCnf)
   return 0;
 }
 
 int
 Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 {
-  SANITIZING_ASSERT(pDest); // pDest must be a valid pointer
-  SANITIZING_ASSERT(pSrc);  // pSrc must be a valid pointer
+  SANITIZING_ASSERT(pDest, "Parameter pDest must be a valid pointer!");
+  SANITIZING_ASSERT(pSrc, "Parameter pSrc must be a valid pointer!");
 
   pDest->count = pSrc->count;
   pDest->capacity = pSrc->capacity;
   pDest->pData = malloc(pSrc->capacity * sizeof(int32_t));
 
-  if (!pDest->pData)
+  if (!pDest->pData) {
+    LOGE("Cnf memory could not be allocated during copy!");
     return 1;
+  }
 
   memcpy(pDest->pData, pSrc->pData, pSrc->count * sizeof(int32_t));
+  LOGD("Cnf copied successfully. %%s"); // TODO insert Cnf_str(pCnf)
   return 0;
 }
 
 int
 Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 {
-  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
 
   // if Cnf empty, add leading 0
-  if (pCnf->count == 0u) {
+  if (pCnf->count == 0u) { // TODO make leading zero inside creation?
     pCnf->pData[0u] = 0;
     ++pCnf->count;
   }
@@ -50,9 +57,12 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
   while (pCnf->count + count + 1u > pCnf->capacity) {
 
     int32_t* pNewData = realloc(pCnf->pData, pCnf->capacity * 2u * sizeof(int32_t));
-    if (!pNewData)
+    if (!pNewData) {
+      LOGE("Cnf memory could not be allocated during pushClause!");
       return 1;
+    }
 
+    LOGD("Cnf memory was reallocated successfully during pushClause!");
     pCnf->pData = pNewData;
     pCnf->capacity *= 2u;
   }
@@ -69,7 +79,7 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 void
 Cnf_destroy(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
 
   free(pCnf->pData);
   pCnf->pData = NULL;
@@ -80,7 +90,7 @@ Cnf_destroy(Cnf* pCnf)
 void
 Cnf_reset(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
   pCnf->count = 0u;
 }
 
@@ -209,8 +219,8 @@ Cnf_toStr(const Cnf* cnf, char** str)
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer
-  SANITIZING_ASSERT(pCnf);               // pCnf must be a valid pointer
+  SANITIZING_ASSERT(pCnfClauseIterator, "Parameter pCnfClauseIterator must be a valid pointer!");
+  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
 
   pCnfClauseIterator->pData = pCnf->pData;
   pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
@@ -220,7 +230,7 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
 bool
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
-  SANITIZING_ASSERT(pCnfClauseIterator); // pCnfClauseIterator must be a valid pointer
+  SANITIZING_ASSERT(pCnfClauseIterator, "Parameter pCnfClauseIterator must be a valid pointer!");
 
   // + 1u to skip the 0 at pCnfClauseIterator->pData
   const int32_t* pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
@@ -240,10 +250,10 @@ Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 int
 ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
 
   pClauseBuffer->count = 0u;
-  pClauseBuffer->capacity = 1024u;
+  pClauseBuffer->capacity = 128u;
   pClauseBuffer->pData = malloc(pClauseBuffer->capacity * sizeof(int32_t));
 
   if (!pClauseBuffer->pData)
@@ -255,7 +265,7 @@ ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 int
 ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 {
-  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
 
   if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
 
@@ -276,7 +286,7 @@ ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 void
 ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
 
   free(pClauseBuffer->pData);
   pClauseBuffer->pData = NULL;
@@ -287,6 +297,6 @@ ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 void
 ClauseBuffer_reset(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer); // pClauseBuffer must be a valid pointer
+  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
   pClauseBuffer->count = 0u;
 }
