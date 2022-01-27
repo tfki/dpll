@@ -95,7 +95,7 @@ test_dpllSolver_unitPropagation_no_unitclause()
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
   int32_t clause1[] = { 3, 4 };
-  size_t clause1Size = 2;
+  size_t clause1Size = 2u;
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
 
   AssignmentStack result;
@@ -117,13 +117,13 @@ test_dpllSolver_unitPropagation_with_mixed_clauses()
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
 
   int32_t clause1[] = { 1 };
-  size_t clause1Size = 1;
+  size_t clause1Size = 1u;
   int32_t clause2[] = { -2 };
-  size_t clause2Size = 1;
+  size_t clause2Size = 1u;
   int32_t clause3[] = { 3, 4 };
-  size_t clause3Size = 2;
+  size_t clause3Size = 2u;
   int32_t clause4[] = { 2, 5 };
-  size_t clause4Size = 2;
+  size_t clause4Size = 2u;
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause1, clause1Size));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause2, clause2Size));
   TEST_ASSERT_SUCCESS(Cnf_pushClause(&cnf, clause3, clause3Size));
@@ -133,7 +133,7 @@ test_dpllSolver_unitPropagation_with_mixed_clauses()
   TEST_ASSERT_SUCCESS(AssignmentStack_create(&result));
 
   TEST_ASSERT_SUCCESS(dpllUnitPropagation(&cnf, &result));
-  TEST_ASSERT_EQ(result.count, 3);
+  TEST_ASSERT_EQ(result.count, 3u);
 
   bool value;
   TEST_ASSERT_SUCCESS(AssignmentStack_get(&result, 1u, &value));
@@ -148,10 +148,10 @@ test_dpllSolver_unitPropagation_with_mixed_clauses()
   TEST_ASSERT_FAILURE(AssignmentStack_get(&result, 3u, &value));
   TEST_ASSERT_FAILURE(AssignmentStack_get(&result, 4u, &value));
 
-  TEST_ASSERT_EQ(cnf.count, 4);
+  TEST_ASSERT_EQ(cnf.count, 4u);
 
-  AssignmentStack_destroy(&result);
   Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&result);
 }
 
 int

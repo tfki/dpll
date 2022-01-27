@@ -64,8 +64,10 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
       ++csvPos;
       break;
     }
-    if (csvString[csvPos] == '\0')
+    if (csvString[csvPos] == '\0') {
+      free(csvString);
       return 0;
+    }
   }
 
   IndexEntry indexEntry;
@@ -84,8 +86,10 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
     for (;; ++csvPos) {
       if (csvString[csvPos] == ';')
         break;
-      if (csvString[csvPos] == '\0')
+      if (csvString[csvPos] == '\0') {
+        free(csvString);
         return 0; // TODO
+      }
     }
     indexEntryEnd = csvPos;
 
@@ -112,6 +116,7 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
         indexEntry.satisfyable = false;
         break;
       default:
+        free(csvString);
         return 1;
     }
 
@@ -156,6 +161,7 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
         indexEntry.complexity = COMPLEXITY_INSANE;
         break;
       default:
+        free(csvString);
         return 1;
     }
 
@@ -164,8 +170,10 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 
     // check for eof
     ++csvPos;
-    if (csvString[csvPos] == '\0')
+    if (csvString[csvPos] == '\0') {
+      free(csvString);
       return 0;
+    }
 
     // newline is required here
     if (csvString[csvPos] == '\r')
