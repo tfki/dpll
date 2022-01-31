@@ -1,4 +1,3 @@
-
 #include <cnf/dimacs.h>
 #include <common/common.h>
 #include <common/freadall.h>
@@ -8,11 +7,11 @@
 int
 main()
 {
-  char* filename = "res/SPLOT-3CNF-FM-5000-500-0.30-SAT-1.dimacs";
+  LOG_INIT();
+
+  char* filename = "res/uf20-01.cnf";
   char* dimacs;
   freadall(filename, &dimacs);
-
-  // printf("%s", dimacs);
 
   Cnf cnf;
   Cnf_create(&cnf);
@@ -28,7 +27,9 @@ main()
   LOGI("just print an info ...");
   LOGD("just print a debug ...");
 
-  SANITIZING_ASSERT(true && false, "I assumed that should work ...");
+  int status = dpllSolve(&cnf, &dpllTrivialPick, &assignment);
+  Cnf_destroy(&cnf);
+  AssignmentStack_destroy(&assignment);
 
-  return dpllSolve(&cnf, &dpllTrivialPick, &assignment);
+  return status;
 }

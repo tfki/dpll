@@ -1,16 +1,17 @@
 #include "cnf/cnf.h"
 
 #include <common/common.h>
+#include <common/log.h>
 #include <stdio.h>
 #include <string.h>
 
 int
 Cnf_create(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pCnf);
 
   pCnf->count = 0u;
-  pCnf->capacity = 512u;
+  pCnf->capacity = 1024u;
   pCnf->pData = malloc(pCnf->capacity * sizeof(int32_t));
 
   if (!pCnf->pData) {
@@ -25,8 +26,8 @@ Cnf_create(Cnf* pCnf)
 int
 Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 {
-  SANITIZING_ASSERT(pDest, "Parameter pDest must be a valid pointer!");
-  SANITIZING_ASSERT(pSrc, "Parameter pSrc must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pDest);
+  SANITIZE_PARAMETER_POINTER(pSrc);
 
   pDest->count = pSrc->count;
   pDest->capacity = pSrc->capacity;
@@ -45,7 +46,7 @@ Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 int
 Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 {
-  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pCnf);
 
   // if Cnf empty, add leading 0
   if (pCnf->count == 0u) { // TODO make leading zero inside creation?
@@ -78,7 +79,7 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 void
 Cnf_destroy(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pCnf);
 
   free(pCnf->pData);
   pCnf->pData = NULL;
@@ -89,128 +90,137 @@ Cnf_destroy(Cnf* pCnf)
 void
 Cnf_reset(Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pCnf);
   pCnf->count = 0u;
 }
 
 void
-Cnf_swap(Cnf* a, Cnf* b)
+Cnf_swap(Cnf* pFirst, Cnf* pSecond)
 {
-  int32_t* tmpPData = a->pData;
-  size_t tmpCapacity = a->capacity;
-  size_t tmpCount = a->count;
+  SANITIZE_PARAMETER_POINTER(pFirst);
+  SANITIZE_PARAMETER_POINTER(pSecond);
 
-  a->pData = b->pData;
-  a->count = b->count;
-  a->capacity = b->capacity;
+  Cnf third = *pFirst;
+  // third.pData = pFirst->pData;
+  // third.capacity = pFirst->capacity;
+  // third.count = pFirst->count;
 
-  b->pData = tmpPData;
-  b->count = tmpCount;
-  b->capacity = tmpCapacity;
+  *pFirst = *pSecond;
+  // pFirst->pData = pSecond->pData;
+  // pFirst->count = pSecond->count;
+  // pFirst->capacity = pSecond->capacity;
+
+  *pSecond = third;
+  // pSecond->pData = third.pData;
+  // pSecond->count = third.capacity;
+  // pSecond->capacity = third.count;
 }
 
 int
-Cnf_toStr(const Cnf* cnf, char** str)
+Cnf_toStr(const Cnf* pCnf, char** pStr)
 {
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pStr);
+
   Cnf_ClauseIterator iter;
-  Cnf_ClauseIterator_create(&iter, cnf);
+  Cnf_ClauseIterator_create(&iter, pCnf);
 
-  // cnf->count * 2 is just a starting point
-  // we cannot easily find out how long str will need to be
+  // pCnf->count * 2 is just a starting point
+  // we cannot easily find out how long pStr will need to be
   size_t strLen = 128;
-  *str = malloc(strLen * sizeof(char));
+  *pStr = malloc(strLen * sizeof(char));
 
-  if (!*str)
+  if (!*pStr)
     return 1;
 
   size_t strIndex = 0u;
   while (Cnf_ClauseIterator_next(&iter)) {
 
     if (strIndex + 1 >= strLen) {
-      *str = realloc(*str, strLen * 2 * sizeof(char));
+      *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
       strLen *= 2;
 
-      if (!*str) {
-        free(*str);
+      if (!*pStr) {
+        free(*pStr);
         return 2;
       }
     }
-    (*str)[strIndex++] = '(';
+    (*pStr)[strIndex++] = '(';
     for (size_t i = 0u; i < iter.count; ++i) {
 
       size_t literalLength;
 
-      literalLength = snprintf(&(*str)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
+      literalLength = snprintf(&(*pStr)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
 
       while (strIndex + literalLength >= strLen) {
-        *str = realloc(*str, strLen * 2 * sizeof(char));
+        *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
         strLen *= 2;
 
-        if (!*str) {
-          free(*str);
+        if (!*pStr) {
+          free(*pStr);
           return 3;
         }
 
-        literalLength = snprintf(&(*str)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
+        literalLength = snprintf(&(*pStr)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
       }
 
       strIndex += literalLength;
 
       if (strIndex + 4 >= strLen) {
-        *str = realloc(*str, strLen * 2 * sizeof(char));
+        *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
         strLen *= 2;
 
-        if (!*str) {
-          free(*str);
+        if (!*pStr) {
+          free(*pStr);
           return 4;
         }
       }
-      (*str)[strIndex++] = ' ';
-      (*str)[strIndex++] = 'O';
-      (*str)[strIndex++] = 'R';
-      (*str)[strIndex++] = ' ';
+      (*pStr)[strIndex++] = ' ';
+      (*pStr)[strIndex++] = 'O';
+      (*pStr)[strIndex++] = 'R';
+      (*pStr)[strIndex++] = ' ';
     }
     if (iter.count > 0) {
       // if clause has any literals
       // overwrite the last 'OR'
-      (*str)[strIndex - 4] = ')';
+      (*pStr)[strIndex - 4] = ')';
       strIndex -= 3;
     } else {
-      (*str)[strIndex++] = ')';
+      (*pStr)[strIndex++] = ')';
     }
 
     if (strIndex + 5 >= strLen) {
-      *str = realloc(*str, strLen * 2 * sizeof(char));
+      *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
       strLen *= 2;
 
-      if (!*str) {
-        free(*str);
+      if (!*pStr) {
+        free(*pStr);
         return 4;
       }
     }
-    (*str)[strIndex++] = ' ';
-    (*str)[strIndex++] = 'A';
-    (*str)[strIndex++] = 'N';
-    (*str)[strIndex++] = 'D';
-    (*str)[strIndex++] = ' ';
+    (*pStr)[strIndex++] = ' ';
+    (*pStr)[strIndex++] = 'A';
+    (*pStr)[strIndex++] = 'N';
+    (*pStr)[strIndex++] = 'D';
+    (*pStr)[strIndex++] = ' ';
   }
 
   if (strIndex + 1 >= strLen) {
-    *str = realloc(*str, strLen * 2 * sizeof(char));
+    *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
     strLen *= 2u;
 
-    if (!*str) {
-      free(*str);
+    if (!*pStr) {
+      free(*pStr);
       return 4;
     }
   }
 
   if (strIndex >= 5) {
     // -5 to overwrite last 'AND'
-    (*str)[strIndex - 5] = '\0';
+    (*pStr)[strIndex - 5] = '\0';
   } else {
-    // cnf is empty
-    (*str)[0] = '\0';
+    // pCnf is empty
+    (*pStr)[0] = '\0';
   }
   return 0;
 }
@@ -218,9 +228,8 @@ Cnf_toStr(const Cnf* cnf, char** str)
 void
 Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnfClauseIterator, "Parameter pCnfClauseIterator must be a valid pointer!");
-  SANITIZING_ASSERT(pCnf, "Parameter pCnf must be a valid pointer!");
-
+  SANITIZE_PARAMETER_POINTER(pCnfClauseIterator);
+  SANITIZE_PARAMETER_POINTER(pCnf);
   pCnfClauseIterator->pData = pCnf->pData;
   pCnfClauseIterator->pDataEnd = pCnf->pData + pCnf->count;
   pCnfClauseIterator->count = 0u;
@@ -229,7 +238,7 @@ Cnf_ClauseIterator_create(Cnf_ClauseIterator* pCnfClauseIterator, const Cnf* pCn
 bool
 Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 {
-  SANITIZING_ASSERT(pCnfClauseIterator, "Parameter pCnfClauseIterator must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pCnfClauseIterator);
 
   // + 1u to skip the 0 at pCnfClauseIterator->pData
   const int32_t* pNextData = pCnfClauseIterator->pData + pCnfClauseIterator->count + 1u;
@@ -249,7 +258,7 @@ Cnf_ClauseIterator_next(Cnf_ClauseIterator* pCnfClauseIterator)
 int
 ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pClauseBuffer);
 
   pClauseBuffer->count = 0u;
   pClauseBuffer->capacity = 128u;
@@ -264,7 +273,7 @@ ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 int
 ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 {
-  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pClauseBuffer);
 
   if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
 
@@ -285,8 +294,7 @@ ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 void
 ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
-
+  SANITIZE_PARAMETER_POINTER(pClauseBuffer);
   free(pClauseBuffer->pData);
   pClauseBuffer->pData = NULL;
   pClauseBuffer->capacity = 0u;
@@ -296,6 +304,6 @@ ClauseBuffer_destroy(ClauseBuffer* pClauseBuffer)
 void
 ClauseBuffer_reset(ClauseBuffer* pClauseBuffer)
 {
-  SANITIZING_ASSERT(pClauseBuffer, "Parameter pClauseBuffer must be a valid pointer!");
+  SANITIZE_PARAMETER_POINTER(pClauseBuffer);
   pClauseBuffer->count = 0u;
 }

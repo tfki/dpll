@@ -3,49 +3,48 @@
 
 #include <stdio.h>
 
-#define LOG_LEVEL_FATAL 0b00001
-#define LOG_LEVEL_ERROR 0b00011
-#define LOG_LEVEL_WARNING 0b00111
-#define LOG_LEVEL_INFO 0b01111
-#define LOG_LEVEL_DEBUG 0b11111
-
 #ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_LEVEL_DEBUG
+#define LOG_LEVEL 4
 #endif
 
-#define LOG(lvl, fmt, ...)                                                                                                                                     \
-  printf("%-5s : %s (%d)\n", lvl, __FILE__, __LINE__);                                                                                                         \
-  printf("      : " fmt "\n", __VA_ARGS__);                                                                                                                     \
-  fflush(stdout)\
+// optional macro for speeding up the print function
+#define LOG_INIT()                                                                                                                                             \
+  setvbuf(stdout, NULL, _IOFBF, 2048u);                                                                                                                        \
+  setvbuf(stderr, NULL, _IONBF, 0u)
 
-#if LOG_LEVEL_FATAL <= LOG_LEVEL
-#define LOGF(fmt, ...) LOG("Fatal", fmt, __VA_ARGS__)
+#define LOG(iobuf, lvl, ...)                                                                                                                                   \
+  fprintf(iobuf, "%-5s : %s (%d)\n", lvl, __FILE__, __LINE__);                                                                                                 \
+  fprintf(iobuf, "      : " __VA_ARGS__);                                                                                                                      \
+  fprintf(iobuf, "\n")
+
+#if 1 <= LOG_LEVEL
+#define LOGF(...) LOG(stderr, "Fatal", __VA_ARGS__)
 #else
-#define LOGF(fmt, ...) ((void)0)
+#define LOGF(...) ((void)0)
 #endif
 
-#if LOG_LEVEL_ERROR <= LOG_LEVEL
-#define LOGE(fmt, ...) LOG("Error", fmt, __VA_ARGS__)
+#if 2 <= LOG_LEVEL
+#define LOGE(...) LOG(stderr, "Error", __VA_ARGS__)
 #else
-#define LOGE(fmt, ...) ((void)0)
+#define LOGE(...) ((void)0)
 #endif
 
-#if LOG_LEVEL_WARNING <= LOG_LEVEL
-#define LOGW(fmt, ...) LOG("Warn", fmt, __VA_ARGS__)
+#if 3 <= LOG_LEVEL
+#define LOGW(...) LOG(stdout, "Warn", __VA_ARGS__)
 #else
-#define LOGW(fmt, ...) ((void)0)
+#define LOGW(...) ((void)0)
 #endif
 
-#if LOG_LEVEL_INFO <= LOG_LEVEL
-#define LOGI(fmt, ...) LOG("Info", fmt, __VA_ARGS__)
+#if 4 <= LOG_LEVEL
+#define LOGI(...) LOG(stdout, "Info", __VA_ARGS__)
 #else
-#define LOGI(fmt, ...) ((void)0)
+#define LOGI(...) ((void)0)
 #endif
 
-#if LOG_LEVEL_DEBUG <= LOG_LEVEL
-#define LOGD(fmt, ...) LOG("Debug", fmt, __VA_ARGS__)
+#if 5 <= LOG_LEVEL
+#define LOGD(...) LOG(stdout, "Debug", __VA_ARGS__)
 #else
-#define LOGD(fmt, ...) ((void)0)
+#define LOGD(...) ((void)0)
 #endif
 
 #endif

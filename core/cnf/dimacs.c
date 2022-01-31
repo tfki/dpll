@@ -15,9 +15,9 @@ typedef enum dimacsParserState
 int
 parseDimacs(char* dimacs, Cnf* cnf)
 {
-  SANITIZING_ASSERT(dimacs);     // dimacs must not be NULL
-  SANITIZING_ASSERT(cnf);        // cnf must not be null
-  SANITIZING_ASSERT(cnf->pData); // cnf must be created
+  SANITIZE_ASSERT(dimacs);     // dimacs must not be NULL
+  SANITIZE_ASSERT(cnf);        // cnf must not be null
+  SANITIZE_ASSERT(cnf->pData); // cnf must be created
 
   size_t dimacsOffset = 0;
   size_t dimacsLen = strlen(dimacs);

@@ -7,16 +7,16 @@
 int32_t
 dpllTrivialPick(const Cnf* pCnf)
 {
-  SANITIZING_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZE_ASSERT(pCnf); // pCnf must be a valid pointer
   return pCnf->pData[1u];
 }
 
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment)
 {
-  SANITIZING_ASSERT(pCnf);          // pCnf must be a valid pointer
-  SANITIZING_ASSERT(pAssignment);   // pAssignment must be a valid pointer
-  SANITIZING_ASSERT(pickAndRemove); // pickAndRemove must be a valid pointer
+  SANITIZE_ASSERT(pCnf);          // pCnf must be a valid pointer
+  SANITIZE_ASSERT(pAssignment);   // pAssignment must be a valid pointer
+  SANITIZE_ASSERT(pickAndRemove); // pickAndRemove must be a valid pointer
 
   // TODO we should not require pCnf to be const, so we can reset and reuse it.
   //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!

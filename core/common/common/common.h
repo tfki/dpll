@@ -3,7 +3,7 @@
 
 #ifdef NDEBUG
 
-#define SANITIZING_ASSERT(c) ((void)0)
+#define SANITIZE_ASSERT(c, ...) ((void)0)
 
 #else
 
@@ -11,18 +11,18 @@
 
 #ifdef _WIN32
 #include <windows.h>
-#define SANITIZING_ASSERT(c, fmt, ...)                                                                                                                         \
+#define SANITIZE_ASSERT(c, ...)                                                                                                                                \
   if (!(c)) {                                                                                                                                                  \
-    LOGE("Assertion failed! (" #c "); " fmt, __VA_ARGS__);                                                                                                     \
+    LOGE("Assertion failed! (" #c "); " __VA_ARGS__);                                                                                                          \
     DebugBreak();                                                                                                                                              \
     ExitProcess(__LINE__);                                                                                                                                     \
   }                                                                                                                                                            \
   ((void)0)
 
 #else
-#define SANITIZING_ASSERT(c, fmt, ...)                                                                                                                                   \
+#define SANITIZE_ASSERT(c, ...)                                                                                                                                \
   if (!(c)) {                                                                                                                                                  \
-    LOGE("Assertion failed! (" #c "); " fmt, __VA_ARGS__);                                                                                                     \
+    LOGE("Assertion failed! (" #c "); " __VA_ARGS__);                                                                                                          \
     exit(__LINE__);                                                                                                                                            \
   }                                                                                                                                                            \
   ((void)0)
@@ -30,5 +30,7 @@
 #endif
 
 #endif
+
+#define SANITIZE_PARAMETER_POINTER(p) SANITIZE_ASSERT(p, "Parameter " #p " must be a valid pointer!")
 
 #endif

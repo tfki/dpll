@@ -54,6 +54,7 @@ static int
 freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 {
   char* csvString;
+  LOGD("Trying to open and read %s", fileName);
   TEST_ASSERT_SUCCESS(freadall(fileName, &csvString));
 
   size_t csvPos = 0u;
@@ -196,6 +197,8 @@ test_dpllsolver_res(const IndexEntry* entry)
   free(dimacs);
 
   AssignmentStack assignmentStack;
+  AssignmentStack_create(&assignmentStack);
+
   TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfyable);
 
   Cnf_destroy(&cnf);

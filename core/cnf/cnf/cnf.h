@@ -28,10 +28,10 @@ void
 Cnf_reset(Cnf* pCnf);
 
 void
-Cnf_swap(Cnf* a, Cnf* b);
+Cnf_swap(Cnf* pFirst, Cnf* pSecond);
 
 int
-Cnf_toStr(const Cnf* cnf, char** str);
+Cnf_toStr(const Cnf* pCnf, char** pStr);
 
 typedef struct Cnf_ClauseIterator
 {

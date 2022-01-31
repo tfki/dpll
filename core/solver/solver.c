@@ -5,9 +5,9 @@
 int
 Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf)
 {
-  SANITIZING_ASSERT(pCnf);        // pCnf must be a valid pointer
-  SANITIZING_ASSERT(pAssignment); // pAssignment must be a valid pointer
-  SANITIZING_ASSERT(pNextCnf);    // pNextCnf must be a valid pointer
+  SANITIZE_ASSERT(pCnf);        // pCnf must be a valid pointer
+  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZE_ASSERT(pNextCnf);    // pNextCnf must be a valid pointer
 
   Cnf_ClauseIterator clauseIterator;
   Cnf_ClauseIterator_create(&clauseIterator, pCnf);
@@ -55,9 +55,9 @@ Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf)
 int
 Cnf_simplifyWithView(const Cnf* pCnf, const AssignmentStackView* pAssignmentView, Cnf* pNextCnf)
 {
-  SANITIZING_ASSERT(pCnf);            // pCnf must be a valid pointer
-  SANITIZING_ASSERT(pAssignmentView); // pAssignment must be a valid pointer
-  SANITIZING_ASSERT(pNextCnf);        // pNextCnf must be a valid pointer
+  SANITIZE_ASSERT(pCnf);            // pCnf must be a valid pointer
+  SANITIZE_ASSERT(pAssignmentView); // pAssignment must be a valid pointer
+  SANITIZE_ASSERT(pNextCnf);        // pNextCnf must be a valid pointer
 
   Cnf_ClauseIterator clauseIterator;
   Cnf_ClauseIterator_create(&clauseIterator, pCnf);

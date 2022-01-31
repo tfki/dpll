@@ -5,21 +5,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef NDEBUG // TODO replace with SANITIZING compiler flag if
-               //      the performance drops to much in debug mode
-
-#define TEST_ASSERT(c) assert(c)
-
-#else
+#include <common/log.h>
 
 #define TEST_ASSERT(c)                                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \
-    printf("assert failed in file %s on line %d", __FILE__, __LINE__);                                                                                         \
-    exit(__LINE__);                                                                                                                                            \
+    LOGE("Assertion failed: " #c);                                                                                                                             \
+    exit(1);                                                                                                                                                   \
   }                                                                                                                                                            \
   ((void)0)
-
-#endif
 
 #define TEST_ASSERT_SUCCESS(status) TEST_ASSERT(!(status))
 #define TEST_ASSERT_FAILURE(status) TEST_ASSERT(status)
