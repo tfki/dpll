@@ -1,6 +1,6 @@
-#include "test_common.h"
-
 #include <solver/assignmentstack.h>
+
+#include <common/test.h>
 
 static void
 test_AssignmentStack_create()

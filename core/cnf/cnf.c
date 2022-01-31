@@ -1,7 +1,8 @@
 #include "cnf/cnf.h"
 
-#include <common/common.h>
 #include <common/log.h>
+#include <common/sanitize.h>
+
 #include <stdio.h>
 #include <string.h>
 
@@ -12,14 +13,14 @@ Cnf_create(Cnf* pCnf)
 
   pCnf->count = 0u;
   pCnf->capacity = 1024u;
-  pCnf->pData = malloc(pCnf->capacity * sizeof(int32_t));
+  pCnf->pData = malloc(pCnf->capacity * sizeof(*pCnf->pData));
 
   if (!pCnf->pData) {
     LOGE("Cnf memory could not be allocated during creation!");
     return 1;
   }
 
-  LOGD("Cnf created successfully. %%s"); // TODO insert Cnf_str(pCnf)
+  LOGD("Cnf created successfully.");
   return 0;
 }
 
@@ -31,14 +32,14 @@ Cnf_copy(Cnf* pDest, const Cnf* pSrc)
 
   pDest->count = pSrc->count;
   pDest->capacity = pSrc->capacity;
-  pDest->pData = malloc(pSrc->capacity * sizeof(int32_t));
+  pDest->pData = malloc(pSrc->capacity * sizeof(*pDest->pData));
 
   if (!pDest->pData) {
     LOGE("Cnf memory could not be allocated during copy!");
     return 1;
   }
 
-  memcpy(pDest->pData, pSrc->pData, pSrc->count * sizeof(int32_t));
+  memcpy(pDest->pData, pSrc->pData, pSrc->count * sizeof(*pSrc->pData));
   LOGD("Cnf copied successfully. %%s"); // TODO insert Cnf_str(pCnf)
   return 0;
 }
@@ -56,7 +57,7 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
 
   while (pCnf->count + count + 1u > pCnf->capacity) {
 
-    int32_t* pNewData = realloc(pCnf->pData, pCnf->capacity * 2u * sizeof(int32_t));
+    int32_t* pNewData = realloc(pCnf->pData, pCnf->capacity * 2u * sizeof(*pCnf->pData));
     if (!pNewData) {
       LOGE("Cnf memory could not be allocated during pushClause!");
       return 1;
@@ -67,7 +68,7 @@ Cnf_pushClause(Cnf* pCnf, const int32_t* pValues, size_t count)
     pCnf->capacity *= 2u;
   }
 
-  memcpy(pCnf->pData + pCnf->count, pValues, count * sizeof(int32_t));
+  memcpy(pCnf->pData + pCnf->count, pValues, count * sizeof(*pCnf->pData));
 
   pCnf->count += count;
   pCnf->pData[pCnf->count] = 0;

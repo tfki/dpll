@@ -1,8 +1,8 @@
 #include <cnf/dimacs.h>
-#include <common/common.h>
+#include <solver/dpll_solver.h>
+
 #include <common/freadall.h>
 #include <common/log.h>
-#include <solver/dpll_solver.h>
 
 int
 main()

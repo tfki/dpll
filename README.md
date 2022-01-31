@@ -22,4 +22,4 @@ TODO
 + use sizeof ([variable]) instead of sizeof ([type])
 
 + for all methods that allocate a parameter should use an allocator passed as parameter
-  - our allocator could look similar the vulkan allocator 
+    - our allocator could look similar the vulkan allocator 

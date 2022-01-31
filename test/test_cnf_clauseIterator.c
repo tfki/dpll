@@ -1,6 +1,6 @@
-#include "test_common.h"
-
 #include <cnf/cnf.h>
+
+#include <common/test.h>
 
 static void
 test_cnf_clauseIterator_with_empty_cnf()

@@ -29,7 +29,7 @@ int
 AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* value);
 
 void
-AssignmentStack_swap(AssignmentStack* a, AssignmentStack* b);
+AssignmentStack_swap(AssignmentStack* pFirst, AssignmentStack* pSecond);
 
 void
 AssignmentStack_destroy(AssignmentStack* pAssignment);

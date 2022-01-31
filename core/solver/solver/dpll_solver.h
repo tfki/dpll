@@ -12,6 +12,6 @@ int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment);
 
 int
-dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack);
+dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment);
 
 #endif

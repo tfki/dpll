@@ -1,11 +1,9 @@
-#ifndef DPLLSOLVER_TEST_COMMON_H
-#define DPLLSOLVER_TEST_COMMON_H
+#ifndef DPLLSOLVER_TEST_H
+#define DPLLSOLVER_TEST_H
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "log.h"
 
-#include <common/log.h>
+#include <stdlib.h> // exit
 
 #define TEST_ASSERT(c)                                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \

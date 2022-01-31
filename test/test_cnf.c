@@ -1,6 +1,7 @@
-#include "test_common.h"
-
 #include <cnf/cnf.h>
+
+#include <common/test.h>
+
 #include <string.h>
 
 static void

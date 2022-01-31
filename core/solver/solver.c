@@ -1,13 +1,13 @@
 #include "solver/solver.h"
 
-#include <common/common.h>
+#include <common/sanitize.h>
 
 int
 Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf)
 {
-  SANITIZE_ASSERT(pCnf);        // pCnf must be a valid pointer
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
-  SANITIZE_ASSERT(pNextCnf);    // pNextCnf must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_PARAMETER_POINTER(pNextCnf);
 
   Cnf_ClauseIterator clauseIterator;
   Cnf_ClauseIterator_create(&clauseIterator, pCnf);
@@ -55,9 +55,9 @@ Cnf_simplify(const Cnf* pCnf, const AssignmentStack* pAssignment, Cnf* pNextCnf)
 int
 Cnf_simplifyWithView(const Cnf* pCnf, const AssignmentStackView* pAssignmentView, Cnf* pNextCnf)
 {
-  SANITIZE_ASSERT(pCnf);            // pCnf must be a valid pointer
-  SANITIZE_ASSERT(pAssignmentView); // pAssignment must be a valid pointer
-  SANITIZE_ASSERT(pNextCnf);        // pNextCnf must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pAssignmentView);
+  SANITIZE_PARAMETER_POINTER(pNextCnf);
 
   Cnf_ClauseIterator clauseIterator;
   Cnf_ClauseIterator_create(&clauseIterator, pCnf);

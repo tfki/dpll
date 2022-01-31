@@ -1,5 +1,7 @@
 #include "cnf/dimacs.h"
-#include <common/common.h>
+
+#include <common/sanitize.h>
+
 #include <stdio.h>
 #include <string.h>
 
@@ -15,9 +17,9 @@ typedef enum dimacsParserState
 int
 parseDimacs(char* dimacs, Cnf* cnf)
 {
-  SANITIZE_ASSERT(dimacs);     // dimacs must not be NULL
-  SANITIZE_ASSERT(cnf);        // cnf must not be null
-  SANITIZE_ASSERT(cnf->pData); // cnf must be created
+  SANITIZE_PARAMETER_POINTER(dimacs);
+  SANITIZE_PARAMETER_POINTER(cnf);
+  SANITIZE_PARAMETER_POINTER(cnf->pData);
 
   size_t dimacsOffset = 0;
   size_t dimacsLen = strlen(dimacs);

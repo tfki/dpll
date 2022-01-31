@@ -1,7 +1,7 @@
-#include "test_common.h"
-
 #include <cnf/cnf.h>
 #include <solver/solver.h>
+
+#include <common/test.h>
 
 static void
 test_Cnf_simplify_withEmptyAssignment()

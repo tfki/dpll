@@ -1,8 +1,48 @@
-#include "test_common.h"
-
 #include <cnf/dimacs.h>
-#include <common/freadall.h>
 #include <solver/solver.h>
+
+#include <common/freadall.h>
+#include <common/test.h>
+
+int
+pathConcat(char* pBse, char* pRel, char* pBuf, int bufSize)
+{
+#ifdef _WIN32
+  char separator = '\\';
+#else
+  char separator = '/';
+#endif
+
+  int bseSize = strlen(pBse);
+  int relSize = strlen(pRel);
+
+  if ((pRel == pBuf) && (relSize > bseSize))
+    return 1;
+
+  if (bufSize < (bseSize + relSize + 2))
+    return 1;
+
+  pBuf[bseSize] = separator;
+  memcpy(&pBuf[bseSize + 1], pRel, relSize);
+  pBuf[bseSize + 1 + relSize] = '\0';
+
+  if (pBse != pBuf)
+    memcpy(pBuf, pBse, bseSize);
+
+  return 0;
+}
+
+int
+pathCopy(char* pBse, char* pBuf, int bufSize)
+{
+  int bseSize = strlen(pBse);
+
+  if (bufSize < (bseSize + 1))
+    return 1;
+
+  memcpy(pBuf, pBse, bseSize + 1);
+  return 0;
+}
 
 typedef enum Complexity
 {
@@ -15,8 +55,8 @@ typedef enum Complexity
 
 typedef struct IndexEntry
 {
-  char pFileName[64u];
-  bool satisfyable;
+  char pFileName[512u];
+  bool satisfiable;
   Complexity complexity;
 } IndexEntry;
 
@@ -35,7 +75,7 @@ IndexEntryArray_create(IndexEntryArray* pIndexEntryArray)
 static int
 IndexEntryArray_push(IndexEntryArray* pIndexEntryArray, IndexEntry indexEntry)
 {
-  if (pIndexEntryArray->count + 1u > 512u)
+  if (pIndexEntryArray->count + 1u > sizeof(pIndexEntryArray->pData))
     return 1;
 
   pIndexEntryArray->pData[pIndexEntryArray->count] = indexEntry;
@@ -54,8 +94,9 @@ static int
 freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 {
   char* csvString;
-  LOGD("Trying to open and read %s", fileName);
-  TEST_ASSERT_SUCCESS(freadall(fileName, &csvString));
+
+  if (freadall(fileName, &csvString))
+    return 1;
 
   size_t csvPos = 0u;
 
@@ -72,10 +113,6 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
   }
 
   IndexEntry indexEntry;
-  indexEntry.pFileName[0u] = 'r';
-  indexEntry.pFileName[1u] = 'e';
-  indexEntry.pFileName[2u] = 's';
-  indexEntry.pFileName[3u] = '/';
 
   size_t indexEntryBegin;
   size_t indexEntryEnd;
@@ -96,25 +133,25 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 
     // calculate file name size
     size_t fileNameSize = indexEntryEnd - indexEntryBegin;
-    TEST_ASSERT(fileNameSize < 59u);
+    TEST_ASSERT(fileNameSize < (sizeof(indexEntry.pFileName) - 1u));
 
     // copy file name into index entry field
-    memcpy(&indexEntry.pFileName[4u], &csvString[indexEntryBegin], fileNameSize);
-    indexEntry.pFileName[fileNameSize + 4u] = '\0';
+    memcpy(indexEntry.pFileName, &csvString[indexEntryBegin], fileNameSize);
+    indexEntry.pFileName[fileNameSize] = '\0';
 
     switch (csvString[++csvPos]) {
       case 't':
         TEST_ASSERT_EQ(csvString[++csvPos], 'r');
         TEST_ASSERT_EQ(csvString[++csvPos], 'u');
         TEST_ASSERT_EQ(csvString[++csvPos], 'e');
-        indexEntry.satisfyable = true;
+        indexEntry.satisfiable = true;
         break;
       case 'f':
         TEST_ASSERT_EQ(csvString[++csvPos], 'a');
         TEST_ASSERT_EQ(csvString[++csvPos], 'l');
         TEST_ASSERT_EQ(csvString[++csvPos], 's');
         TEST_ASSERT_EQ(csvString[++csvPos], 'e');
-        indexEntry.satisfyable = false;
+        indexEntry.satisfiable = false;
         break;
       default:
         free(csvString);
@@ -199,21 +236,36 @@ test_dpllsolver_res(const IndexEntry* entry)
   AssignmentStack assignmentStack;
   AssignmentStack_create(&assignmentStack);
 
-  TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfyable);
+  TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfiable);
 
   Cnf_destroy(&cnf);
   AssignmentStack_destroy(&assignmentStack);
 }
 
 int
-main()
+main(int argc, char** argv)
 {
-  char* fileName = "res/_index.csv";
+  TEST_ASSERT_EQ(argc, 1);
+  char absPath[512u];
+  const int absPathSize = sizeof(absPath);
+
+  TEST_ASSERT_SUCCESS(pathConcat(argv[0], "..", absPath, absPathSize));
+  TEST_ASSERT_SUCCESS(pathConcat(absPath, "res", absPath, absPathSize));
+  TEST_ASSERT_SUCCESS(pathConcat(absPath, "_index.csv", absPath, absPathSize));
 
   IndexEntryArray iea;
   IndexEntryArray_create(&iea);
 
-  TEST_ASSERT_SUCCESS(freadindex(fileName, &iea));
+  TEST_ASSERT_SUCCESS(freadindex(absPath, &iea));
+  for (size_t i = 0u; i < iea.count; ++i) {
+    char* entryFileName = iea.pData[i].pFileName;
+    const int entryFileNameSize = sizeof(iea.pData->pFileName);
+
+    TEST_ASSERT_SUCCESS(pathConcat(argv[0], "..", absPath, absPathSize));
+    TEST_ASSERT_SUCCESS(pathConcat(absPath, "res", absPath, absPathSize));
+    TEST_ASSERT_SUCCESS(pathConcat(absPath, entryFileName, absPath, absPathSize));
+    TEST_ASSERT_SUCCESS(pathCopy(absPath, entryFileName, entryFileNameSize));
+  }
 
   for (size_t i = 0u; i < iea.count; ++i) {
 

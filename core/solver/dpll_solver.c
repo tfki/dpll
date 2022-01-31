@@ -1,22 +1,22 @@
 #include "solver/dpll_solver.h"
 
-#include <cnf/cnf.h>
-#include <common/common.h>
+#include <common/sanitize.h>
+
 #include <stdbool.h>
 
 int32_t
 dpllTrivialPick(const Cnf* pCnf)
 {
-  SANITIZE_ASSERT(pCnf); // pCnf must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pCnf);
   return pCnf->pData[1u];
 }
 
 int
 dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pCnf);          // pCnf must be a valid pointer
-  SANITIZE_ASSERT(pAssignment);   // pAssignment must be a valid pointer
-  SANITIZE_ASSERT(pickAndRemove); // pickAndRemove must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_PARAMETER_POINTER(pickAndRemove);
 
   // TODO we should not require pCnf to be const, so we can reset and reuse it.
   //      also we should pass simplified into dpllSolvePartial to reduce memory allocations!
@@ -101,8 +101,11 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 }
 
 int
-dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack)
+dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment)
 {
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+
   bool foundAtLeasOneUnitClause;
 
   Cnf simplified;
@@ -111,16 +114,16 @@ dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack)
 
   do {
     AssignmentStackView assignmentView;
-    AssignmentStackView_beginView(&assignmentView, assignmentStack);
+    AssignmentStackView_beginView(&assignmentView, pAssignment);
     foundAtLeasOneUnitClause = false;
 
-    for (size_t i = 0u; i + 2 < cnf->count; i++) {
-      if (cnf->pData[i] == 0 && cnf->pData[i + 1] != 0 && cnf->pData[i + 2] == 0) {
+    for (size_t i = 0u; i + 2 < pCnf->count; i++) {
+      if (pCnf->pData[i] == 0 && pCnf->pData[i + 1] != 0 && pCnf->pData[i + 2] == 0) {
         // unit clause found
-        int32_t literal = cnf->pData[i + 1];
+        int32_t literal = pCnf->pData[i + 1];
         uint32_t variable = literal > 0 ? literal : -literal;
         bool value = literal > 0;
-        if (AssignmentStack_push(assignmentStack, variable, value)) {
+        if (AssignmentStack_push(pAssignment, variable, value)) {
           Cnf_destroy(&simplified);
           return 1;
         }
@@ -129,11 +132,11 @@ dpllUnitPropagation(Cnf* cnf, AssignmentStack* assignmentStack)
       }
     }
 
-    AssignmentStackView_endView(&assignmentView, assignmentStack);
-    if (Cnf_simplifyWithView(cnf, &assignmentView, &simplified))
+    AssignmentStackView_endView(&assignmentView, pAssignment);
+    if (Cnf_simplifyWithView(pCnf, &assignmentView, &simplified))
       return 1;
 
-    Cnf_swap(cnf, &simplified);
+    Cnf_swap(pCnf, &simplified);
     Cnf_reset(&simplified);
   } while (foundAtLeasOneUnitClause);
 

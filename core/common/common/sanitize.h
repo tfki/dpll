@@ -1,5 +1,7 @@
-#ifndef DPLLSOLVER_COMMON_H
-#define DPLLSOLVER_COMMON_H
+#ifndef DPLLSOLVER_SANITIZE_H
+#define DPLLSOLVER_SANITIZE_H
+
+#include <stdbool.h>
 
 #ifdef NDEBUG
 
@@ -32,5 +34,6 @@
 #endif
 
 #define SANITIZE_PARAMETER_POINTER(p) SANITIZE_ASSERT(p, "Parameter " #p " must be a valid pointer!")
+#define SANITIZE_PARAMETER_BOOL(b) SANITIZE_ASSERT((((b) == true) || ((b) == false)), "Parameter " #b " must be a \"normalized\" bool!")
 
 #endif

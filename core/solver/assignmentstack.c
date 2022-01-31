@@ -1,11 +1,12 @@
 #include "solver/assignmentstack.h"
-#include <common/common.h>
+
+#include <common/sanitize.h>
 #include <stdlib.h>
 
 int
 AssignmentStack_create(AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pAssignment);
 
   pAssignment->count = 0u;
   pAssignment->capacity = 1024u;
@@ -22,8 +23,8 @@ AssignmentStack_create(AssignmentStack* pAssignment)
 int
 AssignmentStack_copy(AssignmentStack* pDest, const AssignmentStack* pSrc)
 {
-  SANITIZE_ASSERT(pDest); // pDest must be a valid pointer
-  SANITIZE_ASSERT(pSrc);  // pSrc must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pDest);
+  SANITIZE_PARAMETER_POINTER(pSrc);
 
   pDest->capacity = pSrc->capacity;
   pDest->count = pSrc->count;
@@ -42,9 +43,9 @@ AssignmentStack_copy(AssignmentStack* pDest, const AssignmentStack* pSrc)
 int
 AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value)
 {
-  SANITIZE_ASSERT(pAssignment);              // pAssignment must be a valid pointer
-  SANITIZE_ASSERT(key);                      // zero key is not allowed!
-  SANITIZE_ASSERT(value == 0 || value == 1); // only "normalized' booleans are allowed
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_PARAMETER_POINTER(key);
+  SANITIZE_PARAMETER_BOOL(value);
 
   if (pAssignment->count + 1 > pAssignment->capacity) {
     uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(uint32_t) + pAssignment->capacity * 2u * sizeof(bool));
@@ -68,7 +69,7 @@ AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value)
 int
 AssignmentStack_pop(AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pAssignment);
 
   if (pAssignment->count == 0)
     return 1;
@@ -80,7 +81,7 @@ AssignmentStack_pop(AssignmentStack* pAssignment)
 int
 AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* value)
 {
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pAssignment);
 
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {
@@ -94,32 +95,19 @@ AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* valu
 }
 
 void
-AssignmentStack_swap(AssignmentStack* a, AssignmentStack* b)
+AssignmentStack_swap(AssignmentStack* pFirst, AssignmentStack* pSecond)
 {
-  SANITIZE_ASSERT(a); // a must be a valid pointer
-  SANITIZE_ASSERT(b); // b must be a valid pointer
-
-  uint32_t* pKeysTmp = a->pKeys;
-  bool* pValuesTmp = a->pValues;
-  size_t countTmp = a->count;
-  size_t capacityTmp = a->capacity;
-
-  a->pKeys = b->pKeys;
-  a->pValues = b->pValues;
-  a->count = b->count;
-  a->capacity = b->capacity;
-
-  b->pKeys = pKeysTmp;
-  b->pValues = pValuesTmp;
-  b->count = countTmp;
-  b->capacity = capacityTmp;
+  SANITIZE_PARAMETER_POINTER(pFirst);
+  SANITIZE_PARAMETER_POINTER(pSecond);
+  AssignmentStack third = *pFirst;
+  *pFirst = *pSecond;
+  *pSecond = third;
 }
 
 void
 AssignmentStack_destroy(AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
-
+  SANITIZE_PARAMETER_POINTER(pAssignment);
   free(pAssignment->pKeys);
   pAssignment->pKeys = NULL;
   pAssignment->pValues = NULL;
@@ -130,17 +118,17 @@ AssignmentStack_destroy(AssignmentStack* pAssignment)
 void
 AssignmentStackView_beginView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pAssignmentView); // pAssignmentView must be a valid pointer
-  SANITIZE_ASSERT(pAssignment);     // pAssignment must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pAssignmentView);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
   pAssignmentView->count = pAssignment->count;
 }
 
 void
 AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const AssignmentStack* pAssignment)
 {
-  SANITIZE_ASSERT(pAssignmentView);                              // pAssignmentView must be a valid pointer
-  SANITIZE_ASSERT(pAssignment);                                  // pAssignment must be a valid pointer
-  SANITIZE_ASSERT(pAssignmentView->count <= pAssignment->count); // only pushes are allowed between beginView and endView
+  SANITIZE_PARAMETER_POINTER(pAssignmentView);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_ASSERT(pAssignmentView->count <= pAssignment->count, "AssignmentStackView can not watch a negative range!");
 
   pAssignmentView->pKeys = &pAssignment->pKeys[pAssignmentView->count];
   pAssignmentView->pValues = &pAssignment->pValues[pAssignmentView->count];
@@ -150,7 +138,7 @@ AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const Assignme
 int
 AssignmentStackView_get(const AssignmentStackView* pAssignment, uint32_t key, bool* value)
 {
-  SANITIZE_ASSERT(pAssignment); // pAssignment must be a valid pointer
+  SANITIZE_PARAMETER_POINTER(pAssignment);
 
   // see if key already exists in pKeys
   for (int i = 0; i < pAssignment->count; ++i) {

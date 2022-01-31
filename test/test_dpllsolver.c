@@ -1,6 +1,6 @@
-#include "test_common.h"
-
 #include <solver/solver.h>
+
+#include <common/test.h>
 
 static void
 test_dpllSolve_emptyCnf()

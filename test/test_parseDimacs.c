@@ -1,6 +1,6 @@
-
-#include "test_common.h"
 #include <cnf/dimacs.h>
+
+#include <common/test.h>
 
 static void
 test_parseDimacs_with_empty_cnf()
