@@ -67,18 +67,6 @@ AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value)
 }
 
 int
-AssignmentStack_pop(AssignmentStack* pAssignment)
-{
-  SANITIZE_PARAMETER_POINTER(pAssignment);
-
-  if (pAssignment->count == 0)
-    return 1;
-
-  --pAssignment->count;
-  return 0;
-}
-
-int
 AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* value)
 {
   SANITIZE_PARAMETER_POINTER(pAssignment);
@@ -149,4 +137,21 @@ AssignmentStackView_get(const AssignmentStackView* pAssignment, uint32_t key, bo
   }
 
   return 1;
+}
+
+void
+AssignmentStack_storeState(AssignmentStack* pAssignment, AssignmentStackState* pState){
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_PARAMETER_POINTER(pState);
+
+  pState->count = pAssignment->count;
+}
+
+void
+AssignmentStack_restoreState(AssignmentStack* pAssignment, AssignmentStackState* pState){
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+  SANITIZE_PARAMETER_POINTER(pState);
+  SANITIZE_ASSERT(pState->count <= pAssignment->count, "");
+
+  pAssignment->count = pState->count;
 }

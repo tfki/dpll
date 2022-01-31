@@ -42,7 +42,9 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
     return 0;
   }
 
-  //  dpllUnitPropagation(&simplified, pAssignment);
+  AssignmentStackState assignmentStateBeforeUP;
+  AssignmentStack_storeState(pAssignment, &assignmentStateBeforeUP);
+  dpllUnitPropagation(&simplified, pAssignment);
 
   if (simplified.count == 0u) {
     Cnf_destroy(&simplified);
@@ -82,20 +84,24 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
   const uint32_t nextVariable = nextLiteral > 0 ? nextLiteral : -nextLiteral;
   const bool sign = (nextLiteral > 0) ? true : false;
 
+  AssignmentStackState assignmentStateBeforeVariablePick;
+  AssignmentStack_storeState(pAssignment, &assignmentStateBeforeVariablePick);
+
   AssignmentStack_push(pAssignment, nextVariable, sign);
   if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
     return 0;
   }
 
-  AssignmentStack_pop(pAssignment);
+  AssignmentStack_restoreState(pAssignment, &assignmentStateBeforeVariablePick);
+
   AssignmentStack_push(pAssignment, nextVariable, !sign);
   if (!dpllSolve(&simplified, pickAndRemove, pAssignment)) {
     Cnf_destroy(&simplified);
     return 0;
   }
 
-  AssignmentStack_pop(pAssignment);
+  AssignmentStack_restoreState(pAssignment, &assignmentStateBeforeUP);
   Cnf_destroy(&simplified);
   return 1;
 }
@@ -133,12 +139,15 @@ dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment)
     }
 
     AssignmentStackView_endView(&assignmentView, pAssignment);
-    if (Cnf_simplifyWithView(pCnf, &assignmentView, &simplified))
+    if (Cnf_simplifyWithView(pCnf, &assignmentView, &simplified)) {
+      Cnf_destroy(&simplified);
       return 1;
+    }
 
     Cnf_swap(pCnf, &simplified);
     Cnf_reset(&simplified);
   } while (foundAtLeasOneUnitClause);
 
+  Cnf_destroy(&simplified);
   return 0;
 }

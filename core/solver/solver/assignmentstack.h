@@ -23,9 +23,6 @@ int
 AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value);
 
 int
-AssignmentStack_pop(AssignmentStack* pAssignment);
-
-int
 AssignmentStack_get(const AssignmentStack* pAssignment, uint32_t key, bool* value);
 
 void
@@ -49,5 +46,16 @@ AssignmentStackView_endView(AssignmentStackView* pAssignmentView, const Assignme
 
 int
 AssignmentStackView_get(const AssignmentStackView* pAssignment, uint32_t key, bool* value);
+
+typedef struct AssignmentStackState
+{
+  size_t count;
+} AssignmentStackState;
+
+void
+AssignmentStack_storeState(AssignmentStack* pAssignment, AssignmentStackState* pState);
+
+void
+AssignmentStack_restoreState(AssignmentStack* pAssignment, AssignmentStackState* pState);
 
 #endif
