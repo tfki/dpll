@@ -14,7 +14,6 @@ TODO
 
 + replace clause iterator with literal iterator
 + simplify for single variable instead of whole assignment
-+ complete benchmark code
 + Assignment_setAll has room for optimization
 + get return type of dpllsolve sorted out
 + solve pickAndRemove Callback does not follow the return conventions
