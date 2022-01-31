@@ -10,7 +10,7 @@ AssignmentStack_create(AssignmentStack* pAssignment)
 
   pAssignment->count = 0u;
   pAssignment->capacity = 1024u;
-  pAssignment->pKeys = malloc(pAssignment->capacity * sizeof(uint32_t) + pAssignment->capacity * sizeof(bool));
+  pAssignment->pKeys = malloc(pAssignment->capacity * sizeof(*pAssignment->pKeys) + pAssignment->capacity * sizeof(*pAssignment->pValues));
 
   if (!pAssignment->pKeys)
     return 1;
@@ -28,7 +28,7 @@ AssignmentStack_copy(AssignmentStack* pDest, const AssignmentStack* pSrc)
 
   pDest->capacity = pSrc->capacity;
   pDest->count = pSrc->count;
-  pDest->pKeys = malloc(pSrc->capacity * sizeof(int32_t) + pSrc->capacity * sizeof(bool));
+  pDest->pKeys = malloc(pSrc->capacity * sizeof(*pDest->pKeys) + pSrc->capacity * sizeof(*pDest->pValues));
   pDest->pValues = (bool*)(pDest->pKeys + pSrc->capacity);
 
   if (!pDest->pKeys)
@@ -48,7 +48,7 @@ AssignmentStack_push(AssignmentStack* pAssignment, uint32_t key, bool value)
   SANITIZE_PARAMETER_BOOL(value);
 
   if (pAssignment->count + 1 > pAssignment->capacity) {
-    uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(uint32_t) + pAssignment->capacity * 2u * sizeof(bool));
+    uint32_t* pNewKeys = realloc(pAssignment->pKeys, pAssignment->capacity * 2u * sizeof(*pAssignment->pKeys) + pAssignment->capacity * 2u * sizeof(*pAssignment->pValues));
     if (!pNewKeys)
       return 1;
 

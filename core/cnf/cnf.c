@@ -129,7 +129,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
   // pCnf->count * 2 is just a starting point
   // we cannot easily find out how long pStr will need to be
   size_t strLen = 128;
-  *pStr = malloc(strLen * sizeof(char));
+  *pStr = malloc(strLen);
 
   if (!*pStr)
     return 1;
@@ -138,7 +138,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
   while (Cnf_ClauseIterator_next(&iter)) {
 
     if (strIndex + 1 >= strLen) {
-      *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
+      *pStr = realloc(*pStr, strLen * 2);
       strLen *= 2;
 
       if (!*pStr) {
@@ -154,7 +154,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
       literalLength = snprintf(&(*pStr)[strIndex], strLen - strIndex, "%d", iter.pData[i]);
 
       while (strIndex + literalLength >= strLen) {
-        *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
+        *pStr = realloc(*pStr, strLen * 2);
         strLen *= 2;
 
         if (!*pStr) {
@@ -168,7 +168,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
       strIndex += literalLength;
 
       if (strIndex + 4 >= strLen) {
-        *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
+        *pStr = realloc(*pStr, strLen * 2);
         strLen *= 2;
 
         if (!*pStr) {
@@ -191,7 +191,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
     }
 
     if (strIndex + 5 >= strLen) {
-      *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
+      *pStr = realloc(*pStr, strLen * 2);
       strLen *= 2;
 
       if (!*pStr) {
@@ -207,7 +207,7 @@ Cnf_toStr(const Cnf* pCnf, char** pStr)
   }
 
   if (strIndex + 1 >= strLen) {
-    *pStr = realloc(*pStr, strLen * 2 * sizeof(char));
+    *pStr = realloc(*pStr, strLen * 2);
     strLen *= 2u;
 
     if (!*pStr) {
@@ -263,7 +263,7 @@ ClauseBuffer_create(ClauseBuffer* pClauseBuffer)
 
   pClauseBuffer->count = 0u;
   pClauseBuffer->capacity = 128u;
-  pClauseBuffer->pData = malloc(pClauseBuffer->capacity * sizeof(int32_t));
+  pClauseBuffer->pData = malloc(pClauseBuffer->capacity * sizeof(*pClauseBuffer->pData));
 
   if (!pClauseBuffer->pData)
     return 1;
@@ -278,7 +278,7 @@ ClauseBuffer_push(ClauseBuffer* pClauseBuffer, int32_t literal)
 
   if (pClauseBuffer->count + 1u > pClauseBuffer->capacity) {
 
-    int32_t* pNewData = realloc(pClauseBuffer->pData, pClauseBuffer->capacity * 2u * sizeof(int32_t));
+    int32_t* pNewData = realloc(pClauseBuffer->pData, pClauseBuffer->capacity * 2u * sizeof(*pClauseBuffer->pData));
     if (!pNewData)
       return 1;
 
