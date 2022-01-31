@@ -61,7 +61,7 @@ fReadCnf(const char* pFileName, Cnf* pCnf)
   SANITIZE_PARAMETER_POINTER(pCnf);
 
   char* dimacs;
-  if (!fReadAll(pFileName, &dimacs))
+  if (fReadAll(pFileName, &dimacs))
     return 1;
 
   int error = parseDimacs(dimacs, pCnf);

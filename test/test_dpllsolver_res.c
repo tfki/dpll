@@ -1,11 +1,12 @@
 #include <cnf/dimacs.h>
 #include <solver/solver.h>
 
+#include <common/bench.h>
 #include <common/fread.h>
 #include <common/test.h>
 
 int
-pathConcat(char* pBse, char* pRel, char* pBuf, int bufSize)
+pathConcat(const char* pBse, const char* pRel, char* pBuf, int bufSize)
 {
 #ifdef _WIN32
   char separator = '\\';
@@ -33,7 +34,7 @@ pathConcat(char* pBse, char* pRel, char* pBuf, int bufSize)
 }
 
 int
-pathCopy(char* pBse, char* pBuf, int bufSize)
+pathCopy(const char* pBse, char* pBuf, int bufSize)
 {
   int bseSize = strlen(pBse);
 
@@ -42,6 +43,22 @@ pathCopy(char* pBse, char* pBuf, int bufSize)
 
   memcpy(pBuf, pBse, bseSize + 1);
   return 0;
+}
+
+void
+fileNameFromPath(const char* pBse, const char** pRel)
+{
+  int bseSize = strlen(pBse);
+
+  for (int i = bseSize-1; i > 0; --i) {
+    if (pBse[i] == '\\' || pBse[i] == '/')
+    {
+      *pRel = &pBse[i+1];
+      return;
+    }
+  }
+
+  *pRel = pBse;
 }
 
 typedef enum Complexity
@@ -229,13 +246,27 @@ test_dpllsolver_res(const Entry* entry)
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
   TEST_ASSERT_SUCCESS(fReadCnf(entry->pFileName, &cnf));
 
-  AssignmentStack assignmentStack;
-  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignmentStack));
+  AssignmentStack assignment;
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignment));
 
-  TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfiable);
+  Bench bench;
+  Bench_create(&bench);
+
+  TEST_ASSERT_SUCCESS(Bench_begin(&bench));
+  int status = dpllSolve(&cnf, dpllTrivialPick, &assignment);
+  TEST_ASSERT_SUCCESS(Bench_end(&bench));
+
+  TEST_ASSERT_EQ(0u == status, entry->satisfiable);
+
+  double seconds;
+  Bench_seconds(&bench, &seconds);
+
+  const char *fileName;
+  fileNameFromPath(entry->pFileName, &fileName);
+  LOGI("Dimacs file (%s) was successfully tested. It took %f seconds to find a sat solution.", fileName, seconds);
 
   Cnf_destroy(&cnf);
-  AssignmentStack_destroy(&assignmentStack);
+  AssignmentStack_destroy(&assignment);
 }
 
 int

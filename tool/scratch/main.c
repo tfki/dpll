@@ -2,7 +2,7 @@
 #include <solver/dpll_solver.h>
 
 #include <common/fread.h>
-#include <common/log.h>
+#include <common/bench.h>
 
 int
 main()
@@ -15,19 +15,18 @@ main()
 
   Cnf cnf;
   Cnf_create(&cnf);
+  fReadCnf(filename, &cnf);
 
   AssignmentStack assignment;
   AssignmentStack_create(&assignment);
 
-  parseDimacs(dimacs, &cnf);
+  Bench bench;
+  Bench_create(&bench);
 
-  LOGF("no formatting");
-  LOGE("format a %%d: %d", 1);
-  LOGW("format a %%s: %s", "Hallo log");
-  LOGI("just print an info ...");
-  LOGD("just print a debug ...");
-
+  Bench_begin(&bench);
   int status = dpllSolve(&cnf, &dpllTrivialPick, &assignment);
+  Bench_end(&bench);
+
   Cnf_destroy(&cnf);
   AssignmentStack_destroy(&assignment);
 
