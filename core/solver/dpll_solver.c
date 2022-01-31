@@ -95,6 +95,7 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
     return 0;
   }
 
+  AssignmentStack_pop(pAssignment);
   Cnf_destroy(&simplified);
   return 1;
 }
