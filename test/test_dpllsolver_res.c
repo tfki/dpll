@@ -1,7 +1,7 @@
 #include <cnf/dimacs.h>
 #include <solver/solver.h>
 
-#include <common/freadall.h>
+#include <common/fread.h>
 #include <common/test.h>
 
 int
@@ -53,27 +53,27 @@ typedef enum Complexity
   COMPLEXITY_INSANE = 0b00100000
 } Complexity;
 
-typedef struct IndexEntry
+typedef struct Entry
 {
-  char pFileName[512u];
+  char pFileName[256u];
   bool satisfiable;
   Complexity complexity;
-} IndexEntry;
+} Entry;
 
-typedef struct IndexEntryArray
+typedef struct EntryArray
 {
-  IndexEntry pData[512u];
+  Entry pData[512u];
   size_t count;
-} IndexEntryArray;
+} EntryArray;
 
 static void
-IndexEntryArray_create(IndexEntryArray* pIndexEntryArray)
+EntryArray_create(EntryArray* pIndexEntryArray)
 {
   pIndexEntryArray->count = 0u;
 }
 
 static int
-IndexEntryArray_push(IndexEntryArray* pIndexEntryArray, IndexEntry indexEntry)
+EntryArray_push(EntryArray* pIndexEntryArray, Entry indexEntry)
 {
   if (pIndexEntryArray->count + 1u > sizeof(pIndexEntryArray->pData))
     return 1;
@@ -85,17 +85,17 @@ IndexEntryArray_push(IndexEntryArray* pIndexEntryArray, IndexEntry indexEntry)
 }
 
 static void
-IndexEntryArray_destroy(IndexEntryArray* pIndexEntryArray)
+EntryArray_destroy(EntryArray* pIndexEntryArray)
 {
   pIndexEntryArray->count = 0u;
 }
 
 static int
-freadindex(char* fileName, IndexEntryArray* pIndexEntries)
+freadindex(char* fileName, EntryArray* pEntries)
 {
   char* csvString;
 
-  if (freadall(fileName, &csvString))
+  if (fReadAll(fileName, &csvString))
     return 1;
 
   size_t csvPos = 0u;
@@ -112,7 +112,7 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
     }
   }
 
-  IndexEntry indexEntry;
+  Entry indexEntry;
 
   size_t indexEntryBegin;
   size_t indexEntryEnd;
@@ -204,7 +204,7 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
     }
 
     // insert entry
-    TEST_ASSERT_SUCCESS(IndexEntryArray_push(pIndexEntries, indexEntry));
+    TEST_ASSERT_SUCCESS(EntryArray_push(pEntries, indexEntry));
 
     // check for eof
     ++csvPos;
@@ -221,20 +221,16 @@ freadindex(char* fileName, IndexEntryArray* pIndexEntries)
 }
 
 static void
-test_dpllsolver_res(const IndexEntry* entry)
+test_dpllsolver_res(const Entry* entry)
 {
   TEST_ASSERT_NON_NULL(entry);
 
-  char* dimacs;
-  TEST_ASSERT_SUCCESS(freadall(entry->pFileName, &dimacs));
-
   Cnf cnf;
   TEST_ASSERT_SUCCESS(Cnf_create(&cnf));
-  TEST_ASSERT_SUCCESS(parseDimacs(dimacs, &cnf));
-  free(dimacs);
+  TEST_ASSERT_SUCCESS(fReadCnf(entry->pFileName, &cnf));
 
   AssignmentStack assignmentStack;
-  AssignmentStack_create(&assignmentStack);
+  TEST_ASSERT_SUCCESS(AssignmentStack_create(&assignmentStack));
 
   TEST_ASSERT_EQ(0u == dpllSolve(&cnf, dpllTrivialPick, &assignmentStack), entry->satisfiable);
 
@@ -245,6 +241,8 @@ test_dpllsolver_res(const IndexEntry* entry)
 int
 main(int argc, char** argv)
 {
+  // get the absolute path to index.csv
+
   TEST_ASSERT_EQ(argc, 1);
   char absPath[512u];
   const int absPathSize = sizeof(absPath);
@@ -253,13 +251,18 @@ main(int argc, char** argv)
   TEST_ASSERT_SUCCESS(pathConcat(absPath, "res", absPath, absPathSize));
   TEST_ASSERT_SUCCESS(pathConcat(absPath, "_index.csv", absPath, absPathSize));
 
-  IndexEntryArray iea;
-  IndexEntryArray_create(&iea);
+  // create index array from file
 
-  TEST_ASSERT_SUCCESS(freadindex(absPath, &iea));
-  for (size_t i = 0u; i < iea.count; ++i) {
-    char* entryFileName = iea.pData[i].pFileName;
-    const int entryFileNameSize = sizeof(iea.pData->pFileName);
+  EntryArray entries;
+  EntryArray_create(&entries);
+
+  TEST_ASSERT_SUCCESS(freadindex(absPath, &entries));
+
+  // make index array entry file names absolute paths
+
+  for (size_t i = 0u; i < entries.count; ++i) {
+    char* entryFileName = entries.pData[i].pFileName;
+    const int entryFileNameSize = sizeof(entries.pData->pFileName);
 
     TEST_ASSERT_SUCCESS(pathConcat(argv[0], "..", absPath, absPathSize));
     TEST_ASSERT_SUCCESS(pathConcat(absPath, "res", absPath, absPathSize));
@@ -267,14 +270,16 @@ main(int argc, char** argv)
     TEST_ASSERT_SUCCESS(pathCopy(absPath, entryFileName, entryFileNameSize));
   }
 
-  for (size_t i = 0u; i < iea.count; ++i) {
+  // run all indices as test
+
+  for (size_t i = 0u; i < entries.count; ++i) {
 
     // skip hard and insane dimacs for testing
-    if (iea.pData[i].complexity > COMPLEXITY_MEDIUM)
+    if (entries.pData[i].complexity > COMPLEXITY_MEDIUM)
       continue;
 
-    test_dpllsolver_res(&iea.pData[i]);
+    test_dpllsolver_res(&entries.pData[i]);
   }
 
-  IndexEntryArray_destroy(&iea);
+  EntryArray_destroy(&entries);
 }

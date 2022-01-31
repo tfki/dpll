@@ -1,7 +1,7 @@
 #include <cnf/dimacs.h>
 #include <solver/dpll_solver.h>
 
-#include <common/freadall.h>
+#include <common/fread.h>
 #include <common/log.h>
 
 int
@@ -11,7 +11,7 @@ main()
 
   char* filename = "res/uf20-01.cnf";
   char* dimacs;
-  freadall(filename, &dimacs);
+  fReadAll(filename, &dimacs);
 
   Cnf cnf;
   Cnf_create(&cnf);

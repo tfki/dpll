@@ -1,20 +1,26 @@
-#ifndef DPLLSOLVER_FREADALL_H
-#define DPLLSOLVER_FREADALL_H
+#ifndef DPLLSOLVER_FREAD_H
+#define DPLLSOLVER_FREAD_H
+
+#include "sanitize.h"
+#include <cnf/cnf.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int
-freadall(const char* fileName, char** raw)
+fReadAll(const char* pFileName, char** pRawStr)
 {
+  SANITIZE_PARAMETER_POINTER(pFileName);
+  SANITIZE_PARAMETER_POINTER(pRawStr);
+
   const size_t elementSize = 1u;
   const size_t bufferSize = 8192u;
   char buffer[8192u];
 
   // open the file
 
-  FILE* file = fopen(fileName, "rb");
+  FILE* file = fopen(pFileName, "rb");
   if (!file)
     return 1;
 
@@ -43,9 +49,25 @@ freadall(const char* fileName, char** raw)
   // add zero termination and write back the result
 
   string[fileSize] = '\0';
-  *raw = string;
+  *pRawStr = string;
 
   return 0;
+}
+
+int
+fReadCnf(const char* pFileName, Cnf* pCnf)
+{
+  SANITIZE_PARAMETER_POINTER(pFileName);
+  SANITIZE_PARAMETER_POINTER(pCnf);
+
+  char* dimacs;
+  if (!fReadAll(pFileName, &dimacs))
+    return 1;
+
+  int error = parseDimacs(dimacs, pCnf);
+
+  free(dimacs);
+  return error;
 }
 
 #endif
