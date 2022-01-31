@@ -22,7 +22,7 @@ int
 Bench_begin(Bench* pBench)
 {
   SANITIZE_PARAMETER_POINTER(pBench);
-  pBench->begin = time(NULL);
+  pBench->begin = clock();
   return pBench->begin == -1 ? 1 : 0;
 }
 
@@ -30,7 +30,7 @@ int
 Bench_end(Bench* pBench)
 {
   SANITIZE_PARAMETER_POINTER(pBench);
-  pBench->end = time(NULL);
+  pBench->end = clock();
   return pBench->end == -1 ? 1 : 0;
 }
 
