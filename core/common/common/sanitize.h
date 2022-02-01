@@ -1,6 +1,8 @@
 #ifndef DPLLSOLVER_SANITIZE_H
 #define DPLLSOLVER_SANITIZE_H
 
+#include "debugbreak.h"
+
 #include <stdbool.h>
 
 #ifdef NDEBUG
@@ -11,25 +13,13 @@
 
 #include "log.h"
 
-#ifdef _WIN32
-#include <windows.h>
 #define SANITIZE_ASSERT(c, ...)                                                                                                                                \
   if (!(c)) {                                                                                                                                                  \
     LOGE("Assertion failed! (" #c "); " __VA_ARGS__);                                                                                                          \
-    DebugBreak();                                                                                                                                              \
-    ExitProcess(__LINE__);                                                                                                                                     \
+    DEBUG_BREAK();                                                                                                                                              \
+    exit(1);                                                                                                                                     \
   }                                                                                                                                                            \
   ((void)0)
-
-#else
-#define SANITIZE_ASSERT(c, ...)                                                                                                                                \
-  if (!(c)) {                                                                                                                                                  \
-    LOGE("Assertion failed! (" #c "); " __VA_ARGS__);                                                                                                          \
-    exit(__LINE__);                                                                                                                                            \
-  }                                                                                                                                                            \
-  ((void)0)
-
-#endif
 
 #endif
 

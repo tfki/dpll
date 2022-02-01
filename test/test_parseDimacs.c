@@ -74,6 +74,7 @@ test_parseDimacs_with_multiple_clauses()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_parseDimacs_with_empty_cnf();
   test_parseDimacs_with_empty_clause();
   test_parseDimacs_with_one_clause();

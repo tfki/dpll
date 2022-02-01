@@ -14,4 +14,7 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 int
 dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment);
 
+int
+dpllPureLiteralElimination(Cnf* pCnf, AssignmentStack* pAssignment);
+
 #endif

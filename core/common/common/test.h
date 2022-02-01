@@ -1,13 +1,15 @@
 #ifndef DPLLSOLVER_TEST_H
 #define DPLLSOLVER_TEST_H
 
+#include "debugbreak.h"
 #include "log.h"
 
 #include <stdlib.h> // exit
 
 #define TEST_ASSERT(c)                                                                                                                                         \
   if (!(c)) {                                                                                                                                                  \
-    LOGE("Assertion failed: " #c);                                                                                                                             \
+    LOGE("Assertion failed! (" #c "); ");                                                                                                                      \
+    DEBUG_BREAK();                                                                                                                                             \
     exit(1);                                                                                                                                                   \
   }                                                                                                                                                            \
   ((void)0)

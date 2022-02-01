@@ -89,6 +89,7 @@ test_AssignmentStackView_empty()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_AssignmentStackView_get();
   test_AssignmentStackView_with_max_size();
   test_AssignmentStackView_empty();

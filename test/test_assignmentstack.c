@@ -135,6 +135,7 @@ test_AssignmentStack_swap()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_AssignmentStack_create();
   test_AssignmentStack_getAndSet();
   test_AssignmentStack_copy();

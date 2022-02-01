@@ -157,6 +157,7 @@ test_dpllSolver_unitPropagation_with_mixed_clauses()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_dpllSolve_emptyCnf();
   test_dpllSolve_precalculatedCnf();
   test_dpllSolve_unsatisfiableCnf();

@@ -12,6 +12,10 @@
   setvbuf(stdout, NULL, _IOFBF, 2048u);                                                                                                                        \
   setvbuf(stderr, NULL, _IONBF, 0u)
 
+#define LOG_TEST_INIT()                                                                                                                                        \
+  setvbuf(stdout, NULL, _IONBF, 0u);                                                                                                                           \
+  setvbuf(stderr, NULL, _IONBF, 0u)
+
 #define LOG(iobuf, lvl, ...)                                                                                                                                   \
   fprintf(iobuf, "%-5s : %s (%d)\n", lvl, __FILE__, __LINE__);                                                                                                 \
   fprintf(iobuf, "      : " __VA_ARGS__);                                                                                                                      \

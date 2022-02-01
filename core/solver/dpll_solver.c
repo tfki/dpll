@@ -1,6 +1,7 @@
 #include "solver/dpll_solver.h"
 
 #include <common/sanitize.h>
+#include <common/debugbreak.h>
 
 #include <stdbool.h>
 
@@ -30,8 +31,9 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 
   // if Cnf is empty -> sat
   Cnf simplified;
-  if (Cnf_create(&simplified))
+  if (Cnf_create(&simplified)) {
     return 1;
+  }
   if (Cnf_simplify(pCnf, pAssignment, &simplified)) {
     Cnf_destroy(&simplified);
     return 1;
@@ -44,7 +46,9 @@ dpllSolve(const Cnf* pCnf, int32_t (*pickAndRemove)(const Cnf*), AssignmentStack
 
   AssignmentStackState assignmentStateBeforeUP;
   AssignmentStack_storeState(pAssignment, &assignmentStateBeforeUP);
+
   dpllUnitPropagation(&simplified, pAssignment);
+  dpllPureLiteralElimination(&simplified, pAssignment);
 
   if (simplified.count == 0u) {
     Cnf_destroy(&simplified);
@@ -115,8 +119,9 @@ dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment)
   bool foundAtLeasOneUnitClause;
 
   Cnf simplified;
-  if (Cnf_create(&simplified))
+  if (Cnf_create(&simplified)) {
     return 1;
+  }
 
   do {
     AssignmentStackView assignmentView;
@@ -149,5 +154,175 @@ dpllUnitPropagation(Cnf* pCnf, AssignmentStack* pAssignment)
   } while (foundAtLeasOneUnitClause);
 
   Cnf_destroy(&simplified);
+  return 0;
+}
+
+typedef enum PureValue
+{
+  PURE_POS = 0b01,
+  PURE_NEG = 0b10,
+  NON_PURE = 0b11,
+} PureValue;
+
+typedef struct PureLiteralStack
+{
+  uint32_t* pKeys;
+  PureValue* pValues;
+  size_t capacity;
+  size_t count;
+} PureLiteralStack;
+
+int
+PureLiteralStack_create(PureLiteralStack* pLiteralStack)
+{
+  SANITIZE_PARAMETER_POINTER(pLiteralStack);
+
+  pLiteralStack->count = 0u;
+  pLiteralStack->capacity = 1024u;
+
+  const size_t keysSize = pLiteralStack->capacity * sizeof(*pLiteralStack->pKeys);
+  const size_t valuesSize = pLiteralStack->capacity * sizeof(*pLiteralStack->pValues);
+  pLiteralStack->pKeys = malloc(keysSize + valuesSize);
+
+  if (!pLiteralStack->pKeys)
+    return 1;
+
+  pLiteralStack->pValues = (PureValue*)(&pLiteralStack->pKeys[pLiteralStack->capacity]);
+
+  return 0;
+}
+
+void
+PureLiteralStack_destroy(PureLiteralStack* pLiteralStack)
+{
+  SANITIZE_PARAMETER_POINTER(pLiteralStack);
+  free(pLiteralStack->pKeys);
+  pLiteralStack->pKeys = NULL;
+  pLiteralStack->pValues = NULL;
+  pLiteralStack->capacity = 0u;
+  pLiteralStack->count = 0u;
+}
+
+int
+PureLiteralStack_push(PureLiteralStack* pLiteralStack, uint32_t key, PureValue value)
+{
+  SANITIZE_PARAMETER_POINTER(pLiteralStack);
+  SANITIZE_PARAMETER_POINTER(key);
+
+  for (size_t i = 0u; i < pLiteralStack->count; ++i) {
+    if (pLiteralStack->pKeys[i] == key) {
+      pLiteralStack->pValues[i] |= value;
+      return 0;
+    }
+  }
+
+  if (pLiteralStack->count + 1 > pLiteralStack->capacity) {
+
+    const size_t newCapacity = pLiteralStack->capacity << 1;
+    const size_t newKeysSize = newCapacity * sizeof(*pLiteralStack->pKeys);
+    const size_t newValuesSize = newCapacity * sizeof(*pLiteralStack->pValues);
+
+    uint32_t* pNewKeys = realloc(pLiteralStack->pKeys, newKeysSize + newValuesSize);
+    if (!pNewKeys)
+      return 1;
+
+    pLiteralStack->pKeys = pNewKeys;
+    pLiteralStack->pValues = (PureValue*)(pLiteralStack->pKeys + newCapacity);
+    pLiteralStack->capacity = newCapacity;
+  }
+
+  // insert key
+  pLiteralStack->pKeys[pLiteralStack->count] = key;
+  pLiteralStack->pValues[pLiteralStack->count] = value;
+  ++pLiteralStack->count;
+
+  return 0;
+}
+
+void
+PureLiteralStack_purify(PureLiteralStack* pLiteralStack)
+{
+  for (size_t i = 0u; i < pLiteralStack->count;) {
+    if (pLiteralStack->pValues[i] == NON_PURE) {
+      pLiteralStack->pKeys[i] = pLiteralStack->pKeys[pLiteralStack->count];
+      pLiteralStack->pValues[i] = pLiteralStack->pValues[pLiteralStack->count];
+      --(pLiteralStack->count);
+      continue;
+    }
+    ++i;
+  }
+}
+
+int
+dpllPureLiteralElimination(Cnf* pCnf, AssignmentStack* pAssignment)
+{
+  SANITIZE_PARAMETER_POINTER(pCnf);
+  SANITIZE_PARAMETER_POINTER(pAssignment);
+
+  AssignmentStackView assignmentView;
+  AssignmentStackView_beginView(&assignmentView, pAssignment);
+
+  Cnf_ClauseIterator clauseIterator;
+  Cnf_ClauseIterator_create(&clauseIterator, pCnf);
+
+  PureLiteralStack literalStack;
+  PureLiteralStack_create(&literalStack);
+
+  // iterate all literals
+  while (Cnf_ClauseIterator_next(&clauseIterator)) {
+    for (size_t literalIndex = 0u; literalIndex < clauseIterator.count; ++literalIndex) {
+
+      // get the literal, its variable and value
+      int32_t literal = clauseIterator.pData[literalIndex];
+      uint32_t variable;
+      PureValue value;
+
+      if (literal < 0) {
+        variable = -literal;
+        value = PURE_NEG;
+      } else {
+        variable = literal;
+        value = PURE_POS;
+      }
+
+      // push the variable into the pure literal stack
+      if (PureLiteralStack_push(&literalStack, variable, value)) {
+        PureLiteralStack_destroy(&literalStack);
+        return 1;
+      }
+    }
+  }
+  // remove all variables from the stack that where pushed with both
+  // a negative and a positive value
+  PureLiteralStack_purify(&literalStack);
+
+  // add all pure key value pairs to the assignment and
+  // end assignment stack view (which then contains all new assignments)
+  for (size_t i = 0u; i < literalStack.count; ++i) {
+    if (AssignmentStack_push(pAssignment, literalStack.pKeys[i], literalStack.pValues[i] == PURE_POS)) {
+      PureLiteralStack_destroy(&literalStack);
+      return 1;
+    }
+  }
+  AssignmentStackView_endView(&assignmentView, pAssignment);
+
+  // the pure literal stack is not needed anymore
+  // the important stuff is in the assignment stack view
+  PureLiteralStack_destroy(&literalStack);
+
+  // invoking simplify is necessary to ensure correctness
+  // we should find a better than to create a temporary cnf object
+  Cnf simplified;
+  if (Cnf_create(&simplified)) {
+    PureLiteralStack_destroy(&literalStack);
+    return 1;
+  }
+  if (Cnf_simplifyWithView(pCnf, &assignmentView, &simplified)) {
+    PureLiteralStack_destroy(&literalStack);
+    return 1;
+  }
+  Cnf_swap(&simplified, pCnf);
+  Cnf_destroy(&simplified);
+
   return 0;
 }

@@ -124,6 +124,7 @@ test_cnf_clauseIterator_with_mixed()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_cnf_clauseIterator_with_empty_cnf();
   test_cnf_clauseIterator_with_one_clause();
   test_cnf_clauseIterator_with_multiple_clauses();

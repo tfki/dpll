@@ -272,6 +272,7 @@ test_dpllsolver_res(const Entry* entry)
 int
 main(int argc, char** argv)
 {
+  LOG_TEST_INIT();
   // get the absolute path to index.csv
 
   TEST_ASSERT_EQ(argc, 1);
@@ -306,7 +307,7 @@ main(int argc, char** argv)
   for (size_t i = 0u; i < entries.count; ++i) {
 
     // skip hard and insane dimacs for testing
-    if (entries.pData[i].complexity > COMPLEXITY_MEDIUM)
+    if (entries.pData[i].complexity > COMPLEXITY_HARD)
       continue;
 
     test_dpllsolver_res(&entries.pData[i]);

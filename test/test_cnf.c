@@ -242,6 +242,7 @@ test_Cnf_toStr_mixedClauses()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_Cnf_create();
   test_Cnf_pushClause();
   test_Cnf_capacityOverflow();

@@ -134,6 +134,7 @@ test_Cnf_simplify_withMixedClauses()
 int
 main()
 {
+  LOG_TEST_INIT();
   test_Cnf_simplify_withEmptyAssignment();
   test_Cnf_simplify_withTrueClause();
   test_Cnf_simplify_withFalseClause();
