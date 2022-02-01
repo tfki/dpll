@@ -50,10 +50,9 @@ fileNameFromPath(const char* pBse, const char** pRel)
 {
   int bseSize = strlen(pBse);
 
-  for (int i = bseSize-1; i > 0; --i) {
-    if (pBse[i] == '\\' || pBse[i] == '/')
-    {
-      *pRel = &pBse[i+1];
+  for (int i = bseSize - 1; i > 0; --i) {
+    if (pBse[i] == '\\' || pBse[i] == '/') {
+      *pRel = &pBse[i + 1];
       return;
     }
   }
@@ -261,7 +260,7 @@ test_dpllsolver_res(const Entry* entry)
   double seconds;
   Bench_seconds(&bench, &seconds);
 
-  const char *fileName;
+  const char* fileName;
   fileNameFromPath(entry->pFileName, &fileName);
   LOGI("Dimacs file (%s) was successfully tested. It took %f seconds to find a sat solution.", fileName, seconds);
 
@@ -307,7 +306,7 @@ main(int argc, char** argv)
   for (size_t i = 0u; i < entries.count; ++i) {
 
     // skip hard and insane dimacs for testing
-    if (entries.pData[i].complexity > COMPLEXITY_HARD)
+    if (entries.pData[i].complexity > COMPLEXITY_MEDIUM)
       continue;
 
     test_dpllsolver_res(&entries.pData[i]);
